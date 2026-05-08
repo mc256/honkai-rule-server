@@ -69,10 +69,12 @@ jobs:
             latest=auto
           # type=semver patterns automatically suppress moving tags for pre-release
           # tags (e.g., v1.5.0-rc.1 emits only itself, not :v1.5 / :v1 / :latest).
+          # The `v`-prefix in each pattern preserves our spec's tag convention
+          # (vX.Y.Z, vX.Y, vX) — without it metadata-action strips the v.
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern=v{{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
           labels: |
             org.opencontainers.image.title=honkai-rule-server
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
