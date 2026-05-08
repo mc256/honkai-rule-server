@@ -65,16 +65,20 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/honkai-rule-server
           # latest=auto: advance :latest only when this is the highest-precedence
           # non-pre-release tag in the repo (handles hotfix-vs-latest per FR-010).
+          # prefix=v,onlatest=false: prepend v to all semver tags (vX.Y.Z, vX.Y,
+          # vX) per spec convention; leave :latest unprefixed. Earlier attempt
+          # used `pattern=v{{version}}` literal but metadata-action normalizes
+          # semver patterns and strips literal v prefixes — `flavor: prefix=v`
+          # is the canonical way.
           flavor: |
             latest=auto
+            prefix=v,onlatest=false
           # type=semver patterns automatically suppress moving tags for pre-release
           # tags (e.g., v1.5.0-rc.1 emits only itself, not :v1.5 / :v1 / :latest).
-          # The `v`-prefix in each pattern preserves our spec's tag convention
-          # (vX.Y.Z, vX.Y, vX) — without it metadata-action strips the v.
           tags: |
-            type=semver,pattern=v{{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
           labels: |
             org.opencontainers.image.title=honkai-rule-server
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
