@@ -1,0 +1,40 @@
+version: 2
+
+# 013: Dependabot watches three ecosystems weekly. Non-major bumps batch into
+# one "all-non-major" group PR per ecosystem; major bumps open as separate
+# PRs and stay open for human review (per FR-016 + FR-017's skip-on-major
+# guard in dependabot-auto-merge.yml). open-pull-requests-limit: 5 is a
+# sanity backstop in case grouping fails.
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      all-non-major:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      all-non-major:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      all-non-major:
+        update-types:
+          - "minor"
+          - "patch"

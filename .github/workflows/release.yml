@@ -1,13 +1,16 @@
-name: ci
+name: release
 
+# Triggers on tag pushes matching vMAJOR.MINOR.PATCH (with optional pre-release suffix).
+# Non-matching tags (e.g., demo-2026, vfoo) are ignored. See
+# specs/013-ci-container-release/contracts/ghcr-tag-contract.md.
 on:
   push:
-    branches: [master, main]
-  pull_request:
-    branches: [master, main]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 permissions:
-  contents: read
+  contents: write   # action-gh-release creates the GitHub Release entry
+  packages: write   # docker/build-push-action pushes to GHCR
 
 jobs:
   test:
@@ -36,29 +39,11 @@ jobs:
         run: go test -race ./...
 
       - name: snapshot drift check
-        # If a developer changed merge/output/templates without
-        # regenerating snapshots, `git diff` shows a diff and we fail.
         run: git diff --exit-code
 
-  build-image:
-    name: docker build (smoke)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: docker build
-        run: docker build --tag honkai-rule-server:ci .
-
-  # 013: publish a master-tagged + sha-tagged image to GHCR on every direct
-  # master push. Gated on the existing `test` job so a failing test suite
-  # blocks publication. Does NOT run on PRs (see contracts/ghcr-tag-contract.md
-  # Trigger A vs Trigger B).
-  publish-master:
-    name: publish image to GHCR (master only)
+  build-and-push:
+    name: build + push image to GHCR
     needs: test
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,14 +63,20 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository_owner }}/honkai-rule-server
+          # latest=auto: advance :latest only when this is the highest-precedence
+          # non-pre-release tag in the repo (handles hotfix-vs-latest per FR-010).
+          flavor: |
+            latest=auto
+          # type=semver patterns automatically suppress moving tags for pre-release
+          # tags (e.g., v1.5.0-rc.1 emits only itself, not :v1.5 / :v1 / :latest).
           tags: |
-            type=ref,event=branch
-            type=sha,prefix=sha-,format=short
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
           labels: |
             org.opencontainers.image.title=honkai-rule-server
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.version=master
 
       - uses: docker/build-push-action@v5
         with:
@@ -96,3 +87,21 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  github-release:
+    name: create GitHub Release entry
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history for auto-generated release notes
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          # Pre-release tags (those with a hyphen after the version) are flagged
+          # so the GitHub UI's "Latest release" badge tracks the highest stable.
+          prerelease: ${{ contains(github.ref_name, '-') }}

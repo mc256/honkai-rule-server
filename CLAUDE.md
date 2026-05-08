@@ -14,7 +14,8 @@ sort direction so lower priority numbers emit earlier in the served
 from the always-present `Proxies` selector group).
 **009 (cluster-deploy)** is fully implemented (Helm chart at
 `charts/honkai-rule-server/` extends with a `honkai` block; image at
-`registry.example.com/library/honkai-rule-server`; ConfigMap +
+`registry.example.com/library/honkai-rule-server` — **superseded by
+`ghcr.io/<owner>/honkai-rule-server` per 013**; ConfigMap +
 PVC + Argo CD app on the cluster).
 **010 (daily-traffic-header)** is fully implemented (served
 `Subscription-Userinfo` header carries the daily-allowance figure
@@ -26,11 +27,21 @@ aggregates remain on `/health`).
 with operator-configurable health-check fields via 5 `URL_TEST_*`
 env vars; always-present `Proxies` selector and operator-defined
 custom proxy groups untouched).
-**011 (daily-spend-tracking)** is the active feature being
-designed/implemented in `specs/011-daily-spend-tracking/`
-(reactivated from parked status to extend 010 with within-day spend
-tracking via a persistent `/data/today-zero.json` snapshot, midnight
-rollover in America/Toronto, and a ratio-aware upload/download split).
+**011 (daily-spend-tracking)** is in-progress in
+`specs/011-daily-spend-tracking/` (reactivated from parked status to
+extend 010 with within-day spend tracking via a persistent
+`/data/today-zero.json` snapshot, midnight rollover in
+America/Toronto, and a ratio-aware upload/download split).
+**013 (ci-container-release)** is the active build/CI infra feature
+being designed/implemented in `specs/013-ci-container-release/`
+(GitHub Actions publishing images to `ghcr.io/<owner>/honkai-rule-server`
+on `master` push and on `v*` SemVer tag push; new Makefile targets
+`release-{patch,minor,major}` + `release VERSION=` + `DRY_RUN=1`;
+Dependabot config for gomod/github-actions/docker with auto-merge
+of non-major bumps and a daily auto-patch-release workflow that cuts
+`vX.Y.(Z+1)` whenever Dependabot commits accumulate on master since
+the last release tag; canonical image registry replaces 009's
+`registry.example.com/library/honkai-rule-server` placeholder).
 
 Key reading for any change:
 - `specs/001-subscription-aggregator/spec.md` + `plan.md` — what the service does today (27 FRs, 15 SCs) and how it's structured
@@ -41,10 +52,11 @@ Key reading for any change:
 - `specs/007-ascending-priority-sort/spec.md` + `plan.md` — flipped 005's rule comparator to ascending so lower priority numbers win routing precedence (matches Mihomo's top-to-bottom evaluation)
 - `specs/006-fix-emoji-yaml-escape/spec.md` + `plan.md` — post-encode byte transform that replaces yaml.v3's `\Uxxxxxxxx` escapes with literal UTF-8 so emoji proxy names render readably in served YAML
 - `specs/008-dialer-proxy-fanout/spec.md` + `plan.md` — for each operator-declared own-proxy emit fan-out copies (`via_<group>__<own>` and `via_AUTO__<own>`) carrying the source own-proxy's connection fields plus a `dialer-proxy:` field set to a server-emitted region/continent group (or to the always-present `Proxies` selector for AUTO); also exclude own-proxies and `via_*` copies from the global `Proxies` selector's member list
-- `specs/009-cluster-deploy/spec.md` + `plan.md` — active feature: build+push the container image to `registry.example.com/library/honkai-rule-server:<sha>`, deploy to the cluster via a new Helm chart in `<your-iac-repo>/charts/honkai-rule-server/` and a new Argo CD Application, served on `example.com` behind a 32-char hex path prefix; PVC for custom-rules + cache, ConfigMap for subscriptions/own-proxies/tokens; new Makefile targets `docker-push`, `docker-push-latest`, `config-sync`, `rules-sync` (the last via a busybox helper pod since the runtime image is `FROM scratch`)
+- `specs/009-cluster-deploy/spec.md` + `plan.md` — build+push the container image to `registry.example.com/library/honkai-rule-server:<sha>` (registry now `ghcr.io/<owner>/honkai-rule-server` per 013), deploy to the cluster via a new Helm chart in `<your-iac-repo>/charts/honkai-rule-server/` and a new Argo CD Application, served on `example.com` behind a 32-char hex path prefix; PVC for custom-rules + cache, ConfigMap for subscriptions/own-proxies/tokens; new Makefile targets `docker-push`, `docker-push-latest`, `config-sync`, `rules-sync` (the last via a busybox helper pod since the runtime image is `FROM scratch`)
 - `specs/010-daily-traffic-header/spec.md` + `plan.md` — replace the served `Subscription-Userinfo` header's raw aggregates with the daily-allowance figure from 001 FR-011b (`total - upload - download = per-day-rate + no-expiry-remaining`, `expire = next 00:00 UTC`); wire format unchanged; raw aggregates remain on `/health`; header omitted entirely when no source supplied userinfo
 - `specs/012-url-test-region-groups/spec.md` + `plan.md` — convert auto-emitted `_region_*` and `_continent_*` proxy groups from `select` to `url-test` with operator-configurable health-check params (5 env vars: `URL_TEST_URL`, `URL_TEST_INTERVAL_SECONDS`, `URL_TEST_TIMEOUT_MS`, `URL_TEST_MAX_FAILED_TIMES`, `URL_TEST_LAZY`); always-present `Proxies` selector and operator-defined custom groups untouched
-- `specs/011-daily-spend-tracking/spec.md` + `plan.md` — active feature: track today's spend in the served `Subscription-Userinfo` header so the client UI's bar fills as the user consumes (010 left it flat at 0%); persistent `/data/today-zero.json` snapshot of per-source midnight baselines + pinned allowance, lazy request-driven rollover, America/Toronto local-day boundary; new `internal/dailyspend/` package owns file I/O outside the pure-merge boundary
+- `specs/011-daily-spend-tracking/spec.md` + `plan.md` — track today's spend in the served `Subscription-Userinfo` header so the client UI's bar fills as the user consumes (010 left it flat at 0%); persistent `/data/today-zero.json` snapshot of per-source midnight baselines + pinned allowance, lazy request-driven rollover, America/Toronto local-day boundary; new `internal/dailyspend/` package owns file I/O outside the pure-merge boundary
+- `specs/013-ci-container-release/spec.md` + `plan.md` — active feature: GitHub Actions workflows publishing the container image to `ghcr.io/<owner>/honkai-rule-server` on `master` push (tags `master` + `sha-<short>`) and on `v*` SemVer tag push (tags `vX.Y.Z` + `vX.Y` + `vX` + `latest`, with hotfix-vs-`latest` precedence rule); Makefile gains `release-{patch,minor,major}` + `release VERSION=` + `DRY_RUN=1` helpers; `.github/dependabot.yml` covers gomod / github-actions / docker ecosystems; `dependabot-auto-merge.yml` skips major bumps via `dependabot/fetch-metadata`; `auto-patch-release.yml` runs daily and cuts `vX.Y.(Z+1)` when Dependabot commits accumulate on master since the last release tag; replaces 009's `registry.example.com/library/honkai-rule-server` placeholder with GHCR as canonical registry
 - `specs/003-custom-rules-access-control/quickstart.md` — operator guide (custom rules YAML schema, continent groups, UA filtering setup)
 - `internal/merge/` — pure-functional transformation core (Constitution Principle I; do not reach into it from outside the module)
 - `internal/customrules/` — custom rule file loading and `CustomRuleSet` type
