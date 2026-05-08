@@ -1,0 +1,3114 @@
+mixed-port: 7890
+allow-lan: false
+bind-address: '*'
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
+  nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback:
+    - https://9.9.9.9/dns-query
+    - https://208.67.222.222/dns-query
+proxies:
+  - {name: _my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false}
+  - {name: _my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp}
+  - {name: beta_剩余流量：43.18 GB, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621172605.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-2.example.net}}}
+  - {name: beta_距离下次重置剩余：19 天, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621172283.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-2.example.net}}}
+  - {name: beta_套餐到期：2027-04-14, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173453.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-2.example.net}}}
+  - {name: beta_官网 provider.example.com, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177423.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-2.example.net}}}
+  - {name: beta_每日使用前请刷新订阅, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621174623.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-b.cdn-2.example.net}}}
+  - {name: beta_优先使用 TCP 系列节点, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621178630.cdn-2.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-b.cdn-2.example.net}}}
+  - {name: beta_特殊地区专用线路, type: vless, server: specially.entrance.provider.example.net, port: 17001, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.icloud.com, reality-opts: {public-key: 6YEiIjqDnhpuc8xgTOp1SvoGhsb2ip6QnbDh0F1gxSM, short-id: b9991dd56b76837a}, client-fingerprint: chrome}
+  - {name: beta_美国A-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621171473.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-1.example.net}}}
+  - {name: beta_美国A-线路2 | TCP, type: vless, server: a2.provider.example.net, port: 17001, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.sony.com, reality-opts: {public-key: XuHk1O4uiiTa24n42MK25whWyV3godzKzhj_YREzIFg, short-id: f2ec}, client-fingerprint: chrome}
+  - {name: beta_美国A-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621174337.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1.cdn-3.example.net}}}
+  - {name: beta_美国A-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15011, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.sony.com, reality-opts: {public-key: mrM5P6BDajQpx4gylOujPITTJ2Jn_TDcXd_dISW8qzo, short-id: ad2ffc8efe6165}, client-fingerprint: qq}
+  - {name: beta_美国B-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177964.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-b.cdn-1.example.net}}}
+  - {name: beta_美国B-线路2 | TCP, type: vless, server: a2-b.provider.example.net, port: 17001, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: aws.com, reality-opts: {public-key: 7K9JLEfgpiEL_6hgYR21WPtdM8Qdka1076FeYWPwdjQ, short-id: 3cc30237a37d1c}, client-fingerprint: qq}
+  - {name: beta_美国B-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621171436.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-b.cdn-3.example.net}}}
+  - {name: beta_美国B-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15012, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: aws.com, reality-opts: {public-key: cEvwNNMKw5VGtqq7qCG6snboOsf8Tb-Lc-tUbSjp2nU, short-id: 6b04cb3161f4dc}, client-fingerprint: safari}
+  - {name: beta_美国C-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173046.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-c.cdn-1.example.net}}}
+  - {name: beta_美国C-线路2 | TCP, type: vless, server: a2-c.provider.example.net, port: 17001, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: aws.com, reality-opts: {public-key: xodpEYE0pI_XRnw9qxqil_wr0xm0M_RFh7GRFAUP_VE, short-id: f7798e6420}, client-fingerprint: safari}
+  - {name: beta_美国C-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621179711.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: a1-c.cdn-3.example.net}}}
+  - {name: beta_美国C-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 10031, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.sony.com, reality-opts: {public-key: n0d5_8muEUapFu3ihLwDm61KDcfhugpdWnGkRhpnIWs, short-id: 8b870bd292790c}, client-fingerprint: chrome}
+  - {name: beta_美国D-线路4 | HY2, server: a2-d.provider.example.net, port: 39169, sni: a2.provider.example.net, up: null, down: null, skip-cert-verify: false, ports: 39101-39199, type: hysteria2, password: 00000000-0000-0000-0000-000000000002}
+  - {name: beta_德国-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621175855.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: b1.cdn-1.example.net}}}
+  - {name: beta_德国-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10003, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: azure.microsoft.com, reality-opts: {public-key: u1Pd67k9WB1ZWMw26BSc2OqPnZdf6MSIrqbGMq8l3GY, short-id: 70d92ba3}, client-fingerprint: ios}
+  - {name: beta_德国-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621179389.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: b1.cdn-3.example.net}}}
+  - {name: beta_德国-线路4 | HY2, server: b2.provider.example.net, port: 39168, sni: b2.provider.example.net, up: null, down: null, skip-cert-verify: false, ports: 39101-39199, type: hysteria2, password: 00000000-0000-0000-0000-000000000002}
+  - {name: beta_德国-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 10033, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: azure.microsoft.com, reality-opts: {public-key: JLzBuuSx6-ARl60pdIzkvTmnf9LjfPgmnUXyTY3AfwE, short-id: 39d1b65131e053}, client-fingerprint: chrome}
+  - {name: beta_加拿大-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621175112.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: c1.cdn-1.example.net}}}
+  - {name: beta_加拿大-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173849.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: c1.cdn-3.example.net}}}
+  - {name: beta_加拿大-线路4 | HY2, server: c1.provider.example.net, port: 39101, sni: c1.provider.example.net, up: null, down: null, skip-cert-verify: false, ports: 39101-39199, type: hysteria2, password: 00000000-0000-0000-0000-000000000002}
+  - {name: beta_台湾-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 8443, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621176074.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: d1.cdn-1.example.net}}}
+  - {name: beta_台湾-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 8443, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177560.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: d1.cdn-3.example.net}}}
+  - {name: beta_英国-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621179880.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: e1.cdn-1.example.net}}}
+  - {name: beta_英国-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621178070.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: e1.cdn-3.example.net}}}
+  - {name: beta_新加坡A-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177407.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1.cdn-1.example.net}}}
+  - {name: beta_新加坡A-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10004, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: azure.microsoft.com, reality-opts: {public-key: 6kY5QZR6KYsxY5nXSFDfTFCAVlpcH1rvvchcYS7ML0w, short-id: ae3579fda2c8}, client-fingerprint: chrome}
+  - {name: beta_新加坡A-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621174657.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1.cdn-3.example.net}}}
+  - {name: beta_新加坡A-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15061, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: amd.com, reality-opts: {public-key: QV-gLda3iinsMfD2QZjAl9rqM-ZoXyof1iPTFLfzJzY, short-id: "826209375e55"}, client-fingerprint: qq}
+  - {name: beta_新加坡B-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621174045.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1-b.cdn-1.example.net}}}
+  - {name: beta_新加坡B-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10005, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.nvidia.com, reality-opts: {public-key: 7K9JLEfgpiEL_6hgYR21WPtdM8Qdka1076FeYWPwdjQ, short-id: 3cc30237a37d1c}, client-fingerprint: safari}
+  - {name: beta_新加坡B-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621171438.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1-b.cdn-3.example.net}}}
+  - {name: beta_新加坡B-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15062, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: amd.com, reality-opts: {public-key: sxwDhkLnXBxfkTYBKAUtzn3xfpZ15cPE1sL-V2LQ3mA, short-id: e7f57d7d79a7af85}, client-fingerprint: chrome}
+  - {name: beta_新加坡C-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177164.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1-c.cdn-1.example.net}}}
+  - {name: beta_新加坡C-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 12063, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: azure.microsoft.com, reality-opts: {public-key: 1EH_m26WjCg64UBcYkktHWQ-qmpe3CislrCJt08Pni4, short-id: 7c3814ad1c77}, client-fingerprint: firefox}
+  - {name: beta_新加坡C-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2096, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621177505.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: f1-c.cdn-3.example.net}}}
+  - {name: beta_新加坡C-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 10034, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: amd.com, reality-opts: {public-key: sxwDhkLnXBxfkTYBKAUtzn3xfpZ15cPE1sL-V2LQ3mA, short-id: e7f57d7d79a7af85}, client-fingerprint: safari}
+  - {name: beta_香港A-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621178729.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: h1.cdn-1.example.net}}}
+  - {name: beta_香港A-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10006, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: sisu.xboxlive.com, reality-opts: {public-key: Fe3e0-_DEwqn4M4FAEoej97gxNWCsuZlWs3leQAy_go, short-id: 876d1505}, client-fingerprint: firefox}
+  - {name: beta_香港A-线路3 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621178074.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: h1.cdn-3.example.net}}}
+  - {name: beta_香港B-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621172835.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: h1-b.cdn-1.example.net}}}
+  - {name: beta_香港B-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10007, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: r.bing.com, reality-opts: {public-key: PGde8dGURh7idZ_X2sm1_XbddcAkBQ6zPnPT8UyCG3g, short-id: 581b88a9ac24c159}, client-fingerprint: firefox}
+  - {name: beta_香港B-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2087, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621176266.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: h1-b.cdn-3.example.net}}}
+  - {name: beta_香港C-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 10036, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: statici.icloud.com, reality-opts: {public-key: 61yqhTQF4rW4nCrry6UYrY-bN752FRexGpZasYmhSyM, short-id: "103863"}, client-fingerprint: firefox}
+  - {name: beta_日本A-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621174821.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1.cdn-1.example.net}}}
+  - {name: beta_日本A-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10008, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.bing.com, reality-opts: {public-key: obtAZCf2MatqqdICtem9CAnROYJgBOYxiYPWosHf300, short-id: a5ba6144f6ec}, client-fingerprint: edge}
+  - {name: beta_日本A-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621176613.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1.cdn-3.example.net}}}
+  - {name: beta_日本A-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15081, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.bing.com, reality-opts: {public-key: 5KTYlJFW3j52VUnfWogv7oUzM6oFu7cZog8IRnjXXFw, short-id: abc3b00aa2db739a}, client-fingerprint: chrome}
+  - {name: beta_日本B-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173288.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1-b.cdn-1.example.net}}}
+  - {name: beta_日本B-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 10009, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: download.amd.com, reality-opts: {public-key: E-FDMkXkmjhBXPD70mp6RNzyALBuEnTnwFIKL5GxHnw, short-id: 45bd1d}, client-fingerprint: edge}
+  - {name: beta_日本B-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621179277.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1-b.cdn-3.example.net}}}
+  - {name: beta_日本B-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 15082, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.bing.com, reality-opts: {public-key: OsNqIHO53H_nYcmJ9VS1cs_Vk-jLsnpoq7vyifAPxE4, short-id: 0e21a89c3b43dc15}, client-fingerprint: safari}
+  - {name: beta_日本C-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621176638.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1-c.cdn-1.example.net}}}
+  - {name: beta_日本C-线路2 | TCP, type: vless, server: dedicated1.entrance.provider.example.net, port: 12083, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.bing.com, reality-opts: {public-key: YaDfmAyqQWPEY1TZw7dtf7l00s2mxALmAqnY0NyNc00, short-id: abe5ae2734b1e7f2}, client-fingerprint: safari}
+  - {name: beta_日本C-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2083, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621176539.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: g1-c.cdn-3.example.net}}}
+  - {name: beta_日本C-CMI专线, type: vless, server: dedicated1.private.dedicated.example.net, port: 10038, uuid: 00000000-0000-0000-0000-000000000002, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.bing.com, reality-opts: {public-key: qByBUzKlruuoeywXXOZilucPZKYQTyS-JaV8QY5-Lzg, short-id: 616abc581adf24}, client-fingerprint: qq}
+  - {name: beta_摩尔多瓦-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 8443, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173870.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: i1.cdn-1.example.net}}}
+  - {name: beta_摩尔多瓦-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 8443, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621179208.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: i1.cdn-3.example.net}}}
+  - {name: beta_越南-线路1 | TCP, type: trojan, server: resolution1.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621173718.cdn-1.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: j1.cdn-1.example.net}}}
+  - {name: beta_越南-线路3 | TCP, type: trojan, server: resolution2.entrance.provider.example.net, port: 2053, password: 00000000-0000-0000-0000-000000000002, udp: true, skip-cert-verify: false, sni: 17771621171908.cdn-3.example.net, network: ws, ws-opts: {path: /videomusicaeghmuaawe, headers: {Host: j1.cdn-3.example.net}}}
+  - {name: alpha_香港直连6, tags: 香港直连6, server: node-43.example.com, port: "16043", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-43.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: alpha_香港直连5, tags: 香港直连5, server: node-42.example.com, port: "16042", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-42.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: alpha_香港直连4, tags: 香港直连4, server: node-41.example.com, port: "16041", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-41.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: alpha_香港直连3, tags: 香港直连3, server: node-33.example.com, port: "16033", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-33.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: alpha_香港直连2, tags: 香港直连2, server: node-32.example.com, port: "16032", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-32.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: alpha_香港直连1, tags: 香港直连1, server: node-31.example.com, port: "16031", ports: 40001-43001, type: hysteria2, obfs: null, obfs-password: null, password: 00000000-0000-0000-0000-000000000001, sni: node-31.example.com, skip-cert-verify: false, up: null, down: null}
+  - {name: 'alpha_网站回家页：https://home.example.com', type: ss, server: 1.1.1.1, port: 1234, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_LA香港2直, type: trojan, server: 972053191793727.yf.r.provider.example.com, port: 41689, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13808ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_LA香港1直, type: trojan, server: 491755443964306.yf.r.provider.example.com, port: 42858, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13802ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_马来西亚4直, type: trojan, server: 778955495759158.yf.r.provider.example.com, port: 44045, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13712ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_马来西亚2直, type: trojan, server: 575971767548977.yf.r.provider.example.com, port: 47595, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13706ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_法国4直, type: trojan, server: 533733540798902.yf.r.provider.example.com, port: 41920, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13612ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_韩国4直, type: trojan, server: 192126658823517.yf.r.provider.example.com, port: 41255, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13512ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_新加坡8直, type: trojan, server: 115878013897767.yf.r.provider.example.com, port: 46525, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13432ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_新加坡6直, type: trojan, server: 570972630950720.yf.r.provider.example.com, port: 42628, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13426ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_新加坡4直, type: trojan, server: 150675814775565.yf.r.provider.example.com, port: 44638, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13412ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_新加坡2直, type: trojan, server: 246677990099085.yf.r.provider.example.com, port: 45926, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13406ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_台湾4直, type: trojan, server: 081835698828475.yf.r.provider.example.com, port: 40137, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13312ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_台湾2直, type: trojan, server: 292007978727753.yf.r.provider.example.com, port: 41256, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13306ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_日本4直, type: trojan, server: 615981583799514.yf.r.provider.example.com, port: 41273, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13212ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_日本2直, type: trojan, server: 711604233461033.yf.r.provider.example.com, port: 46140, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13206ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_香港大带宽8直, type: trojan, server: 065216200477887.yf.r.provider.example.com, port: 45672, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13132ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_香港HKT4直, type: trojan, server: 068847219983133.yf.r.provider.example.com, port: 44438, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13112ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_香港HKT2直, type: trojan, server: 065216099911091.yf.r.provider.example.com, port: 43860, password: 00000000-0000-0000-0000-000000000001, udp: true, sni: 13106ew.r.bilibili.com, skip-cert-verify: true, network: tcp}
+  - {name: alpha_美国02, type: vless, server: us35.provider.example.com, port: 443, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_美国01, type: vless, server: us34.provider.example.com, port: 443, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_LA香港中转02|VLESS, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 15209, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_LA香港中转02, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 15109, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_LA香港中转01|VLESS, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 15208, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_LA香港中转01, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 15108, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_LA香港中转03|VLESS, type: vless, server: v3.cdn.qqws1rrgrm.ewddns.net, port: 15210, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_LA香港中转03, type: ss, server: v3.cdn.qqws1rrgrm.ewddns.net, port: 15110, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-马来西亚4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4708, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-马来西亚3-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4707, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-马来西亚2-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4702, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-马来西亚1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4701, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-法国4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4608, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-法国1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4601, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-韩国4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4508, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-韩国1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4501, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-新加坡8-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4428, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-新加坡7-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4427, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-新加坡6-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4422, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-新加坡5-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4421, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-新加坡4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4408, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-新加坡3-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4407, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-新加坡2-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4402, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-新加坡1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4401, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-台湾4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4308, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-台湾3-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4307, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-台湾2-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4302, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-台湾1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4301, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-日本4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4208, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-日本3-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4207, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-日本2-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4202, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: www.microsoft.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-日本1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4201, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-香港大带宽8-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4128, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-香港大带宽7-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4127, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-香港HKT4-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4108, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-香港HKT3-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4107, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: alpha_基础-香港HKT2-V2, type: vless, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4102, uuid: 00000000-0000-0000-0000-000000000001, alterId: 0, cipher: auto, udp: true, flow: xtls-rprx-vision, tls: true, skip-cert-verify: false, servername: cdnjs.cloudflare.com, reality-opts: {public-key: JrWOojSFwFA93YjsiQkDydTItQzNAsXsHU24HuWGWjA, short-id: bc8e3658db7d1323}, client-fingerprint: chrome}
+  - {name: alpha_基础-香港HKT1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4101, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
+  - {name: via_AUTO__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: Proxies}
+  - {name: via_region_CA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_CA}
+  - {name: via_region_DE__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_DE}
+  - {name: via_region_FR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_FR}
+  - {name: via_region_GB__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_GB}
+  - {name: via_region_HK__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_HK}
+  - {name: via_region_JP__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_JP}
+  - {name: via_region_KR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_KR}
+  - {name: via_region_MY__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_MY}
+  - {name: via_region_SG__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_SG}
+  - {name: via_region_TW__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_TW}
+  - {name: via_region_US__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_US}
+  - {name: via_region_VN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_VN}
+  - {name: via_region_UNKNOWN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_UNKNOWN}
+  - {name: via_continent_AS__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_AS}
+  - {name: via_continent_EU__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_EU}
+  - {name: via_continent_NA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_NA}
+  - {name: via_AUTO__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: Proxies}
+  - {name: via_region_CA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_CA}
+  - {name: via_region_DE__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_DE}
+  - {name: via_region_FR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_FR}
+  - {name: via_region_GB__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_GB}
+  - {name: via_region_HK__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_HK}
+  - {name: via_region_JP__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_JP}
+  - {name: via_region_KR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_KR}
+  - {name: via_region_MY__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_MY}
+  - {name: via_region_SG__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_SG}
+  - {name: via_region_TW__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_TW}
+  - {name: via_region_US__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_US}
+  - {name: via_region_VN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_VN}
+  - {name: via_region_UNKNOWN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_UNKNOWN}
+  - {name: via_continent_AS__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_AS}
+  - {name: via_continent_EU__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_EU}
+  - {name: via_continent_NA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_NA}
+proxy-groups:
+  - name: _My-Own
+    type: select
+    proxies:
+      - _my-home-trojan
+      - _my-vps-vless
+  - name: beta_蓝莓桥
+    type: select
+    proxies:
+      - beta_自动选择
+      - beta_故障转移
+      - DIRECT
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+  - name: beta_自动选择
+    type: url-test
+    proxies:
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 500
+  - name: beta_故障转移
+    type: fallback
+    proxies:
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+  - name: "alpha_🔰国外流量"
+    type: select
+    proxies:
+      - "alpha_🎁自动选择"
+      - "alpha_🌈故障转移"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+      - "alpha_🚀直接连接"
+  - name: "alpha_🔰尔湾回家页"
+    type: select
+    proxies:
+      - alpha_网站回家页：https://home.example.com
+  - name: "alpha_🎁自动选择"
+    type: url-test
+    proxies:
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+    url: https://www.google.com/generate_204
+    interval: 86400
+  - name: "alpha_🌈故障转移"
+    type: fallback
+    proxies:
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+    url: https://www.google.com/generate_204
+    interval: 86400
+  - name: alpha_⚓️其他流量
+    type: select
+    proxies:
+      - "alpha_🔰国外流量"
+      - "alpha_🚀直接连接"
+  - name: alpha_✈️Telegram
+    type: select
+    proxies:
+      - "alpha_🔰国外流量"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+  - name: "alpha_🎬Youtube"
+    type: select
+    proxies:
+      - "alpha_🔰国外流量"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+  - name: "alpha_🎬Netflix"
+    type: select
+    proxies:
+      - "alpha_🔰国外流量"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+  - name: "alpha_🎬哔哩哔哩"
+    type: select
+    proxies:
+      - "alpha_🚀直接连接"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+  - name: "alpha_🎬国外媒体"
+    type: select
+    proxies:
+      - "alpha_🔰国外流量"
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+  - name: "alpha_🍎苹果服务"
+    type: select
+    proxies:
+      - "alpha_🚀直接连接"
+      - "alpha_🔰国外流量"
+  - name: "alpha_🚀直接连接"
+    type: select
+    proxies:
+      - DIRECT
+  - name: Proxies
+    type: select
+    proxies:
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_网站回家页：https://home.example.com
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_法国4直
+      - alpha_韩国4直
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_美国02
+      - alpha_美国01
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+      - _region_CA
+      - _region_DE
+      - _region_FR
+      - _region_GB
+      - _region_HK
+      - _region_JP
+      - _region_KR
+      - _region_MY
+      - _region_SG
+      - _region_TW
+      - _region_US
+      - _region_VN
+      - _region_UNKNOWN
+      - _continent_AS
+      - _continent_EU
+      - _continent_NA
+  - name: _region_CA
+    type: url-test
+    proxies:
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_DE
+    type: url-test
+    proxies:
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_FR
+    type: url-test
+    proxies:
+      - alpha_法国4直
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_GB
+    type: url-test
+    proxies:
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_HK
+    type: url-test
+    proxies:
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_JP
+    type: url-test
+    proxies:
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_KR
+    type: url-test
+    proxies:
+      - alpha_韩国4直
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_MY
+    type: url-test
+    proxies:
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_SG
+    type: url-test
+    proxies:
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_TW
+    type: url-test
+    proxies:
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_US
+    type: url-test
+    proxies:
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - alpha_美国02
+      - alpha_美国01
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_VN
+    type: url-test
+    proxies:
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _region_UNKNOWN
+    type: url-test
+    proxies:
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - alpha_网站回家页：https://home.example.com
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _continent_AS
+    type: url-test
+    proxies:
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_韩国4直
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _continent_EU
+    type: url-test
+    proxies:
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - alpha_法国4直
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _continent_NA
+    type: url-test
+    proxies:
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - alpha_美国02
+      - alpha_美国01
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+rules:
+  # --- priority 1000 (alpha) ---
+  - DOMAIN-SUFFIX,smtp,DIRECT
+  - DOMAIN-KEYWORD,aria2,DIRECT
+  - "DOMAIN-SUFFIX,ampproject.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,appspot.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blogger.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,getoutline.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gvt0.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gvt1.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gvt3.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,google,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,blogspot,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,onedrive.live.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xboxlive.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cdninstagram.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fb.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fb.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fbaddins.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fbcdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fbsbx.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fbworkmail.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,instagram.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,m.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,messenger.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,oculus.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,oculuscdn.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,rocksdb.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,whatsapp.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,whatsapp.net,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,facebook,alpha_🔰国外流量"
+  - "IP-CIDR,3.123.36.126/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,35.157.215.84/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,35.157.217.255/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,52.58.209.134/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,54.93.124.31/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,54.162.243.80/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,54.173.34.141/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,54.235.23.242/32,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,169.45.248.118/32,alpha_🔰国外流量,no-resolve"
+  - "DOMAIN-SUFFIX,pscp.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,periscope.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,t.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,twimg.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,twimg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,twitpic.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vine.co,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,twitter,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,t.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tdesktop.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,telegra.ph,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,telegram.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,telegram.org,alpha_🔰国外流量"
+  - "IP-CIDR,91.108.4.0/22,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,91.108.8.0/22,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,91.108.12.0/22,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,91.108.16.0/22,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,91.108.56.0/22,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,149.154.160.0/20,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR6,2001:b28:f23d::/48,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR6,2001:b28:f23f::/48,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR6,2001:67c:4e8::/48,alpha_🔰国外流量,no-resolve"
+  - "DOMAIN-SUFFIX,line.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,line-apps.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,line-scdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,naver.jp,alpha_🔰国外流量"
+  - "IP-CIDR,103.2.30.0/23,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,125.209.208.0/20,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,147.92.128.0/17,alpha_🔰国外流量,no-resolve"
+  - "IP-CIDR,203.104.144.0/21,alpha_🔰国外流量,no-resolve"
+  - "DOMAIN-SUFFIX,4shared.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,520cc.cc,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,881903.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,9cache.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,9gag.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,abc.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,abc.net.au,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,abebooks.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,amazon.co.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apigee.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apk-dl.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apkfind.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apkmirror.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apkmonk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apkpure.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,aptoide.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,archive.is,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,archive.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,arte.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,artstation.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,arukas.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ask.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,avg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,avgle.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,badoo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bandwagonhost.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bbc.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,behance.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bibox.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,biggo.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,binance.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bitcointalk.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bitfinex.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bitmex.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bit-z.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bloglovin.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bloomberg.cn,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bloomberg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blubrry.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,book.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,booklive.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,books.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,boslife.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,box.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,businessinsider.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bwh1.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,castbox.fm,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cbc.ca,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cdw.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,change.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,channelnewsasia.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ck101.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,clarionproject.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,clyp.it,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cna.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,comparitech.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,conoha.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,crucial.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cts.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cw.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cyberctm.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dailymotion.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dailyview.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,daum.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,daumcdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dcard.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,deepdiscount.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,depositphotos.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,deviantart.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,disconnect.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,discordapp.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,discordapp.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,disqus.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dlercloud.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dns2go.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dowjones.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dropbox.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dropboxusercontent.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,duckduckgo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dw.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dynu.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,earthcam.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ebookservice.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,economist.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,edgecastcdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,edu,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,elpais.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,enanyang.my,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,encyclopedia.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,esoir.be,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,etherscan.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,euronews.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,evozi.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,feedly.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,firech.at,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,flickr.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,flitto.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,foreignpolicy.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,freebrowser.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,freewechat.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,freeweibo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,friday.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ftchinese.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ftimg.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gate.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,getlantern.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,getsync.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,globalvoices.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,goo.ne.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,goodreads.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gov,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gov.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,greatfire.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gumroad.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hbg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,heroku.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hightail.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hk01.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hkbf.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hkbookcity.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hkej.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hket.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hkgolden.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hootsuite.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hudson.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hyread.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ibtimes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,i-cable.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,icij.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,icoco.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,imgur.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,initiummall.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,insecam.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ipfs.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,issuu.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,istockphoto.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,japantimes.co.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,jiji.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,jinx.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,jkforum.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,joinmastodon.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,justmysocks.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,justpaste.it,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kakao.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kakaocorp.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kik.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kobo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kobobooks.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,kodingen.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,lemonde.fr,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,lepoint.fr,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,lihkg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,listennotes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,livestream.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,logmein.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mail.ru,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mailchimp.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,marc.info,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,matters.news,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,maying.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,medium.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mega.nz,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mil,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mingpao.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mobile01.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,myspace.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,myspacecdn.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nanyang.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,naver.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,neowin.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,newstapa.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nexitally.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nhk.or.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nicovideo.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nii.ac.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nikkei.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nofile.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,now.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nrk.no,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nyt.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytchina.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytcn.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytco.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytimes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytimg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytlog.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nytstyle.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ok.ru,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,okex.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,on.cc,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,orientaldaily.com.my,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,overcast.fm,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,paltalk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pao-pao.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,parsevideo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pbxes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pcdvd.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pchome.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pcloud.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,picacomic.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pinimg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pixiv.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,player.fm,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,plurk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,po18.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,potato.im,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,potatso.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,prism-break.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,proxifier.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pt.im,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pts.org.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pubu.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pubu.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,pureapk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,quora.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,quoracdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,rakuten.co.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,readingtimes.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,readmoo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,redbubble.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,reddit.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,redditmedia.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,resilio.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,reuters.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,reutersmedia.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,rfi.fr,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,rixcloud.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,roadshow.hk,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,scmp.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,scribd.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,seatguru.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,shadowsocks.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,shopee.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,slideshare.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,softfamous.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,soundcloud.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ssrcloud.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,startpage.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,steamcommunity.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,steemit.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,steemitwallet.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,t66y.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tapatalk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,teco-hk.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,teco-mo.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,teddysun.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,textnow.me,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,theguardian.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,theinitium.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,thetvdb.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tineye.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,torproject.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tumblr.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,turbobit.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tutanota.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tvboxnow.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,udn.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,unseen.is,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,upmedia.mg,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,uptodown.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,urbandictionary.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ustream.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,uwants.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,v2ray.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,viber.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,videopress.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vimeo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,voachinese.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,voanews.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,voxer.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vzw.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,w3schools.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,washingtonpost.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wattpad.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,whoer.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wikimapia.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wikipedia.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wikiquote.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wikiwand.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,winudf.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wire.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wordpress.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,workflow.is,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,worldcat.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wsj.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wsj.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xhamster.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xn--90wwvt03e.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xn--i2ru8q2qg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xnxx.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xvideos.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yahoo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yandex.ru,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ycombinator.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yesasia.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yes-news.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yomiuri.co.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,you-get.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zaobao.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zb.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zello.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zeronet.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zoom.us,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,github,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,jav,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,pinterest,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,porn,alpha_🔰国外流量"
+  - "DOMAIN-KEYWORD,wikileaks,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apartmentratings.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,apartments.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bankmobilevibe.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bing.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,booktopia.com.au,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cccat.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,centauro.com.br,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,clearsurance.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,costco.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,crackle.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,depositphotos.cn,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dish.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dmm.co.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dmm.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dnvod.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,esurance.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,extmatrix.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fastpic.ru,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,flipboard.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fnac.be,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fnac.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,funkyimg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,fxnetworks.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gettyimages.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,go.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,here.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,jcpenney.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,jiehua.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,mailfence.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nationwide.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nbc.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nexon.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nordstrom.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nordstromimage.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nordstromrack.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,superpages.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,target.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,thinkgeek.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tracfone.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,unity3d.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,uploader.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vevo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,viu.tv,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,vsco.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,xfinity.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,zattoo.com,alpha_🔰国外流量"
+  - "DOMAIN,testflight.apple.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,appsto.re,alpha_🔰国外流量"
+  - "DOMAIN,books.itunes.apple.com,alpha_🔰国外流量"
+  - "DOMAIN,hls.itunes.apple.com,alpha_🔰国外流量"
+  - "DOMAIN,apps.apple.com,alpha_🔰国外流量"
+  - "DOMAIN,itunes.apple.com,alpha_🔰国外流量"
+  - "DOMAIN,api-glb-sea.smoot.apple.com,alpha_🔰国外流量"
+  - "DOMAIN,lookup-api.apple.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,abc.xyz,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,android.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,androidify.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dialogflow.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,autodraw.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,capitalg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,certificate-transparency.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,chrome.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,chromeexperiments.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,chromestatus.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,chromium.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,creativelab5.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,debug.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,deepmind.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,firebaseio.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,getmdl.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ggpht.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gmail.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gmodules.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,godoc.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,golang.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gstatic.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gv.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gwtproject.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,itasoftware.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,madewithcode.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,material.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,polymer-project.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,admin.recaptcha.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,recaptcha.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,shattered.io,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,synergyse.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tensorflow.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tfhub.dev,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tiltbrush.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,waveprotocol.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,waymo.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,webmproject.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,webrtc.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,whatbrowser.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,widevine.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,x.company,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,youtu.be,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yt.be,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ytimg.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,1drv.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,1drv.ms,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blob.core.windows.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,livefilestore.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,onedrive.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,storage.live.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,storage.msn.com,alpha_🔰国外流量"
+  - "DOMAIN,oneclient.sfx.ms,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,0rz.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,4bluestones.biz,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,9bis.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,allconnected.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,aol.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bcc.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bit.ly,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,bitshare.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blog.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blogimg.jp,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,blogtd.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,broadcast.co.nz,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,camfrog.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cfos.de,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,citypopulation.de,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cloudfront.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ctitv.com.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cuhk.edu.hk,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,cusu.hk,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,discord.gg,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,discuss.com.hk,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,dropboxapi.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,duolingo.cn,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,edditstatic.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,flickriver.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,focustaiwan.tw,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,free.fr,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,gigacircle.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hk-pub.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hosting.co.uk,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,hwcdn.net,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,ifixit.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,iphone4hongkong.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,iphonetaiwan.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,iptvbin.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,linksalpha.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,manyvids.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,myactimes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,newsblur.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,now.im,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,nowe.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,redditlist.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,s3.amazonaws.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,signal.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,smartmailcloud.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,sparknotes.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,streetvoice.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,supertop.co,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,tv.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,typepad.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,udnbkk.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,urbanairship.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,whispersystems.org,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wikia.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wn.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,wolframalpha.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,x-art.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,yimg.com,alpha_🔰国外流量"
+  - "DOMAIN,api.steampowered.com,alpha_🔰国外流量"
+  - "DOMAIN,store.steampowered.com,alpha_🔰国外流量"
+  - "DOMAIN-SUFFIX,aaplimg.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,apple.co,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,apple.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,appstore.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,cdn-apple.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,crashlytics.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,icloud.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,icloud-content.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,me.com,alpha_🍎苹果服务"
+  - "DOMAIN-SUFFIX,mzstatic.com,alpha_🍎苹果服务"
+  - "DOMAIN,www-cdn.icloud.com.akadns.net,alpha_🍎苹果服务"
+  - DOMAIN-SUFFIX,t.me,alpha_✈️Telegram
+  - DOMAIN-SUFFIX,tdesktop.com,alpha_✈️Telegram
+  - DOMAIN-SUFFIX,telegra.ph,alpha_✈️Telegram
+  - DOMAIN-SUFFIX,telegram.me,alpha_✈️Telegram
+  - DOMAIN-SUFFIX,telegram.org,alpha_✈️Telegram
+  - IP-CIDR,91.108.4.0/22,alpha_✈️Telegram,no-resolve
+  - IP-CIDR,91.108.8.0/22,alpha_✈️Telegram,no-resolve
+  - IP-CIDR,91.108.12.0/22,alpha_✈️Telegram,no-resolve
+  - IP-CIDR,91.108.16.0/22,alpha_✈️Telegram,no-resolve
+  - IP-CIDR,91.108.56.0/22,alpha_✈️Telegram,no-resolve
+  - IP-CIDR,149.154.160.0/20,alpha_✈️Telegram,no-resolve
+  - IP-CIDR6,2001:b28:f23d::/48,alpha_✈️Telegram,no-resolve
+  - IP-CIDR6,2001:b28:f23f::/48,alpha_✈️Telegram,no-resolve
+  - IP-CIDR6,2001:67c:4e8::/48,alpha_✈️Telegram,no-resolve
+  - "DOMAIN-SUFFIX,googlevideo.com,alpha_🎬Youtube"
+  - "DOMAIN-SUFFIX,youtube.com,alpha_🎬Youtube"
+  - "DOMAIN,youtubei.googleapis.com,alpha_🎬Youtube"
+  - "DOMAIN-SUFFIX,netflix.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflix.net,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,nflxext.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,nflximg.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,nflximg.net,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,nflxso.net,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,nflxvideo.net,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest0.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest1.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest2.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest3.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest4.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest5.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest6.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest7.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest8.com,alpha_🎬Netflix"
+  - "DOMAIN-SUFFIX,netflixdnstest9.com,alpha_🎬Netflix"
+  - "IP-CIDR,23.246.0.0/18,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,37.77.184.0/21,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,45.57.0.0/17,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,64.120.128.0/17,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,66.197.128.0/17,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,108.175.32.0/20,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,192.173.64.0/18,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,198.38.96.0/19,alpha_🎬Netflix,no-resolve"
+  - "IP-CIDR,198.45.48.0/20,alpha_🎬Netflix,no-resolve"
+  - "DOMAIN-SUFFIX,deezer.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,dzcdn.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,kkbox.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,kkbox.com.tw,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,kfs.io,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,joox.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,pandora.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,p-cdn.us,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,sndcdn.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,soundcloud.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,pscdn.co,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,scdn.co,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,spotify.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,spoti.fi,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,spotify.com,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,-spotify-com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,tidal.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,c4assets.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,channel4.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,abema.io,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,ameba.jp,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,abema.tv,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hayabusa.io,alpha_🎬国外媒体"
+  - "DOMAIN,abematv.akamaized.net,alpha_🎬国外媒体"
+  - "DOMAIN,ds-linear-abematv.akamaized.net,alpha_🎬国外媒体"
+  - "DOMAIN,ds-vod-abematv.akamaized.net,alpha_🎬国外媒体"
+  - "DOMAIN,linear-abematv.akamaized.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,aiv-cdn.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,aiv-delivery.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,amazonvideo.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,primevideo.com,alpha_🎬国外媒体"
+  - "DOMAIN,avodmp4s3ww-a.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,d25xi40x97liuc.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,dmqdd6hw24ucf.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,d22qjgkvxw22r6.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,d1v5ir2lpwr8os.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,avoddashs,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,bahamut.com.tw,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,gamer.com.tw,alpha_🎬国外媒体"
+  - "DOMAIN,gamer-cds.cdn.hinet.net,alpha_🎬国外媒体"
+  - "DOMAIN,gamer2-cds.cdn.hinet.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,bbc.co.uk,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,bbci.co.uk,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,bbcfmt,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,uk-live,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,dazn.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,dazn-api.com,alpha_🎬国外媒体"
+  - "DOMAIN,d151l6v8er5bdm.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN-KEYWORD,voddazn,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,bamgrid.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,disney-plus.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,disneyplus.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,dssott.com,alpha_🎬国外媒体"
+  - "DOMAIN,cdn.registerdisney.go.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,encoretvb.com,alpha_🎬国外媒体"
+  - "DOMAIN,edge.api.brightcove.com,alpha_🎬国外媒体"
+  - "DOMAIN,bcbolt446c5271-a.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,fox.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,foxdcg.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,theplatform.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,uplynk.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hbo.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hbogo.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hbonow.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hbogoasia.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hbogoasia.hk,alpha_🎬国外媒体"
+  - "DOMAIN,bcbolthboa-a.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,players.brightcove.net,alpha_🎬国外媒体"
+  - "DOMAIN,s3-ap-southeast-1.amazonaws.com,alpha_🎬国外媒体"
+  - "DOMAIN,dai3fd1oh325y.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com,alpha_🎬国外媒体"
+  - "DOMAIN,hboasia1-i.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,hboasia2-i.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,hboasia3-i.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,hboasia4-i.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,hboasia5-i.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,5itv.tv,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,ocnttv.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hulu.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,huluim.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hulustream.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,happyon.jp,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,hulu.jp,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,itv.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,itvstatic.com,alpha_🎬国外媒体"
+  - "DOMAIN,itvpnpmobile-a.akamaihd.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,kktv.com.tw,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,kktv.me,alpha_🎬国外媒体"
+  - "DOMAIN,kktv-theater.kk.stream,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,linetv.tw,alpha_🎬国外媒体"
+  - "DOMAIN,d3c7rimkq79yfu.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,litv.tv,alpha_🎬国外媒体"
+  - "DOMAIN,litvfreemobile-hichannel.cdn.hinet.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,channel5.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,my5.tv,alpha_🎬国外媒体"
+  - "DOMAIN,d349g9zuie06uo.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,mytvsuper.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,tvb.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflix.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflix.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nflxext.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nflximg.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nflximg.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nflxso.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nflxvideo.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest0.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest1.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest2.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest3.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest4.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest5.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest6.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest7.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest8.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,netflixdnstest9.com,alpha_🎬国外媒体"
+  - "IP-CIDR,23.246.0.0/18,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,37.77.184.0/21,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,45.57.0.0/17,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,64.120.128.0/17,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,66.197.128.0/17,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,108.175.32.0/20,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,192.173.64.0/18,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,198.38.96.0/19,alpha_🎬国外媒体,no-resolve"
+  - "IP-CIDR,198.45.48.0/20,alpha_🎬国外媒体,no-resolve"
+  - "DOMAIN-SUFFIX,dmc.nico,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nicovideo.jp,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,nimg.jp,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,socdm.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,pbs.org,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,phncdn.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,pornhub.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,pornhubpremium.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,skyking.com.tw,alpha_🎬国外媒体"
+  - "DOMAIN,hamifans.emome.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,twitch.tv,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,twitchcdn.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,ttvnw.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,jtvnw.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,viu.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,viu.tv,alpha_🎬国外媒体"
+  - "DOMAIN,api.viu.now.com,alpha_🎬国外媒体"
+  - "DOMAIN,d1k2us671qcoau.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,d2anahhhmp1ffz.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN,dfp6rglgjqszk.cloudfront.net,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,googlevideo.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,youtube.com,alpha_🎬国外媒体"
+  - "DOMAIN,youtubei.googleapis.com,alpha_🎬国外媒体"
+  - "DOMAIN-SUFFIX,biliapi.com,alpha_🎬哔哩哔哩"
+  - "DOMAIN-SUFFIX,biliapi.net,alpha_🎬哔哩哔哩"
+  - "DOMAIN-SUFFIX,bilibili.com,alpha_🎬哔哩哔哩"
+  - "DOMAIN-SUFFIX,bilibili.tv,alpha_🎬哔哩哔哩"
+  - "DOMAIN-SUFFIX,bilivideo.com,alpha_🎬哔哩哔哩"
+  - DOMAIN-SUFFIX,local,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - IP-CIDR6,::1/128,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - IP-CIDR6,fd00::/8,DIRECT,no-resolve
+  - DOMAIN,app.adjust.com,DIRECT
+  - DOMAIN-SUFFIX,googletraveladservices.com,DIRECT
+  - DOMAIN,dl.google.com,DIRECT
+  - DOMAIN,mtalk.google.com,DIRECT
+  - DOMAIN,livew.l.qq.com,DIRECT
+  - DOMAIN,vd.l.qq.com,DIRECT
+  - DOMAIN,analytics.strava.com,DIRECT
+  - DOMAIN,msg.umeng.com,DIRECT
+  - DOMAIN,msg.umengcloud.com,DIRECT
+  - DOMAIN-SUFFIX,qhres.com,DIRECT
+  - DOMAIN-SUFFIX,qhimg.com,DIRECT
+  - DOMAIN-SUFFIX,akadns.net,DIRECT
+  - DOMAIN-SUFFIX,alibaba.com,DIRECT
+  - DOMAIN-SUFFIX,alicdn.com,DIRECT
+  - DOMAIN-SUFFIX,alikunlun.com,DIRECT
+  - DOMAIN-SUFFIX,alipay.com,DIRECT
+  - DOMAIN-SUFFIX,amap.com,DIRECT
+  - DOMAIN-SUFFIX,autonavi.com,DIRECT
+  - DOMAIN-SUFFIX,dingtalk.com,DIRECT
+  - DOMAIN-SUFFIX,mxhichina.com,DIRECT
+  - DOMAIN-SUFFIX,soku.com,DIRECT
+  - DOMAIN-SUFFIX,taobao.com,DIRECT
+  - DOMAIN-SUFFIX,tmall.com,DIRECT
+  - DOMAIN-SUFFIX,tmall.hk,DIRECT
+  - DOMAIN-SUFFIX,ykimg.com,DIRECT
+  - DOMAIN-SUFFIX,youku.com,DIRECT
+  - DOMAIN-SUFFIX,xiami.com,DIRECT
+  - DOMAIN-SUFFIX,xiami.net,DIRECT
+  - DOMAIN-SUFFIX,aaplimg.com,DIRECT
+  - DOMAIN-SUFFIX,apple.co,DIRECT
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT
+  - DOMAIN-SUFFIX,appstore.com,DIRECT
+  - DOMAIN-SUFFIX,cdn-apple.com,DIRECT
+  - DOMAIN-SUFFIX,crashlytics.com,DIRECT
+  - DOMAIN-SUFFIX,icloud.com,DIRECT
+  - DOMAIN-SUFFIX,icloud-content.com,DIRECT
+  - DOMAIN-SUFFIX,me.com,DIRECT
+  - DOMAIN-SUFFIX,mzstatic.com,DIRECT
+  - DOMAIN,www-cdn.icloud.com.akadns.net,DIRECT
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,baidubcr.com,DIRECT
+  - DOMAIN-SUFFIX,bdstatic.com,DIRECT
+  - DOMAIN-SUFFIX,yunjiasu-cdn.net,DIRECT
+  - DOMAIN-SUFFIX,acgvideo.com,DIRECT
+  - DOMAIN-SUFFIX,hdslb.com,DIRECT
+  - DOMAIN-SUFFIX,blizzard.com,DIRECT
+  - DOMAIN-SUFFIX,battle.net,DIRECT
+  - DOMAIN,blzddist1-a.akamaihd.net,DIRECT
+  - DOMAIN-SUFFIX,feiliao.com,DIRECT
+  - DOMAIN-SUFFIX,pstatp.com,DIRECT
+  - DOMAIN-SUFFIX,snssdk.com,DIRECT
+  - DOMAIN-SUFFIX,iesdouyin.com,DIRECT
+  - DOMAIN-SUFFIX,toutiao.com,DIRECT
+  - DOMAIN-SUFFIX,cctv.com,DIRECT
+  - DOMAIN-SUFFIX,cctvpic.com,DIRECT
+  - DOMAIN-SUFFIX,livechina.com,DIRECT
+  - DOMAIN-SUFFIX,didialift.com,DIRECT
+  - DOMAIN-SUFFIX,didiglobal.com,DIRECT
+  - DOMAIN-SUFFIX,udache.com,DIRECT
+  - DOMAIN-SUFFIX,343480.com,DIRECT
+  - DOMAIN-SUFFIX,baduziyuan.com,DIRECT
+  - DOMAIN-SUFFIX,com-hs-hkdy.com,DIRECT
+  - DOMAIN-SUFFIX,czybjz.com,DIRECT
+  - DOMAIN-SUFFIX,dandanzan.com,DIRECT
+  - DOMAIN-SUFFIX,fjhps.com,DIRECT
+  - DOMAIN-SUFFIX,kuyunbo.club,DIRECT
+  - DOMAIN-SUFFIX,21cn.com,DIRECT
+  - DOMAIN-SUFFIX,hitv.com,DIRECT
+  - DOMAIN-SUFFIX,mgtv.com,DIRECT
+  - DOMAIN-SUFFIX,iqiyi.com,DIRECT
+  - DOMAIN-SUFFIX,iqiyipic.com,DIRECT
+  - DOMAIN-SUFFIX,71.am.com,DIRECT
+  - DOMAIN-SUFFIX,jd.com,DIRECT
+  - DOMAIN-SUFFIX,jd.hk,DIRECT
+  - DOMAIN-SUFFIX,jdpay.com,DIRECT
+  - DOMAIN-SUFFIX,360buyimg.com,DIRECT
+  - DOMAIN-SUFFIX,iciba.com,DIRECT
+  - DOMAIN-SUFFIX,ksosoft.com,DIRECT
+  - DOMAIN-SUFFIX,meitu.com,DIRECT
+  - DOMAIN-SUFFIX,meitudata.com,DIRECT
+  - DOMAIN-SUFFIX,meitustat.com,DIRECT
+  - DOMAIN-SUFFIX,meipai.com,DIRECT
+  - DOMAIN-SUFFIX,duokan.com,DIRECT
+  - DOMAIN-SUFFIX,mi-img.com,DIRECT
+  - DOMAIN-SUFFIX,miui.com,DIRECT
+  - DOMAIN-SUFFIX,miwifi.com,DIRECT
+  - DOMAIN-SUFFIX,xiaomi.com,DIRECT
+  - DOMAIN-SUFFIX,microsoft.com,DIRECT
+  - DOMAIN-SUFFIX,msecnd.net,DIRECT
+  - DOMAIN-SUFFIX,office365.com,DIRECT
+  - DOMAIN-SUFFIX,outlook.com,DIRECT
+  - DOMAIN-SUFFIX,s-microsoft.com,DIRECT
+  - DOMAIN-SUFFIX,visualstudio.com,DIRECT
+  - DOMAIN-SUFFIX,windows.com,DIRECT
+  - DOMAIN-SUFFIX,windowsupdate.com,DIRECT
+  - DOMAIN,officecdn-microsoft-com.akamaized.net,DIRECT
+  - DOMAIN-SUFFIX,163.com,DIRECT
+  - DOMAIN-SUFFIX,126.net,DIRECT
+  - DOMAIN-SUFFIX,127.net,DIRECT
+  - DOMAIN-SUFFIX,163yun.com,DIRECT
+  - DOMAIN-SUFFIX,lofter.com,DIRECT
+  - DOMAIN-SUFFIX,netease.com,DIRECT
+  - DOMAIN-SUFFIX,ydstatic.com,DIRECT
+  - DOMAIN-SUFFIX,sina.com,DIRECT
+  - DOMAIN-SUFFIX,weibo.com,DIRECT
+  - DOMAIN-SUFFIX,weibocdn.com,DIRECT
+  - DOMAIN-SUFFIX,sohu.com,DIRECT
+  - DOMAIN-SUFFIX,sohucs.com,DIRECT
+  - DOMAIN-SUFFIX,sohu-inc.com,DIRECT
+  - DOMAIN-SUFFIX,v-56.com,DIRECT
+  - DOMAIN-SUFFIX,sogo.com,DIRECT
+  - DOMAIN-SUFFIX,sogou.com,DIRECT
+  - DOMAIN-SUFFIX,sogoucdn.com,DIRECT
+  - DOMAIN-SUFFIX,steampowered.com,DIRECT
+  - DOMAIN-SUFFIX,steam-chat.com,DIRECT
+  - DOMAIN-SUFFIX,steamgames.com,DIRECT
+  - DOMAIN-SUFFIX,steamusercontent.com,DIRECT
+  - DOMAIN-SUFFIX,steamcontent.com,DIRECT
+  - DOMAIN-SUFFIX,steamstatic.com,DIRECT
+  - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net,DIRECT
+  - DOMAIN-SUFFIX,steamstat.us,DIRECT
+  - DOMAIN-SUFFIX,gtimg.com,DIRECT
+  - DOMAIN-SUFFIX,idqqimg.com,DIRECT
+  - DOMAIN-SUFFIX,igamecj.com,DIRECT
+  - DOMAIN-SUFFIX,myapp.com,DIRECT
+  - DOMAIN-SUFFIX,myqcloud.com,DIRECT
+  - DOMAIN-SUFFIX,qq.com,DIRECT
+  - DOMAIN-SUFFIX,tencent.com,DIRECT
+  - DOMAIN-SUFFIX,tencent-cloud.net,DIRECT
+  - DOMAIN-SUFFIX,jstucdn.com,DIRECT
+  - DOMAIN-SUFFIX,zimuzu.io,DIRECT
+  - DOMAIN-SUFFIX,zimuzu.tv,DIRECT
+  - DOMAIN-SUFFIX,zmz2019.com,DIRECT
+  - DOMAIN-SUFFIX,zmzapi.com,DIRECT
+  - DOMAIN-SUFFIX,zmzapi.net,DIRECT
+  - DOMAIN-SUFFIX,zmzfile.com,DIRECT
+  - DOMAIN-SUFFIX,ccgslb.com,DIRECT
+  - DOMAIN-SUFFIX,ccgslb.net,DIRECT
+  - DOMAIN-SUFFIX,chinanetcenter.com,DIRECT
+  - DOMAIN-SUFFIX,meixincdn.com,DIRECT
+  - DOMAIN-SUFFIX,ourdvs.com,DIRECT
+  - DOMAIN-SUFFIX,staticdn.net,DIRECT
+  - DOMAIN-SUFFIX,wangsu.com,DIRECT
+  - DOMAIN-SUFFIX,ipip.net,DIRECT
+  - DOMAIN-SUFFIX,ip.la,DIRECT
+  - DOMAIN-SUFFIX,ip-cdn.com,DIRECT
+  - DOMAIN-SUFFIX,ipv6-test.com,DIRECT
+  - DOMAIN-SUFFIX,test-ipv6.com,DIRECT
+  - DOMAIN-SUFFIX,whatismyip.com,DIRECT
+  - DOMAIN-SUFFIX,netspeedtestmaster.com,DIRECT
+  - DOMAIN,speedtest.macpaw.com,DIRECT
+  - DOMAIN-SUFFIX,awesome-hd.me,DIRECT
+  - DOMAIN-SUFFIX,broadcasthe.net,DIRECT
+  - DOMAIN-SUFFIX,chdbits.co,DIRECT
+  - DOMAIN-SUFFIX,classix-unlimited.co.uk,DIRECT
+  - DOMAIN-SUFFIX,empornium.me,DIRECT
+  - DOMAIN-SUFFIX,gazellegames.net,DIRECT
+  - DOMAIN-SUFFIX,hdchina.org,DIRECT
+  - DOMAIN-SUFFIX,hdsky.me,DIRECT
+  - DOMAIN-SUFFIX,icetorrent.org,DIRECT
+  - DOMAIN-SUFFIX,jpopsuki.eu,DIRECT
+  - DOMAIN-SUFFIX,keepfrds.com,DIRECT
+  - DOMAIN-SUFFIX,madsrevolution.net,DIRECT
+  - DOMAIN-SUFFIX,m-team.cc,DIRECT
+  - DOMAIN-SUFFIX,nanyangpt.com,DIRECT
+  - DOMAIN-SUFFIX,ncore.cc,DIRECT
+  - DOMAIN-SUFFIX,open.cd,DIRECT
+  - DOMAIN-SUFFIX,ourbits.club,DIRECT
+  - DOMAIN-SUFFIX,passthepopcorn.me,DIRECT
+  - DOMAIN-SUFFIX,privatehd.to,DIRECT
+  - DOMAIN-SUFFIX,redacted.ch,DIRECT
+  - DOMAIN-SUFFIX,springsunday.net,DIRECT
+  - DOMAIN-SUFFIX,tjupt.org,DIRECT
+  - DOMAIN-SUFFIX,totheglory.im,DIRECT
+  - DOMAIN-SUFFIX,acm.org,DIRECT
+  - DOMAIN-SUFFIX,acs.org,DIRECT
+  - DOMAIN-SUFFIX,aip.org,DIRECT
+  - DOMAIN-SUFFIX,ams.org,DIRECT
+  - DOMAIN-SUFFIX,annualreviews.org,DIRECT
+  - DOMAIN-SUFFIX,aps.org,DIRECT
+  - DOMAIN-SUFFIX,ascelibrary.org,DIRECT
+  - DOMAIN-SUFFIX,asm.org,DIRECT
+  - DOMAIN-SUFFIX,asme.org,DIRECT
+  - DOMAIN-SUFFIX,astm.org,DIRECT
+  - DOMAIN-SUFFIX,bmj.com,DIRECT
+  - DOMAIN-SUFFIX,cambridge.org,DIRECT
+  - DOMAIN-SUFFIX,cas.org,DIRECT
+  - DOMAIN-SUFFIX,clarivate.com,DIRECT
+  - DOMAIN-SUFFIX,ebscohost.com,DIRECT
+  - DOMAIN-SUFFIX,emerald.com,DIRECT
+  - DOMAIN-SUFFIX,engineeringvillage.com,DIRECT
+  - DOMAIN-SUFFIX,icevirtuallibrary.com,DIRECT
+  - DOMAIN-SUFFIX,ieee.org,DIRECT
+  - DOMAIN-SUFFIX,imf.org,DIRECT
+  - DOMAIN-SUFFIX,iop.org,DIRECT
+  - DOMAIN-SUFFIX,jamanetwork.com,DIRECT
+  - DOMAIN-SUFFIX,jhu.edu,DIRECT
+  - DOMAIN-SUFFIX,jstor.org,DIRECT
+  - DOMAIN-SUFFIX,karger.com,DIRECT
+  - DOMAIN-SUFFIX,libguides.com,DIRECT
+  - DOMAIN-SUFFIX,madsrevolution.net,DIRECT
+  - DOMAIN-SUFFIX,mpg.de,DIRECT
+  - DOMAIN-SUFFIX,myilibrary.com,DIRECT
+  - DOMAIN-SUFFIX,nature.com,DIRECT
+  - DOMAIN-SUFFIX,oecd-ilibrary.org,DIRECT
+  - DOMAIN-SUFFIX,osapublishing.org,DIRECT
+  - DOMAIN-SUFFIX,oup.com,DIRECT
+  - DOMAIN-SUFFIX,ovid.com,DIRECT
+  - DOMAIN-SUFFIX,oxfordartonline.com,DIRECT
+  - DOMAIN-SUFFIX,oxfordbibliographies.com,DIRECT
+  - DOMAIN-SUFFIX,oxfordmusiconline.com,DIRECT
+  - DOMAIN-SUFFIX,pnas.org,DIRECT
+  - DOMAIN-SUFFIX,proquest.com,DIRECT
+  - DOMAIN-SUFFIX,rsc.org,DIRECT
+  - DOMAIN-SUFFIX,sagepub.com,DIRECT
+  - DOMAIN-SUFFIX,sciencedirect.com,DIRECT
+  - DOMAIN-SUFFIX,sciencemag.org,DIRECT
+  - DOMAIN-SUFFIX,scopus.com,DIRECT
+  - DOMAIN-SUFFIX,siam.org,DIRECT
+  - DOMAIN-SUFFIX,spiedigitallibrary.org,DIRECT
+  - DOMAIN-SUFFIX,springer.com,DIRECT
+  - DOMAIN-SUFFIX,springerlink.com,DIRECT
+  - DOMAIN-SUFFIX,tandfonline.com,DIRECT
+  - DOMAIN-SUFFIX,un.org,DIRECT
+  - DOMAIN-SUFFIX,uni-bielefeld.de,DIRECT
+  - DOMAIN-SUFFIX,webofknowledge.com,DIRECT
+  - DOMAIN-SUFFIX,westlaw.com,DIRECT
+  - DOMAIN-SUFFIX,wiley.com,DIRECT
+  - DOMAIN-SUFFIX,worldbank.org,DIRECT
+  - DOMAIN-SUFFIX,worldscientific.com,DIRECT
+  - DOMAIN-SUFFIX,cn,DIRECT
+  - DOMAIN-SUFFIX,360in.com,DIRECT
+  - DOMAIN-SUFFIX,51ym.me,DIRECT
+  - DOMAIN-SUFFIX,8686c.com,DIRECT
+  - DOMAIN-SUFFIX,abchina.com,DIRECT
+  - DOMAIN-SUFFIX,accuweather.com,DIRECT
+  - DOMAIN-SUFFIX,aicoinstorge.com,DIRECT
+  - DOMAIN-SUFFIX,air-matters.com,DIRECT
+  - DOMAIN-SUFFIX,air-matters.io,DIRECT
+  - DOMAIN-SUFFIX,aixifan.com,DIRECT
+  - DOMAIN-SUFFIX,amd.com,DIRECT
+  - DOMAIN-SUFFIX,b612.net,DIRECT
+  - DOMAIN-SUFFIX,bdatu.com,DIRECT
+  - DOMAIN-SUFFIX,beitaichufang.com,DIRECT
+  - DOMAIN-SUFFIX,bjango.com,DIRECT
+  - DOMAIN-SUFFIX,booking.com,DIRECT
+  - DOMAIN-SUFFIX,bstatic.com,DIRECT
+  - DOMAIN-SUFFIX,cailianpress.com,DIRECT
+  - DOMAIN-SUFFIX,camera360.com,DIRECT
+  - DOMAIN-SUFFIX,chinaso.com,DIRECT
+  - DOMAIN-SUFFIX,chua.pro,DIRECT
+  - DOMAIN-SUFFIX,chuimg.com,DIRECT
+  - DOMAIN-SUFFIX,chunyu.mobi,DIRECT
+  - DOMAIN-SUFFIX,chushou.tv,DIRECT
+  - DOMAIN-SUFFIX,cmbchina.com,DIRECT
+  - DOMAIN-SUFFIX,cmbimg.com,DIRECT
+  - DOMAIN-SUFFIX,ctrip.com,DIRECT
+  - DOMAIN-SUFFIX,dfcfw.com,DIRECT
+  - DOMAIN-SUFFIX,docschina.org,DIRECT
+  - DOMAIN-SUFFIX,douban.com,DIRECT
+  - DOMAIN-SUFFIX,doubanio.com,DIRECT
+  - DOMAIN-SUFFIX,douyu.com,DIRECT
+  - DOMAIN-SUFFIX,dxycdn.com,DIRECT
+  - DOMAIN-SUFFIX,dytt8.net,DIRECT
+  - DOMAIN-SUFFIX,eastmoney.com,DIRECT
+  - DOMAIN-SUFFIX,eudic.net,DIRECT
+  - DOMAIN-SUFFIX,feng.com,DIRECT
+  - DOMAIN-SUFFIX,fengkongcloud.com,DIRECT
+  - DOMAIN-SUFFIX,frdic.com,DIRECT
+  - DOMAIN-SUFFIX,futu5.com,DIRECT
+  - DOMAIN-SUFFIX,futunn.com,DIRECT
+  - DOMAIN-SUFFIX,gandi.net,DIRECT
+  - DOMAIN-SUFFIX,geilicdn.com,DIRECT
+  - DOMAIN-SUFFIX,getpricetag.com,DIRECT
+  - DOMAIN-SUFFIX,gifshow.com,DIRECT
+  - DOMAIN-SUFFIX,godic.net,DIRECT
+  - DOMAIN-SUFFIX,hicloud.com,DIRECT
+  - DOMAIN-SUFFIX,hongxiu.com,DIRECT
+  - DOMAIN-SUFFIX,hostbuf.com,DIRECT
+  - DOMAIN-SUFFIX,huxiucdn.com,DIRECT
+  - DOMAIN-SUFFIX,huya.com,DIRECT
+  - DOMAIN-SUFFIX,infinitynewtab.com,DIRECT
+  - DOMAIN-SUFFIX,ithome.com,DIRECT
+  - DOMAIN-SUFFIX,java.com,DIRECT
+  - DOMAIN-SUFFIX,jidian.im,DIRECT
+  - DOMAIN-SUFFIX,kaiyanapp.com,DIRECT
+  - DOMAIN-SUFFIX,kaspersky-labs.com,DIRECT
+  - DOMAIN-SUFFIX,keepcdn.com,DIRECT
+  - DOMAIN-SUFFIX,kkmh.com,DIRECT
+  - DOMAIN-SUFFIX,licdn.com,DIRECT
+  - DOMAIN-SUFFIX,linkedin.com,DIRECT
+  - DOMAIN-SUFFIX,loli.net,DIRECT
+  - DOMAIN-SUFFIX,luojilab.com,DIRECT
+  - DOMAIN-SUFFIX,maoyan.com,DIRECT
+  - DOMAIN-SUFFIX,maoyun.tv,DIRECT
+  - DOMAIN-SUFFIX,meituan.com,DIRECT
+  - DOMAIN-SUFFIX,meituan.net,DIRECT
+  - DOMAIN-SUFFIX,mobike.com,DIRECT
+  - DOMAIN-SUFFIX,moke.com,DIRECT
+  - DOMAIN-SUFFIX,mubu.com,DIRECT
+  - DOMAIN-SUFFIX,myzaker.com,DIRECT
+  - DOMAIN-SUFFIX,nim-lang-cn.org,DIRECT
+  - DOMAIN-SUFFIX,nvidia.com,DIRECT
+  - DOMAIN-SUFFIX,oracle.com,DIRECT
+  - DOMAIN-SUFFIX,paypal.com,DIRECT
+  - DOMAIN-SUFFIX,paypalobjects.com,DIRECT
+  - DOMAIN-SUFFIX,qdaily.com,DIRECT
+  - DOMAIN-SUFFIX,qidian.com,DIRECT
+  - DOMAIN-SUFFIX,qyer.com,DIRECT
+  - DOMAIN-SUFFIX,qyerstatic.com,DIRECT
+  - DOMAIN-SUFFIX,raychase.net,DIRECT
+  - DOMAIN-SUFFIX,ronghub.com,DIRECT
+  - DOMAIN-SUFFIX,ruguoapp.com,DIRECT
+  - DOMAIN-SUFFIX,s-reader.com,DIRECT
+  - DOMAIN-SUFFIX,sankuai.com,DIRECT
+  - DOMAIN-SUFFIX,scomper.me,DIRECT
+  - DOMAIN-SUFFIX,seafile.com,DIRECT
+  - DOMAIN-SUFFIX,sm.ms,DIRECT
+  - DOMAIN-SUFFIX,smzdm.com,DIRECT
+  - DOMAIN-SUFFIX,snapdrop.net,DIRECT
+  - DOMAIN-SUFFIX,snwx.com,DIRECT
+  - DOMAIN-SUFFIX,sspai.com,DIRECT
+  - DOMAIN-SUFFIX,takungpao.com,DIRECT
+  - DOMAIN-SUFFIX,teamviewer.com,DIRECT
+  - DOMAIN-SUFFIX,tianyancha.com,DIRECT
+  - DOMAIN-SUFFIX,udacity.com,DIRECT
+  - DOMAIN-SUFFIX,uning.com,DIRECT
+  - DOMAIN-SUFFIX,vmware.com,DIRECT
+  - DOMAIN-SUFFIX,weather.com,DIRECT
+  - DOMAIN-SUFFIX,weico.cc,DIRECT
+  - DOMAIN-SUFFIX,weidian.com,DIRECT
+  - DOMAIN-SUFFIX,xiachufang.com,DIRECT
+  - DOMAIN-SUFFIX,ximalaya.com,DIRECT
+  - DOMAIN-SUFFIX,xinhuanet.com,DIRECT
+  - DOMAIN-SUFFIX,xmcdn.com,DIRECT
+  - DOMAIN-SUFFIX,yangkeduo.com,DIRECT
+  - DOMAIN-SUFFIX,zhangzishi.cc,DIRECT
+  - DOMAIN-SUFFIX,zhihu.com,DIRECT
+  - DOMAIN-SUFFIX,zhimg.com,DIRECT
+  - DOMAIN-SUFFIX,zhuihd.com,DIRECT
+  - DOMAIN,download.jetbrains.com,DIRECT
+  - DOMAIN,images-cn.ssl-images-amazon.com,DIRECT
+  - IP-CIDR,119.28.28.28/32,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT
+  # --- priority 2000 (beta) ---
+  - DOMAIN,upstream.example.com:8443,DIRECT
+  - IP-CIDR,1.1.1.1/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,8.8.8.8/32,beta_蓝莓桥,no-resolve
+  - DOMAIN,api.githubcopilot.com,beta_蓝莓桥
+  - DOMAIN,copilot-proxy.githubusercontent.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,copilot.cloud.microsoft,beta_蓝莓桥
+  - DOMAIN-SUFFIX,copilot.microsoft.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,services.googleapis.cn,DIRECT
+  - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,DIRECT
+  - DOMAIN-KEYWORD,dbankcloud,DIRECT
+  - DOMAIN,safebrowsing.urlsec.qq.com,DIRECT
+  - DOMAIN,safebrowsing.googleapis.com,DIRECT
+  - DOMAIN,developer.apple.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,digicert.com,beta_蓝莓桥
+  - DOMAIN,ocsp.apple.com,beta_蓝莓桥
+  - DOMAIN,ocsp.comodoca.com,beta_蓝莓桥
+  - DOMAIN,ocsp.usertrust.com,beta_蓝莓桥
+  - DOMAIN,ocsp.sectigo.com,beta_蓝莓桥
+  - DOMAIN,ocsp.verisign.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,apple-dns.net,beta_蓝莓桥
+  - DOMAIN,testflight.apple.com,beta_蓝莓桥
+  - DOMAIN,sandbox.itunes.apple.com,beta_蓝莓桥
+  - DOMAIN,itunes.apple.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,apps.apple.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blobstore.apple.com,beta_蓝莓桥
+  - DOMAIN,cvws.icloud-content.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mzstatic.com,DIRECT
+  - DOMAIN-SUFFIX,itunes.apple.com,DIRECT
+  - DOMAIN-SUFFIX,icloud.com,DIRECT
+  - DOMAIN-SUFFIX,icloud-content.com,DIRECT
+  - DOMAIN-SUFFIX,me.com,DIRECT
+  - DOMAIN-SUFFIX,aaplimg.com,DIRECT
+  - DOMAIN-SUFFIX,cdn20.com,DIRECT
+  - DOMAIN-SUFFIX,cdn-apple.com,DIRECT
+  - DOMAIN-SUFFIX,akadns.net,DIRECT
+  - DOMAIN-SUFFIX,akamaiedge.net,DIRECT
+  - DOMAIN-SUFFIX,edgekey.net,DIRECT
+  - DOMAIN-SUFFIX,mwcloudcdn.com,DIRECT
+  - DOMAIN-SUFFIX,mwcname.com,DIRECT
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT
+  - DOMAIN-SUFFIX,apple-mapkit.com,DIRECT
+  - DOMAIN-SUFFIX,126.com,DIRECT
+  - DOMAIN-SUFFIX,126.net,DIRECT
+  - DOMAIN-SUFFIX,127.net,DIRECT
+  - DOMAIN-SUFFIX,163.com,DIRECT
+  - DOMAIN-SUFFIX,360buyimg.com,DIRECT
+  - DOMAIN-SUFFIX,36kr.com,DIRECT
+  - DOMAIN-SUFFIX,acfun.tv,DIRECT
+  - DOMAIN-SUFFIX,air-matters.com,DIRECT
+  - DOMAIN-SUFFIX,aixifan.com,DIRECT
+  - DOMAIN-KEYWORD,alicdn,DIRECT
+  - DOMAIN-KEYWORD,alipay,DIRECT
+  - DOMAIN-KEYWORD,taobao,DIRECT
+  - DOMAIN-SUFFIX,amap.com,DIRECT
+  - DOMAIN-SUFFIX,autonavi.com,DIRECT
+  - DOMAIN-KEYWORD,baidu,DIRECT
+  - DOMAIN-SUFFIX,bdimg.com,DIRECT
+  - DOMAIN-SUFFIX,bdstatic.com,DIRECT
+  - DOMAIN-SUFFIX,bilibili.com,DIRECT
+  - DOMAIN-SUFFIX,bilivideo.com,DIRECT
+  - DOMAIN-SUFFIX,caiyunapp.com,DIRECT
+  - DOMAIN-SUFFIX,clouddn.com,DIRECT
+  - DOMAIN-SUFFIX,cnbeta.com,DIRECT
+  - DOMAIN-SUFFIX,cnbetacdn.com,DIRECT
+  - DOMAIN-SUFFIX,cootekservice.com,DIRECT
+  - DOMAIN-SUFFIX,csdn.net,DIRECT
+  - DOMAIN-SUFFIX,ctrip.com,DIRECT
+  - DOMAIN-SUFFIX,dgtle.com,DIRECT
+  - DOMAIN-SUFFIX,dianping.com,DIRECT
+  - DOMAIN-SUFFIX,douban.com,DIRECT
+  - DOMAIN-SUFFIX,doubanio.com,DIRECT
+  - DOMAIN-SUFFIX,duokan.com,DIRECT
+  - DOMAIN-SUFFIX,easou.com,DIRECT
+  - DOMAIN-SUFFIX,ele.me,DIRECT
+  - DOMAIN-SUFFIX,feng.com,DIRECT
+  - DOMAIN-SUFFIX,fir.im,DIRECT
+  - DOMAIN-SUFFIX,frdic.com,DIRECT
+  - DOMAIN-SUFFIX,g-cores.com,DIRECT
+  - DOMAIN-SUFFIX,godic.net,DIRECT
+  - DOMAIN-SUFFIX,gtimg.com,DIRECT
+  - DOMAIN,cdn.hockeyapp.net,DIRECT
+  - DOMAIN-SUFFIX,hongxiu.com,DIRECT
+  - DOMAIN-SUFFIX,hxcdn.net,DIRECT
+  - DOMAIN-SUFFIX,iciba.com,DIRECT
+  - DOMAIN-SUFFIX,ifeng.com,DIRECT
+  - DOMAIN-SUFFIX,ifengimg.com,DIRECT
+  - DOMAIN-SUFFIX,ipip.net,DIRECT
+  - DOMAIN-SUFFIX,iqiyi.com,DIRECT
+  - DOMAIN-SUFFIX,jd.com,DIRECT
+  - DOMAIN-SUFFIX,jianshu.com,DIRECT
+  - DOMAIN-SUFFIX,knewone.com,DIRECT
+  - DOMAIN-SUFFIX,le.com,DIRECT
+  - DOMAIN-SUFFIX,lecloud.com,DIRECT
+  - DOMAIN-SUFFIX,lemicp.com,DIRECT
+  - DOMAIN-SUFFIX,licdn.com,DIRECT
+  - DOMAIN-SUFFIX,luoo.net,DIRECT
+  - DOMAIN-SUFFIX,meituan.com,DIRECT
+  - DOMAIN-SUFFIX,meituan.net,DIRECT
+  - DOMAIN-SUFFIX,mi.com,DIRECT
+  - DOMAIN-SUFFIX,miaopai.com,DIRECT
+  - DOMAIN-SUFFIX,microsoft.com,DIRECT
+  - DOMAIN-SUFFIX,microsoftonline.com,DIRECT
+  - DOMAIN-SUFFIX,miui.com,DIRECT
+  - DOMAIN-SUFFIX,miwifi.com,DIRECT
+  - DOMAIN-SUFFIX,mob.com,DIRECT
+  - DOMAIN-SUFFIX,netease.com,DIRECT
+  - DOMAIN-SUFFIX,office.com,DIRECT
+  - DOMAIN-SUFFIX,office365.com,DIRECT
+  - DOMAIN-KEYWORD,officecdn,DIRECT
+  - DOMAIN-SUFFIX,oschina.net,DIRECT
+  - DOMAIN-SUFFIX,ppsimg.com,DIRECT
+  - DOMAIN-SUFFIX,pstatp.com,DIRECT
+  - DOMAIN-SUFFIX,qcloud.com,DIRECT
+  - DOMAIN-SUFFIX,qdaily.com,DIRECT
+  - DOMAIN-SUFFIX,qdmm.com,DIRECT
+  - DOMAIN-SUFFIX,qhimg.com,DIRECT
+  - DOMAIN-SUFFIX,qhres.com,DIRECT
+  - DOMAIN-SUFFIX,qidian.com,DIRECT
+  - DOMAIN-SUFFIX,qihucdn.com,DIRECT
+  - DOMAIN-SUFFIX,qiniu.com,DIRECT
+  - DOMAIN-SUFFIX,qiniucdn.com,DIRECT
+  - DOMAIN-SUFFIX,qiyipic.com,DIRECT
+  - DOMAIN-SUFFIX,qq.com,DIRECT
+  - DOMAIN-SUFFIX,qqurl.com,DIRECT
+  - DOMAIN-SUFFIX,rarbg.to,DIRECT
+  - DOMAIN-SUFFIX,ruguoapp.com,DIRECT
+  - DOMAIN-SUFFIX,segmentfault.com,DIRECT
+  - DOMAIN-SUFFIX,sinaapp.com,DIRECT
+  - DOMAIN-SUFFIX,smzdm.com,DIRECT
+  - DOMAIN-SUFFIX,snapdrop.net,DIRECT
+  - DOMAIN-SUFFIX,sogou.com,DIRECT
+  - DOMAIN-SUFFIX,sogoucdn.com,DIRECT
+  - DOMAIN-SUFFIX,sohu.com,DIRECT
+  - DOMAIN-SUFFIX,soku.com,DIRECT
+  - DOMAIN-SUFFIX,speedtest.net,DIRECT
+  - DOMAIN-SUFFIX,sspai.com,DIRECT
+  - DOMAIN-SUFFIX,suning.com,DIRECT
+  - DOMAIN-SUFFIX,taobao.com,DIRECT
+  - DOMAIN-SUFFIX,tencent.com,DIRECT
+  - DOMAIN-SUFFIX,tenpay.com,DIRECT
+  - DOMAIN-SUFFIX,tianyancha.com,DIRECT
+  - DOMAIN-SUFFIX,tmall.com,DIRECT
+  - DOMAIN-SUFFIX,tudou.com,DIRECT
+  - DOMAIN-SUFFIX,umetrip.com,DIRECT
+  - DOMAIN-SUFFIX,upaiyun.com,DIRECT
+  - DOMAIN-SUFFIX,upyun.com,DIRECT
+  - DOMAIN-SUFFIX,veryzhun.com,DIRECT
+  - DOMAIN-SUFFIX,weather.com,DIRECT
+  - DOMAIN-SUFFIX,weibo.com,DIRECT
+  - DOMAIN-SUFFIX,xiami.com,DIRECT
+  - DOMAIN-SUFFIX,xiami.net,DIRECT
+  - DOMAIN-SUFFIX,xiaomicp.com,DIRECT
+  - DOMAIN-SUFFIX,ximalaya.com,DIRECT
+  - DOMAIN-SUFFIX,xmcdn.com,DIRECT
+  - DOMAIN-SUFFIX,xunlei.com,DIRECT
+  - DOMAIN-SUFFIX,yhd.com,DIRECT
+  - DOMAIN-SUFFIX,yihaodianimg.com,DIRECT
+  - DOMAIN-SUFFIX,yinxiang.com,DIRECT
+  - DOMAIN-SUFFIX,ykimg.com,DIRECT
+  - DOMAIN-SUFFIX,youdao.com,DIRECT
+  - DOMAIN-SUFFIX,youku.com,DIRECT
+  - DOMAIN-SUFFIX,zealer.com,DIRECT
+  - DOMAIN-SUFFIX,zhihu.com,DIRECT
+  - DOMAIN-SUFFIX,zhimg.com,DIRECT
+  - DOMAIN-SUFFIX,zimuzu.tv,DIRECT
+  - DOMAIN-SUFFIX,zoho.com,DIRECT
+  - DOMAIN-KEYWORD,amazon,beta_蓝莓桥
+  - DOMAIN-KEYWORD,google,beta_蓝莓桥
+  - DOMAIN-KEYWORD,gmail,beta_蓝莓桥
+  - DOMAIN-KEYWORD,youtube,beta_蓝莓桥
+  - DOMAIN-KEYWORD,facebook,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fb.me,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fbcdn.net,beta_蓝莓桥
+  - DOMAIN-KEYWORD,twitter,beta_蓝莓桥
+  - DOMAIN-KEYWORD,instagram,beta_蓝莓桥
+  - DOMAIN-KEYWORD,dropbox,beta_蓝莓桥
+  - DOMAIN-SUFFIX,twimg.com,beta_蓝莓桥
+  - DOMAIN-KEYWORD,blogspot,beta_蓝莓桥
+  - DOMAIN-SUFFIX,youtu.be,beta_蓝莓桥
+  - DOMAIN-KEYWORD,whatsapp,beta_蓝莓桥
+  - DOMAIN-KEYWORD,admarvel,REJECT
+  - DOMAIN-KEYWORD,admaster,REJECT
+  - DOMAIN-KEYWORD,adsage,REJECT
+  - DOMAIN-KEYWORD,adsmogo,REJECT
+  - DOMAIN-KEYWORD,adsrvmedia,REJECT
+  - DOMAIN-KEYWORD,adwords,REJECT
+  - DOMAIN-KEYWORD,adservice,REJECT
+  - DOMAIN-SUFFIX,appsflyer.com,REJECT
+  - DOMAIN-KEYWORD,domob,REJECT
+  - DOMAIN-SUFFIX,doubleclick.net,REJECT
+  - DOMAIN-KEYWORD,duomeng,REJECT
+  - DOMAIN-KEYWORD,dwtrack,REJECT
+  - DOMAIN-KEYWORD,guanggao,REJECT
+  - DOMAIN-KEYWORD,lianmeng,REJECT
+  - DOMAIN-SUFFIX,mmstat.com,REJECT
+  - DOMAIN-KEYWORD,mopub,REJECT
+  - DOMAIN-KEYWORD,omgmta,REJECT
+  - DOMAIN-KEYWORD,openx,REJECT
+  - DOMAIN-KEYWORD,partnerad,REJECT
+  - DOMAIN-KEYWORD,pingfore,REJECT
+  - DOMAIN-KEYWORD,supersonicads,REJECT
+  - DOMAIN-KEYWORD,uedas,REJECT
+  - DOMAIN-KEYWORD,umeng,REJECT
+  - DOMAIN-KEYWORD,usage,REJECT
+  - DOMAIN-SUFFIX,vungle.com,REJECT
+  - DOMAIN-KEYWORD,wlmonitor,REJECT
+  - DOMAIN-KEYWORD,zjtoolbar,REJECT
+  - DOMAIN-SUFFIX,9to5mac.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,abpchina.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,adblockplus.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,adobe.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,akamaized.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,alfredapp.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,amplitude.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ampproject.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,android.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,angularjs.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,aolcdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,apkpure.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,appledaily.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,appshopper.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,appspot.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,arcgis.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,archive.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,armorgames.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,aspnetcdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,att.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,awsstatic.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,azureedge.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,azurewebsites.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bing.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bintray.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bit.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bit.ly,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bitbucket.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bjango.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bkrtx.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blog.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blogcdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blogger.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blogsmithmedia.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blogspot.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,blogspot.hk,beta_蓝莓桥
+  - DOMAIN-SUFFIX,bloomberg.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,box.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,box.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cachefly.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,chromium.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cl.ly,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cloudflare.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cloudfront.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cloudmagic.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cmail19.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cnet.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,cocoapods.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,comodoca.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,crashlytics.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,culturedcode.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,d.pr,beta_蓝莓桥
+  - DOMAIN-SUFFIX,danilo.to,beta_蓝莓桥
+  - DOMAIN-SUFFIX,dayone.me,beta_蓝莓桥
+  - DOMAIN-SUFFIX,db.tt,beta_蓝莓桥
+  - DOMAIN-SUFFIX,deskconnect.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,disq.us,beta_蓝莓桥
+  - DOMAIN-SUFFIX,disqus.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,disquscdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,dnsimple.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,docker.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,dribbble.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,droplr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,duckduckgo.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,dueapp.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,dytt8.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,edgecastcdn.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,edgekey.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,edgesuite.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,engadget.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,entrust.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,eurekavpt.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,evernote.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fabric.io,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fast.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fastly.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fc2.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,feedburner.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,feedly.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,feedsportal.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,fiftythree.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,firebaseio.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,flexibits.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,flickr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,flipboard.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,g.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gabia.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,geni.us,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gfx.ms,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ggpht.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ghostnoteapp.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,git.io,beta_蓝莓桥
+  - DOMAIN-KEYWORD,github,beta_蓝莓桥
+  - DOMAIN-SUFFIX,globalsign.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gmodules.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,godaddy.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,golang.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gongm.in,beta_蓝莓桥
+  - DOMAIN-SUFFIX,goo.gl,beta_蓝莓桥
+  - DOMAIN-SUFFIX,goodreaders.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,goodreads.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gravatar.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gstatic.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,gvt0.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,hockeyapp.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,hotmail.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,icons8.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ifixit.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ift.tt,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ifttt.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,iherb.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,imageshack.us,beta_蓝莓桥
+  - DOMAIN-SUFFIX,img.ly,beta_蓝莓桥
+  - DOMAIN-SUFFIX,imgur.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,imore.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,instapaper.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ipn.li,beta_蓝莓桥
+  - DOMAIN-SUFFIX,is.gd,beta_蓝莓桥
+  - DOMAIN-SUFFIX,issuu.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,itgonglun.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,itun.es,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ixquick.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,j.mp,beta_蓝莓桥
+  - DOMAIN-SUFFIX,js.revsci.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,jshint.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,jtvnw.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,justgetflux.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,kat.cr,beta_蓝莓桥
+  - DOMAIN-SUFFIX,klip.me,beta_蓝莓桥
+  - DOMAIN-SUFFIX,libsyn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,linkedin.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,line-apps.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,linode.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,lithium.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,littlehj.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,live.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,live.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,livefilestore.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,llnwd.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,macid.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,macromedia.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,macrumors.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mashable.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mathjax.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,medium.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mega.co.nz,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mega.nz,beta_蓝莓桥
+  - DOMAIN-SUFFIX,megaupload.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,microsofttranslator.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mindnode.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,mobile01.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,modmyi.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,msedge.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,myfontastic.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,name.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,nextmedia.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,nsstatic.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,nssurge.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,nyt.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,nytimes.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,omnigroup.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,onedrive.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,onenote.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ooyala.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,openvpn.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,openwrt.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,orkut.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,osxdaily.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,outlook.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ow.ly,beta_蓝莓桥
+  - DOMAIN-SUFFIX,paddleapi.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,parallels.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,parse.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pdfexpert.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,periscope.tv,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pinboard.in,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pinterest.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pixelmator.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pixiv.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,playpcesor.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,playstation.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,playstation.com.hk,beta_蓝莓桥
+  - DOMAIN-SUFFIX,playstation.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,playstationnetwork.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,pushwoosh.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,rime.im,beta_蓝莓桥
+  - DOMAIN-SUFFIX,servebom.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sfx.ms,beta_蓝莓桥
+  - DOMAIN-SUFFIX,shadowsocks.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sharethis.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,shazam.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,skype.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,smartdns蓝莓桥.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,smartmailcloud.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sndcdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sony.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,soundcloud.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sourceforge.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,spotify.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,squarespace.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,sstatic.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,st.luluku.pw,beta_蓝莓桥
+  - DOMAIN-SUFFIX,stackoverflow.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,startpage.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,staticflickr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,steamcommunity.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,symauth.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,symcb.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,symcd.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tapbots.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tapbots.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tdesktop.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,techcrunch.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,techsmith.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,thepiratebay.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,theverge.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,time.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,timeinc.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tiny.cc,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tinypic.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tmblr.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,todoist.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,trello.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,trustasiassl.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tumblr.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tumblr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tweetdeck.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,tweetmarker.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,twitch.tv,beta_蓝莓桥
+  - DOMAIN-SUFFIX,txmblr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,typekit.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ubertags.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ublock.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ubnt.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ulyssesapp.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,urchin.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,usertrust.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,v.gd,beta_蓝莓桥
+  - DOMAIN-SUFFIX,v2ex.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vimeo.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vimeocdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vine.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vivaldi.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vox-cdn.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vsco.co,beta_蓝莓桥
+  - DOMAIN-SUFFIX,vultr.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,w.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,w3schools.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,webtype.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wikiwand.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wikileaks.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wikimedia.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wikipedia.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wikipedia.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,windows.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,windows.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wire.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wordpress.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,workflowy.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wp.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wsj.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,wsj.net,beta_蓝莓桥
+  - DOMAIN-SUFFIX,xda-developers.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,xeeno.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,xiti.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,yahoo.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,yimg.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ying.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,yoyo.org,beta_蓝莓桥
+  - DOMAIN-SUFFIX,ytimg.com,beta_蓝莓桥
+  - DOMAIN-SUFFIX,telegra.ph,beta_蓝莓桥
+  - DOMAIN-SUFFIX,telegram.org,beta_蓝莓桥
+  - IP-CIDR,91.108.4.0/22,beta_蓝莓桥,no-resolve
+  - IP-CIDR,91.108.8.0/21,beta_蓝莓桥,no-resolve
+  - IP-CIDR,91.108.16.0/22,beta_蓝莓桥,no-resolve
+  - IP-CIDR,91.108.56.0/22,beta_蓝莓桥,no-resolve
+  - IP-CIDR,149.154.160.0/20,beta_蓝莓桥,no-resolve
+  - IP-CIDR6,2001:67c:4e8::/48,beta_蓝莓桥,no-resolve
+  - IP-CIDR6,2001:b28:f23d::/48,beta_蓝莓桥,no-resolve
+  - IP-CIDR6,2001:b28:f23f::/48,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.232.181.162/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.241.147.226/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.253.253.226/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.253.255.162/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.253.255.34/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,120.253.255.98/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,180.163.150.162/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,180.163.150.34/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,180.163.151.162/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,180.163.151.34/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,203.208.39.0/24,beta_蓝莓桥,no-resolve
+  - IP-CIDR,203.208.40.0/24,beta_蓝莓桥,no-resolve
+  - IP-CIDR,203.208.41.0/24,beta_蓝莓桥,no-resolve
+  - IP-CIDR,203.208.43.0/24,beta_蓝莓桥,no-resolve
+  - IP-CIDR,203.208.50.0/24,beta_蓝莓桥,no-resolve
+  - IP-CIDR,220.181.174.162/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,220.181.174.226/32,beta_蓝莓桥,no-resolve
+  - IP-CIDR,220.181.174.34/32,beta_蓝莓桥,no-resolve
+  - DOMAIN,injections.adguard.org,DIRECT
+  - DOMAIN,local.adguard.org,DIRECT
+  - DOMAIN-SUFFIX,local,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,17.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+  - IP-CIDR6,fe80::/10,DIRECT
+  - DOMAIN-SUFFIX,cn,DIRECT
+  - DOMAIN-KEYWORD,-cn,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,auto

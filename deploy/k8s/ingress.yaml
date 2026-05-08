@@ -1,0 +1,37 @@
+# Ingress handles TLS termination per FR-019c — the server itself listens
+# on plain HTTP inside the cluster.
+#
+# IMPORTANT: only the served subscription path (/) is exposed to the public
+# internet. /health is OMITTED from the public Ingress on purpose: it
+# leaks per-upstream state and aggregated quota numbers to anyone who can
+# reach it (FR-015 + contracts/health.openapi.yaml security note).
+# Operators should hit /health from the cluster-internal Service URL only.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: honkai-rule-server
+  labels:
+    app.kubernetes.io/name: honkai-rule-server
+  annotations:
+    # Adjust to your ingress controller's TLS / cert-manager flavor.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # The served body is ~130KB; bump if your controller's default
+    # response-buffer is smaller. nginx's default 256k handles this fine.
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - subscription.example.internal   # ← change to your hostname
+      secretName: honkai-rule-server-tls
+  rules:
+    - host: subscription.example.internal  # ← change to your hostname
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: honkai-rule-server
+                port:
+                  number: 8080

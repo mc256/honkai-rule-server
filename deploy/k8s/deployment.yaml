@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: honkai-rule-server
+  labels:
+    app.kubernetes.io/name: honkai-rule-server
+spec:
+  replicas: 1                # Single replica is correct for v1: per-pod
+                             # in-memory cache + per-pod fsnotify + per-pod
+                             # bootstrap state. Multiple replicas would
+                             # multiply upstream fetches without coordination.
+  strategy:
+    type: Recreate           # Avoid running two pods at once.
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: honkai-rule-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: honkai-rule-server
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532       # `nobody` in many distroless images; the
+                                # scratch image runs as root by default
+                                # unless we set this. The binary doesn't
+                                # need root.
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: server
+          image: honkai-rule-server:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SUBSCRIPTIONS_CSV_PATH
+              value: /secret/subscriptions.csv
+            - name: OWN_PROXIES_YAML_PATH
+              value: /secret/own-proxies.yaml
+            - name: TOKENS_PATH
+              value: /secret/tokens.json
+            - name: SERVED_CONFIG_TEMPLATE_PATH
+              value: /template/served-config.template.yaml
+            - name: CACHE_DIR
+              value: /cache
+            - name: PORT
+              value: "8080"
+            - name: LOG_LEVEL
+              value: info
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            failureThreshold: 6  # ~30s before marking not-ready (covers cold-
+                                  # start bootstrap window).
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - name: secret
+              mountPath: /secret
+              readOnly: true
+            - name: template
+              mountPath: /template
+              readOnly: true
+            - name: cache
+              mountPath: /cache
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: secret
+          secret:
+            secretName: honkai-rule-server-config
+            defaultMode: 0400
+        - name: template
+          configMap:
+            name: honkai-rule-server-template
+        - name: cache
+          emptyDir: {}

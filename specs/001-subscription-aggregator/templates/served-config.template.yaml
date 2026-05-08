@@ -1,0 +1,49 @@
+# Served-Config Template — v1 draft (referenced by FR-005c, FR-009a)
+#
+# This is the server-side template the merge layer renders into the response
+# body of the served subscription endpoint. Globals (everything outside
+# `proxies`, `proxy-groups`, `rules`) come from this file and ONLY this file —
+# upstream globals are intentionally discarded so the served output is
+# independent of which provider was first in the configured CSV.
+#
+# Render-time substitutions (handled by the merge layer):
+#   __MERGED_PROXIES__        -> sequence: union of upstream + own proxies,
+#                                with collision suffixes per FR-002 / FR-008.
+#   __MERGED_PROXY_GROUPS__   -> sequence: union of upstream + own proxy-groups,
+#                                with same-name groups merged per FR-008a, plus
+#                                the always-present `Proxies` select group per
+#                                FR-009a.
+#   __MERGED_RULES__          -> sequence: priority-ordered upstream rules
+#                                per FR-005a.
+#
+# This draft is deliberately minimal and conventional; values like ports, DNS
+# resolvers, and the controller bind address are operator-tunable in /speckit-plan.
+
+mixed-port: 7890
+allow-lan: false
+bind-address: '*'
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
+  nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback:
+    - https://9.9.9.9/dns-query
+    - https://208.67.222.222/dns-query
+
+proxies: __MERGED_PROXIES__
+
+proxy-groups: __MERGED_PROXY_GROUPS__
+
+rules: __MERGED_RULES__

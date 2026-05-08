@@ -1,0 +1,23 @@
+proxies:
+  - name: my-home-trojan
+    type: trojan
+    server: home-test.example.com
+    port: 443
+    password: synthetic-test-password
+    sni: home-test.example.com
+    skip-cert-verify: false
+
+  - name: my-vps-vless
+    type: vless
+    server: vps-test.example.com
+    port: 8443
+    uuid: 00000000-0000-0000-0000-000000000001
+    tls: true
+    network: tcp
+
+proxy-groups:
+  - name: My-Own
+    type: select
+    proxies:
+      - my-home-trojan
+      - my-vps-vless

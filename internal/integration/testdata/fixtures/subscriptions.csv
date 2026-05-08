@@ -1,0 +1,3 @@
+name,link,priority,enable
+alpha,http://upstream-alpha.test/sub?token=fake-alpha-token,1000,Enable
+beta,http://upstream-berry.test/sub/fake-berry-token,2000,Enable

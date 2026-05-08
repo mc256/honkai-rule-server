@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: User-Agent Filtering — HTTP Response Contract
+  description: |
+    Describes the 403 Forbidden response returned when a request's User-Agent
+    header does not match any configured prefix in HONKAI_RULE_CLIENT_UA.
+  version: 1.0.0
+
+paths:
+  /:
+    get:
+      summary: Subscription endpoint (with UA gating)
+      description: |
+        When HONKAI_RULE_CLIENT_UA is set, requests whose User-Agent header
+        does not start with any configured prefix receive HTTP 403.
+      parameters:
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+          description: |
+            NOTE: When UA filtering rejects a request, the token parameter is
+            never inspected. UA filtering runs before token authentication.
+      responses:
+        "200":
+          description: |
+            Request accepted. Normal subscription response follows.
+            Only reachable if UA matches (or UA filtering is disabled).
+          content:
+            text/yaml:
+              schema:
+                type: string
+        "403":
+          description: |
+            Forbidden. The request's User-Agent header did not match any
+            configured prefix. Response body is empty.
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain
+          content:
+            text/plain:
+              schema:
+                type: string
+                maxLength: 0
+              example: ""
+              description: Empty body.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid token (UA check passed).
+      content:
+        text/plain:
+          schema:
+            type: string
+            maxLength: 0
+    ServiceUnavailable:
+      description: Bootstrap in progress or failed.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                enum: [warming_up, bootstrap_failed]

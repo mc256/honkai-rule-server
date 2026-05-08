@@ -1,0 +1,62 @@
+<!-- SPECKIT START -->
+**001 (subscription-aggregator)** is fully implemented; production code
+lives under `cmd/server/` and `internal/`. **002 (namespacing-and-regions)**
+is fully implemented. **003 (custom-rules-access-control)** is fully
+implemented. **004 (yaml-output-formatting)** is fully implemented.
+**005 (unified-rule-priority)** is fully implemented.
+**006 (fix-emoji-yaml-escape)** is fully implemented (post-encode byte
+transform replacing yaml.v3's `\Uxxxxxxxx` escapes with literal UTF-8).
+**007 (ascending-priority-sort)** is fully implemented (reversed 005's
+sort direction so lower priority numbers emit earlier in the served
+`rules:` block).
+**008 (dialer-proxy-fanout)** is fully implemented (per-region/per-continent
++ AUTO fan-out copies of own-proxies; own-proxies and `via_*` excluded
+from the always-present `Proxies` selector group).
+**009 (cluster-deploy)** is fully implemented (Helm chart at
+`charts/honkai-rule-server/` extends with a `honkai` block; image at
+`registry.example.com/library/honkai-rule-server`; ConfigMap +
+PVC + Argo CD app on the cluster).
+**010 (daily-traffic-header)** is fully implemented (served
+`Subscription-Userinfo` header carries the daily-allowance figure
+`upload=0; download=0; total=<allowance>; expire=<next 00:00 UTC>`;
+header omitted entirely when no source contributed userinfo; raw
+aggregates remain on `/health`).
+**012 (url-test-region-groups)** is fully implemented (auto-emitted
+`_region_*` and `_continent_*` proxy groups are `type: url-test`
+with operator-configurable health-check fields via 5 `URL_TEST_*`
+env vars; always-present `Proxies` selector and operator-defined
+custom proxy groups untouched).
+**011 (daily-spend-tracking)** is the active feature being
+designed/implemented in `specs/011-daily-spend-tracking/`
+(reactivated from parked status to extend 010 with within-day spend
+tracking via a persistent `/data/today-zero.json` snapshot, midnight
+rollover in America/Toronto, and a ratio-aware upload/download split).
+
+Key reading for any change:
+- `specs/001-subscription-aggregator/spec.md` + `plan.md` — what the service does today (27 FRs, 15 SCs) and how it's structured
+- `specs/002-namespacing-and-regions/spec.md` + `plan.md` — per-source `<provider>_` prefixing, trailing-rule drop, `region_<CC>` proxy-groups via ISO 3166-1 alpha-2 inference
+- `specs/003-custom-rules-access-control/spec.md` + `plan.md` — custom rules with priorities (YAML files in folder), `_continent_<CONT>` proxy groups via country-to-continent mapping, `_region_UNKNOWN` catch-all group, User-Agent access control via `HONKAI_RULE_CLIENT_UA`
+- `specs/004-yaml-output-formatting/spec.md` + `plan.md` — proxy-groups block format with field ordering (name, type, proxies first), rule priority comments in served YAML
+- `specs/005-unified-rule-priority/spec.md` + `plan.md` — unified priority sort across upstream sources and custom rule sets; `# --- priority N (contributor-list) ---` headers replace the `# --- upstream ---` divider. Sort direction was reversed to ascending by feature 007.
+- `specs/007-ascending-priority-sort/spec.md` + `plan.md` — flipped 005's rule comparator to ascending so lower priority numbers win routing precedence (matches Mihomo's top-to-bottom evaluation)
+- `specs/006-fix-emoji-yaml-escape/spec.md` + `plan.md` — post-encode byte transform that replaces yaml.v3's `\Uxxxxxxxx` escapes with literal UTF-8 so emoji proxy names render readably in served YAML
+- `specs/008-dialer-proxy-fanout/spec.md` + `plan.md` — for each operator-declared own-proxy emit fan-out copies (`via_<group>__<own>` and `via_AUTO__<own>`) carrying the source own-proxy's connection fields plus a `dialer-proxy:` field set to a server-emitted region/continent group (or to the always-present `Proxies` selector for AUTO); also exclude own-proxies and `via_*` copies from the global `Proxies` selector's member list
+- `specs/009-cluster-deploy/spec.md` + `plan.md` — active feature: build+push the container image to `registry.example.com/library/honkai-rule-server:<sha>`, deploy to the cluster via a new Helm chart in `<your-iac-repo>/charts/honkai-rule-server/` and a new Argo CD Application, served on `example.com` behind a 32-char hex path prefix; PVC for custom-rules + cache, ConfigMap for subscriptions/own-proxies/tokens; new Makefile targets `docker-push`, `docker-push-latest`, `config-sync`, `rules-sync` (the last via a busybox helper pod since the runtime image is `FROM scratch`)
+- `specs/010-daily-traffic-header/spec.md` + `plan.md` — replace the served `Subscription-Userinfo` header's raw aggregates with the daily-allowance figure from 001 FR-011b (`total - upload - download = per-day-rate + no-expiry-remaining`, `expire = next 00:00 UTC`); wire format unchanged; raw aggregates remain on `/health`; header omitted entirely when no source supplied userinfo
+- `specs/012-url-test-region-groups/spec.md` + `plan.md` — convert auto-emitted `_region_*` and `_continent_*` proxy groups from `select` to `url-test` with operator-configurable health-check params (5 env vars: `URL_TEST_URL`, `URL_TEST_INTERVAL_SECONDS`, `URL_TEST_TIMEOUT_MS`, `URL_TEST_MAX_FAILED_TIMES`, `URL_TEST_LAZY`); always-present `Proxies` selector and operator-defined custom groups untouched
+- `specs/011-daily-spend-tracking/spec.md` + `plan.md` — active feature: track today's spend in the served `Subscription-Userinfo` header so the client UI's bar fills as the user consumes (010 left it flat at 0%); persistent `/data/today-zero.json` snapshot of per-source midnight baselines + pinned allowance, lazy request-driven rollover, America/Toronto local-day boundary; new `internal/dailyspend/` package owns file I/O outside the pure-merge boundary
+- `specs/003-custom-rules-access-control/quickstart.md` — operator guide (custom rules YAML schema, continent groups, UA filtering setup)
+- `internal/merge/` — pure-functional transformation core (Constitution Principle I; do not reach into it from outside the module)
+- `internal/customrules/` — custom rule file loading and `CustomRuleSet` type
+- `internal/integration/testdata/snapshots/` — deterministic snapshots; CI fails on drift (Constitution Principle II)
+
+Tech: Go 1.25 toolchain (declared 1.22+), stdlib `net/http`, `log/slog`,
+`gopkg.in/yaml.v3`, `golang.org/x/sync/singleflight`, `fsnotify`,
+`bradleyjkemp/cupaloy/v2` for snapshots. `make check` runs vet +
+staticcheck + tests + snapshot-drift check.
+
+002 deviation from Constitution Principle III (CSV strict-schema-loud-fail):
+the `^[a-z]+$` rule on `SubscriptionRow.Name` is enforced as **warn +
+skip the offending row** rather than loud-fail-abort. Justified in
+`specs/002-namespacing-and-regions/plan.md` Complexity Tracking.
+<!-- SPECKIT END -->

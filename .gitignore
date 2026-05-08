@@ -1,0 +1,27 @@
+example/**
+sandbox/**
+
+# Build artifacts
+bin/
+*.exe
+*.test
+*.out
+coverage.out
+coverage.txt
+
+# Local cache (per-source upstream payload snapshots)
+.cache/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Vendored deps (we don't vendor)
+vendor/
+
+# Operator-private overrides for Makefile/deploy targets — see .env.example
+.env
+.env.local

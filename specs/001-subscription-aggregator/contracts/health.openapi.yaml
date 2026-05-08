@@ -1,0 +1,204 @@
+openapi: 3.1.0
+info:
+  title: Honkai Rule Server — Health Endpoint
+  version: 1.0.0
+  description: |
+    Operator-facing health surface (FR-015). Reports per-upstream fetch state,
+    bootstrap status, the per-source-weighted daily-allowance figure
+    (FR-011b), and any expired-source flags. Designed to answer "which
+    upstream is degraded" and "how much can I spend per day" without
+    reading raw logs.
+
+    Not authenticated in v1: in the target Kubernetes deployment this endpoint
+    is exposed only on the cluster-internal Service, not behind the public
+    Ingress. (If the operator needs to expose it externally, the recommendation
+    is to put it behind the same Ingress with a separate path-based auth gate;
+    out of scope for the MVP.)
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+  - url: http://honkai-rule-server.default.svc.cluster.local:8080
+    description: In-cluster Service URL
+
+paths:
+  /health:
+    get:
+      summary: Server + per-upstream health
+      responses:
+        '200':
+          description: |
+            Server is fully bootstrapped (every enabled source has succeeded
+            its first fetch) and the merged subscription endpoint is serving
+            traffic.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                healthy:
+                  summary: Both upstreams healthy
+                  value:
+                    bootstrap: succeeded
+                    sources:
+                      - name: alpha
+                        enabled: true
+                        bootstrapState: succeeded
+                        lastFetchedAt: '2026-04-30T03:30:00Z'
+                        lastFetchOutcome: success
+                        servingFromCache: false
+                        cachedSubscriptionUserinfo:
+                          upload: 23398198706
+                          download: 203036431271
+                          total: 654791671808
+                          expire: 1804180937
+                      - name: beta
+                        enabled: true
+                        bootstrapState: succeeded
+                        lastFetchedAt: '2026-04-30T03:31:12Z'
+                        lastFetchOutcome: success
+                        servingFromCache: false
+                        cachedSubscriptionUserinfo:
+                          upload: 0
+                          download: 5368709120
+                          total: 107374182400
+                          expire: 1814380937
+                    dailyAllowance:
+                      perDayRateBytes: 22548578304
+                      noExpiryRemainingBytes: 0
+                      expiredSourceFlags: []
+                degraded:
+                  summary: One source serving from cache
+                  value:
+                    bootstrap: succeeded
+                    sources:
+                      - name: alpha
+                        enabled: true
+                        bootstrapState: succeeded
+                        lastFetchedAt: '2026-04-30T03:30:00Z'
+                        lastFetchOutcome: http_error
+                        lastFetchError: 'HTTP 503 from upstream'
+                        servingFromCache: true
+                        cachedSubscriptionUserinfo:
+                          upload: 23398198706
+                          download: 203036431271
+                          total: 654791671808
+                          expire: 1804180937
+                      - name: beta
+                        enabled: true
+                        bootstrapState: succeeded
+                        lastFetchedAt: '2026-04-30T03:31:12Z'
+                        lastFetchOutcome: success
+                        servingFromCache: false
+                        cachedSubscriptionUserinfo:
+                          upload: 0
+                          download: 5368709120
+                          total: 107374182400
+                          expire: 1814380937
+                    dailyAllowance:
+                      perDayRateBytes: 22548578304
+                      noExpiryRemainingBytes: 0
+                      expiredSourceFlags: []
+        '503':
+          description: |
+            Server is in bootstrap window OR a previously-bootstrapped source
+            has lost its cache and now fails closed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [bootstrap, sources, dailyAllowance]
+      properties:
+        bootstrap:
+          type: string
+          enum: [warming_up, succeeded, failed]
+          description: Aggregated bootstrap status across all enabled sources
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceState'
+        dailyAllowance:
+          $ref: '#/components/schemas/DailyAllowance'
+
+    SourceState:
+      type: object
+      required: [name, enabled, bootstrapState, servingFromCache]
+      properties:
+        name:
+          type: string
+        enabled:
+          type: boolean
+          description: Mirrors the `enable` column on the subscriptions CSV row
+        bootstrapState:
+          type: string
+          enum: [pending, succeeded, failed]
+        lastFetchedAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastFetchOutcome:
+          type: string
+          enum: [success, http_error, timeout, parse_error, network_error]
+          nullable: true
+        lastFetchError:
+          type: string
+          nullable: true
+        servingFromCache:
+          type: boolean
+          description: True if the most recent serve used a stale-but-within-window payload
+        cachedSubscriptionUserinfo:
+          $ref: '#/components/schemas/SubscriptionUserinfo'
+          nullable: true
+        cachedPayloadBytes:
+          type: integer
+          nullable: true
+
+    SubscriptionUserinfo:
+      type: object
+      required: [upload, download, total, expire]
+      properties:
+        upload:
+          type: integer
+          minimum: 0
+        download:
+          type: integer
+          minimum: 0
+        total:
+          type: integer
+          minimum: 0
+        expire:
+          type: integer
+          minimum: 0
+          description: Unix seconds; `0` means "no expiry"
+
+    DailyAllowance:
+      type: object
+      required: [perDayRateBytes, noExpiryRemainingBytes, expiredSourceFlags]
+      properties:
+        perDayRateBytes:
+          type: integer
+          minimum: 0
+          description: |
+            Σ_i (remaining_i / days_until_expire_i) for sources where
+            expire_i > now. The per-source weighted daily allowance —
+            meaningful when providers have differing expiry dates and
+            quotas (FR-011b).
+        noExpiryRemainingBytes:
+          type: integer
+          minimum: 0
+          description: |
+            Sum of remaining bytes for sources whose expire is `0`
+            (no-expiry plans). Reported separately from the per-day rate,
+            since these bytes are not subject to a deadline.
+        expiredSourceFlags:
+          type: array
+          items:
+            type: string
+          description: |
+            Names of sources whose `expire` is a non-zero Unix timestamp
+            in the past. The operator should renew or remove these.

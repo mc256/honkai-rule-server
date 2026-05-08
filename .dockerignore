@@ -1,0 +1,12 @@
+.git
+bin/
+*.exe
+*.test
+*.out
+.cache/
+vendor/
+coverage.out
+coverage.txt
+*.log
+.env*
+specs/

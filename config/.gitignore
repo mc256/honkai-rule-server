@@ -1,0 +1,10 @@
+# Operator secrets — never commit. See spec FR-016.
+subscriptions.csv
+own-proxies.yaml
+tokens.json
+custom-rules
+custom-rules/**
+
+# But DO commit this gitignore and the README
+!.gitignore
+!README.md

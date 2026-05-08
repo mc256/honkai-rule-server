@@ -1,0 +1,2 @@
+Subscription-Userinfo: upload=0; download=0; total=22548578304; expire=1777521600
+Profile-Update-Interval: 12

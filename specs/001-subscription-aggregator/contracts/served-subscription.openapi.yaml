@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: Honkai Rule Server — Served Subscription Endpoint
+  version: 1.0.0
+  description: |
+    The single subscription endpoint that Mihomo / Sparkle / Clash clients fetch.
+    Behaves as a drop-in Clash subscription server (FR-019b): identical response
+    shape and headers, so a stock client can add the profile without any custom
+    configuration. TLS is terminated upstream of this server (Kubernetes Ingress
+    in the target deployment, FR-019c).
+
+    See: spec.md FR-001..FR-005, FR-005a..FR-005c, FR-009a, FR-011, FR-011a,
+    FR-019, FR-019a, FR-019b, FR-019c.
+
+servers:
+  - url: https://subscription.example.internal
+    description: Production (TLS terminated at Ingress)
+  - url: http://localhost:8080
+    description: Local development
+
+paths:
+  /:
+    get:
+      summary: Fetch the merged Clash subscription
+      description: |
+        Returns the byte-identical (per FR-004 / Constitution Principle II)
+        merged Clash configuration produced by aggregating all enabled
+        upstream subscriptions (subscriptions CSV) and own-proxies (own-proxies
+        YAML), rendered through the server-side served-config template.
+
+        The token query parameter (FR-019) is required. Missing / unknown /
+        revoked tokens receive 401 with no body and no `Subscription-Userinfo`
+        header (so an attacker cannot harvest quota numbers from a 401).
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: |
+            Per-client token issued by the operator. Looked up in the token
+            store; revoked or expired tokens are rejected.
+      responses:
+        '200':
+          description: Merged subscription returned successfully
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/yaml; charset=utf-8
+            Subscription-Userinfo:
+              schema:
+                type: string
+                pattern: '^upload=\d+; download=\d+; total=\d+; expire=\d+$'
+                example: 'upload=16106127360; download=59055800320; total=322122547200; expire=1804180937'
+              description: |
+                Aggregated quota figures across all upstreams whose metadata is
+                currently known. Wire format mirrors what real Clash subscription
+                servers emit. `expire=0` denotes "no expiry from any upstream".
+                Sources whose metadata is missing are excluded from the sums
+                (FR-012).
+            Profile-Update-Interval:
+              schema:
+                type: integer
+                minimum: 1
+                example: 12
+              description: |
+                Suggested profile-refresh interval in **hours**. Aggregated as
+                the minimum non-zero value across upstreams; falls back to the
+                configured default when no upstream supplies one.
+            Cache-Control:
+              schema:
+                type: string
+                example: 'no-store, no-cache, must-revalidate'
+          content:
+            application/yaml:
+              schema:
+                type: string
+                description: |
+                  Standard Clash configuration YAML body. Contains:
+                  - Globals (`mixed-port`, `mode`, `dns`, etc.) from the
+                    server-side served-config template.
+                  - `proxies`: union of upstream + own proxies; collisions
+                    suffixed `<name>@<source>` per FR-002 / FR-008.
+                  - `proxy-groups`: same-name groups merged per FR-008a; always
+                    contains a `select`-type `Proxies` group with every proxy
+                    (FR-009a).
+                  - `rules`: priority-ordered concatenation of upstream `rules`
+                    blocks (highest `priority` first) per FR-005a.
+
+                  No upstream credentials, subscription URLs, or tokens appear
+                  anywhere in this body (FR-005, SC-007).
+        '401':
+          description: |
+            Token missing, malformed, unknown, expired, or revoked.
+
+            Body is empty; no `Subscription-Userinfo` header is set (avoids
+            quota-number leakage to unauthenticated requesters). The rejection
+            is logged with `sha256:<first-12-hex>` of the token (never the
+            plaintext).
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain
+        '503':
+          description: |
+            Server is in cold-start bootstrap window or has fail-closed because
+            one or more enabled upstreams have no usable cached payload
+            (FR-003b). Inspect `/health` for which sources are degraded.
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds until the next bootstrap retry attempt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum: [warming_up, bootstrap_failed]
+                  failingSources:
+                    type: array
+                    items:
+                      type: string
+                    description: source names whose bootstrap fetch has not yet succeeded
+                required: [error]
+
+components:
+  securitySchemes:
+    queryToken:
+      type: apiKey
+      in: query
+      name: token
+      description: Per-client token; presented in the URL query parameter.
+
+security:
+  - queryToken: []

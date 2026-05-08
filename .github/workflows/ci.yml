@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: vet + staticcheck + test (-race) + snapshot drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: staticcheck
+        run: $(go env GOPATH)/bin/staticcheck ./...
+
+      - name: go test -race
+        run: go test -race ./...
+
+      - name: snapshot drift check
+        # If a developer changed merge/output/templates without
+        # regenerating snapshots, `git diff` shows a diff and we fail.
+        run: git diff --exit-code
+
+  build-image:
+    name: docker build (smoke)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: docker build
+        run: docker build --tag honkai-rule-server:ci .

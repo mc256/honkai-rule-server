@@ -1,0 +1,47 @@
+# Embeds templates/served-config.template.yaml as a ConfigMap. To regenerate
+# after editing the template:
+#   kubectl create configmap honkai-rule-server-template \
+#     --from-file=served-config.template.yaml=./templates/served-config.template.yaml \
+#     --dry-run=client -o yaml > deploy/k8s/configmap-served-template.yaml
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: honkai-rule-server-template
+  labels:
+    app.kubernetes.io/name: honkai-rule-server
+data:
+  served-config.template.yaml: |
+    # Served-Config Template — v1 draft (referenced by FR-005c, FR-009a)
+    #
+    # This is the server-side template the merge layer renders into the response
+    # body of the served subscription endpoint. Globals (everything outside
+    # `proxies`, `proxy-groups`, `rules`) come from this file and ONLY this file —
+    # upstream globals are intentionally discarded so the served output is
+    # independent of which provider was first in the configured CSV.
+    #
+    # Render-time substitutions (handled by the merge layer):
+    #   __MERGED_PROXIES__        -> sequence: union of upstream + own proxies,
+    #                                with collision suffixes per FR-002 / FR-008.
+    #   __MERGED_PROXY_GROUPS__   -> sequence: union of upstream + own proxy-groups,
+    #                                with same-name groups merged per FR-008a, plus
+    #                                the always-present `Proxies` select group per
+    #                                FR-009a.
+    #   __MERGED_RULES__          -> sequence: priority-ordered upstream rules
+    #                                per FR-005a.
+    #
+    # This draft is deliberately minimal and conventional; values like ports, DNS
+    # resolvers, and the controller bind address are operator-tunable in /speckit-plan.
+    port: 7890
+    socks-port: 7891
+    redir-port: 7892
+    mode: rule
+    log-level: silent
+    external-controller: '0.0.0.0:9090'
+
+    
+    proxies: __MERGED_PROXIES__
+    
+    proxy-groups: __MERGED_PROXY_GROUPS__
+    
+    rules: __MERGED_RULES__

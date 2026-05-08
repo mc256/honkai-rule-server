@@ -1,0 +1,40 @@
+{
+  "bootstrap": "succeeded",
+  "dailyAllowance": {
+    "expiredSourceFlags": [],
+    "noExpiryRemainingBytes": 0,
+    "perDayRateBytes": 22548578304
+  },
+  "sources": [
+    {
+      "bootstrapState": "succeeded",
+      "cachedPayloadBytes": 82477,
+      "cachedSubscriptionUserinfo": {
+        "download": 42949672960,
+        "expire": 1780099200,
+        "total": 214748364800,
+        "upload": 10737418240
+      },
+      "enabled": true,
+      "lastFetchOutcome": "success",
+      "lastFetchedAt": "\u003cscrubbed-timestamp\u003e",
+      "name": "alpha",
+      "servingFromCache": false
+    },
+    {
+      "bootstrapState": "succeeded",
+      "cachedPayloadBytes": 53564,
+      "cachedSubscriptionUserinfo": {
+        "download": 16106127360,
+        "expire": 1777939200,
+        "total": 107374182400,
+        "upload": 5368709120
+      },
+      "enabled": true,
+      "lastFetchOutcome": "success",
+      "lastFetchedAt": "\u003cscrubbed-timestamp\u003e",
+      "name": "beta",
+      "servingFromCache": false
+    }
+  ]
+}
