@@ -216,23 +216,25 @@ release-major:
 	echo "  https://github.com/$$(git remote get-url origin | sed -E 's#.*github.com[:/]([^/]+/[^/.]+)(\.git)?#\1#')/actions"
 
 # Explicit-version target. Use for skip-ahead, RC tags, or hotfix backports.
+# All post-precondition logic is a single shell invocation so DRY_RUN's `exit 0`
+# actually halts the recipe before any git side effect.
 release:
 	@if [ -z "$(VERSION)" ]; then echo "ERROR: VERSION required (e.g., make release VERSION=v2.0.0)"; exit 1; fi
+	$(_release_preconditions)
 	@. scripts/release-bump.sh && \
 	if ! validate_version "$(VERSION)"; then \
 		echo "ERROR: VERSION must match vMAJOR.MINOR.PATCH[-PRERELEASE], got: $(VERSION)"; exit 1; \
-	fi
-	$(_release_preconditions)
-	@if git rev-parse "$(VERSION)" >/dev/null 2>&1; then \
+	fi; \
+	if git rev-parse "$(VERSION)" >/dev/null 2>&1; then \
 		echo "ERROR: tag $(VERSION) already exists locally"; exit 1; \
-	fi
-	@if [ "$$(git ls-remote --tags origin "refs/tags/$(VERSION)" 2>/dev/null | wc -l)" -ne 0 ]; then \
+	fi; \
+	if [ "$$(git ls-remote --tags origin "refs/tags/$(VERSION)" 2>/dev/null | wc -l)" -ne 0 ]; then \
 		echo "ERROR: tag $(VERSION) already exists on origin"; exit 1; \
-	fi
-	@if [ "$(DRY_RUN)" = "1" ]; then \
+	fi; \
+	if [ "$(DRY_RUN)" = "1" ]; then \
 		echo "Would create tag: $(VERSION) at $$(git rev-parse --short HEAD)"; exit 0; \
-	fi
-	@git tag -a -m "Release $(VERSION)" "$(VERSION)" && \
+	fi; \
+	git tag -a -m "Release $(VERSION)" "$(VERSION)" && \
 	git push origin "$(VERSION)" && \
 	echo "" && \
 	echo "Pushed $(VERSION) — watch the release workflow at:" && \
