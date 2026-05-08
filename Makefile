@@ -1,4 +1,4 @@
-.PHONY: build test test-race test-unit test-integration snapshot-update lint vet check docker docker-build docker-push docker-push-latest config-sync rules-sync pod-restart cache-clear clean run help
+.PHONY: build test test-race test-unit test-integration snapshot-update lint vet check docker docker-build docker-push docker-push-latest config-sync rules-sync pod-restart cache-clear clean run help release-patch release-minor release-major release
 
 # Operator-private overrides — see .env.example. Optional; safe to skip.
 ifneq (,$(wildcard .env))
@@ -10,8 +10,15 @@ BINARY := bin/server
 PKG := ./...
 INTEGRATION_PKG := ./internal/integration/...
 
-# 009: image build & publish
-IMAGE_REPO ?= registry.example.com/library/honkai-rule-server
+# 009 + 013: image build & publish.
+# Default IMAGE_REPO is GHCR derived from the GitHub remote owner. Override
+# via `IMAGE_REPO=<custom>` (in .env or env) for private mirror / custom
+# registry; the existing `make docker-push` flow keeps working with any
+# operator-set value. The owner regex matches both ssh
+# (git@github.com:owner/repo.git) and https (https://github.com/owner/repo)
+# remote URL forms.
+IMAGE_OWNER := $(shell git remote get-url origin 2>/dev/null | sed -E 's#.*github.com[:/]([^/]+)/.*#\1#' | head -1)
+IMAGE_REPO ?= ghcr.io/$(IMAGE_OWNER)/honkai-rule-server
 IMAGE_TAG  ?= $(shell git rev-parse --short HEAD)
 IMAGE      := $(IMAGE_REPO):$(IMAGE_TAG)
 
@@ -150,6 +157,87 @@ run:
 	@test -n "$$SUBSCRIPTIONS_CSV_PATH" || (echo "Set SUBSCRIPTIONS_CSV_PATH (and other env vars per quickstart §3)"; exit 1)
 	go run ./cmd/server
 
+# 013: SemVer release targets. See specs/013-ci-container-release/contracts/make-targets-contract.md
+# and RELEASING.md for full operator docs.
+
+# Shared precondition checks for all release targets. Loud-fail per Constitution
+# Principle III applied to operator UX. Sets PHONY-style helper variables.
+define _release_preconditions
+	@if ! git diff --quiet || ! git diff --cached --quiet; then \
+		echo "ERROR: working tree is dirty; commit or stash first"; exit 1; \
+	fi
+	@CURRENT_BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
+	EXPECTED_BRANCH=$${RELEASE_FROM_BRANCH:-master}; \
+	if [ "$$CURRENT_BRANCH" != "$$EXPECTED_BRANCH" ]; then \
+		echo "ERROR: not on $$EXPECTED_BRANCH (currently on $$CURRENT_BRANCH); set RELEASE_FROM_BRANCH=$$CURRENT_BRANCH if intentional"; exit 1; \
+	fi
+endef
+
+release-patch:
+	$(_release_preconditions)
+	@. scripts/release-bump.sh && \
+	LAST=$$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' 2>/dev/null || true); \
+	NEXT=$$(bump_patch "$$LAST") || exit $$?; \
+	if [ "$(DRY_RUN)" = "1" ]; then \
+		echo "Would create tag: $$NEXT at $$(git rev-parse --short HEAD)"; exit 0; \
+	fi; \
+	git tag -a -m "Release $$NEXT" "$$NEXT" && \
+	git push origin "$$NEXT" && \
+	echo "" && \
+	echo "Pushed $$NEXT — watch the release workflow at:" && \
+	echo "  https://github.com/$$(git remote get-url origin | sed -E 's#.*github.com[:/]([^/]+/[^/.]+)(\.git)?#\1#')/actions"
+
+release-minor:
+	$(_release_preconditions)
+	@. scripts/release-bump.sh && \
+	LAST=$$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' 2>/dev/null || true); \
+	NEXT=$$(bump_minor "$$LAST") || exit $$?; \
+	if [ "$(DRY_RUN)" = "1" ]; then \
+		echo "Would create tag: $$NEXT at $$(git rev-parse --short HEAD)"; exit 0; \
+	fi; \
+	git tag -a -m "Release $$NEXT" "$$NEXT" && \
+	git push origin "$$NEXT" && \
+	echo "" && \
+	echo "Pushed $$NEXT — watch the release workflow at:" && \
+	echo "  https://github.com/$$(git remote get-url origin | sed -E 's#.*github.com[:/]([^/]+/[^/.]+)(\.git)?#\1#')/actions"
+
+release-major:
+	$(_release_preconditions)
+	@. scripts/release-bump.sh && \
+	LAST=$$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' 2>/dev/null || true); \
+	NEXT=$$(bump_major "$$LAST") || exit $$?; \
+	if [ "$(DRY_RUN)" = "1" ]; then \
+		echo "Would create tag: $$NEXT at $$(git rev-parse --short HEAD)"; exit 0; \
+	fi; \
+	git tag -a -m "Release $$NEXT" "$$NEXT" && \
+	git push origin "$$NEXT" && \
+	echo "" && \
+	echo "Pushed $$NEXT — watch the release workflow at:" && \
+	echo "  https://github.com/$$(git remote get-url origin | sed -E 's#.*github.com[:/]([^/]+/[^/.]+)(\.git)?#\1#')/actions"
+
+# Explicit-version target. Use for skip-ahead, RC tags, or hotfix backports.
+release:
+	@if [ -z "$(VERSION)" ]; then echo "ERROR: VERSION required (e.g., make release VERSION=v2.0.0)"; exit 1; fi
+	@. scripts/release-bump.sh && \
+	if ! validate_version "$(VERSION)"; then \
+		echo "ERROR: VERSION must match vMAJOR.MINOR.PATCH[-PRERELEASE], got: $(VERSION)"; exit 1; \
+	fi
+	$(_release_preconditions)
+	@if git rev-parse "$(VERSION)" >/dev/null 2>&1; then \
+		echo "ERROR: tag $(VERSION) already exists locally"; exit 1; \
+	fi
+	@if [ "$$(git ls-remote --tags origin "refs/tags/$(VERSION)" 2>/dev/null | wc -l)" -ne 0 ]; then \
+		echo "ERROR: tag $(VERSION) already exists on origin"; exit 1; \
+	fi
+	@if [ "$(DRY_RUN)" = "1" ]; then \
+		echo "Would create tag: $(VERSION) at $$(git rev-parse --short HEAD)"; exit 0; \
+	fi
+	@git tag -a -m "Release $(VERSION)" "$(VERSION)" && \
+	git push origin "$(VERSION)" && \
+	echo "" && \
+	echo "Pushed $(VERSION) — watch the release workflow at:" && \
+	echo "  https://github.com/$$(git remote get-url origin | sed -E 's#.*github.com[:/]([^/]+/[^/.]+)(\.git)?#\1#')/actions"
+
 help:
 	@echo "Common targets:"
 	@echo "  make build             - compile to bin/server"
@@ -171,3 +259,11 @@ help:
 	@echo "    fsnotify missed a rules-sync event). Cache survives."
 	@echo "  make cache-clear KUBE_CONTEXT=<your-context> NAMESPACE=cms"
 	@echo "    Wipe /data/cache/* and rollout restart. Forces upstream re-fetch."
+	@echo ""
+	@echo "Release (013; see RELEASING.md):"
+	@echo "  make release-patch         - Cut a patch release (vX.Y.(Z+1)) from the most recent tag"
+	@echo "  make release-minor         - Cut a minor release (vX.(Y+1).0) from the most recent tag"
+	@echo "  make release-major         - Cut a major release (v(X+1).0.0); creates v1.0.0 if no prior tag"
+	@echo "  make release VERSION=v...  - Cut an explicit-version release (RC / hotfix / skip-ahead)"
+	@echo "                               Use DRY_RUN=1 to preview without creating/pushing the tag"
+	@echo "                               Use RELEASE_FROM_BRANCH=<branch> for hotfix branches"
