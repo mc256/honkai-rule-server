@@ -381,9 +381,9 @@ description: "Task list for 013-ci-container-release"
 
 ### Implementation for User Story 4
 
-- [ ] T022 [US4] Confirm the `DRY_RUN=1` mode is wired into all three `release-{patch,minor,major}` targets from T010. The reference in T010's task body already includes the `DRY_RUN=1` guard. If T010 was implemented without it, retrofit per `contracts/make-targets-contract.md` §"`DRY_RUN=1`" — single line printed to stdout, exit 0, no git operations.
+- [X] T022 [US4] Confirm the `DRY_RUN=1` mode is wired into all three `release-{patch,minor,major}` targets from T010. The reference in T010's task body already includes the `DRY_RUN=1` guard. If T010 was implemented without it, retrofit per `contracts/make-targets-contract.md` §"`DRY_RUN=1`" — single line printed to stdout, exit 0, no git operations.
 
-- [ ] T023 [US4] Add the `release` target (with `VERSION=` argument) to `Makefile` per `contracts/make-targets-contract.md` §"Target: `make release VERSION=<v>`" and `research.md` §4. Reference body:
+- [X] T023 [US4] Add the `release` target (with `VERSION=` argument) to `Makefile` per `contracts/make-targets-contract.md` §"Target: `make release VERSION=<v>`" and `research.md` §4. Reference body:
 
   ```makefile
   release:
@@ -414,9 +414,9 @@ description: "Task list for 013-ci-container-release"
 
   Add `release` to the `.PHONY` line.
 
-- [ ] T024 [US4] Add the help-line entry for `release VERSION=v...` to the `make help` target per FR-021 / `contracts/make-targets-contract.md` §"Help-line contract".
+- [X] T024 [US4] Add the help-line entry for `release VERSION=v...` to the `make help` target per FR-021 / `contracts/make-targets-contract.md` §"Help-line contract".
 
-- [ ] T025 [US4] Manually verify the explicit-version target locally:
+- [X] T025 [US4] Manually verify the explicit-version target locally:
   - `make release VERSION=v0.0.1-test-foo DRY_RUN=1` from clean tree on master → prints the would-create line.
   - `make release VERSION=2.0.0 DRY_RUN=1` → exits 1 with the regex error.
   - `make release VERSION=v1.5 DRY_RUN=1` → exits 1 with the regex error.
