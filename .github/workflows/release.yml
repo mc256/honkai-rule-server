@@ -106,7 +106,7 @@ jobs:
         with:
           fetch-depth: 0   # full history for auto-generated release notes
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           # Pre-release tags (those with a hyphen after the version) are flagged
