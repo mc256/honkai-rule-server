@@ -86,6 +86,7 @@ jobs:
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=master
+            org.opencontainers.image.licenses=MIT
 
       - uses: docker/build-push-action@v5
         with:
