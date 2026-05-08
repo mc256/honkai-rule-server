@@ -106,7 +106,7 @@ description: "Task list for 013-ci-container-release"
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Add the three `release-{patch,minor,major}` targets to `Makefile` per `contracts/make-targets-contract.md` and `research.md` §3. Each target:
+- [X] T010 [US1] Add the three `release-{patch,minor,major}` targets to `Makefile` per `contracts/make-targets-contract.md` and `research.md` §3. Each target:
   1. Runs the dirty-tree precondition check (`git diff --quiet && git diff --cached --quiet || (echo "ERROR: working tree is dirty;..."; exit 1)`).
   2. Runs the branch precondition check (compare `git rev-parse --abbrev-ref HEAD` to `${RELEASE_FROM_BRANCH:-master}`).
   3. Sources `scripts/release-bump.sh` (`. scripts/release-bump.sh`).
@@ -118,9 +118,9 @@ description: "Task list for 013-ci-container-release"
 
   Add the three targets to `.PHONY` line at the top of the Makefile.
 
-- [ ] T011 [US1] Add the help-line entries for `release-patch`, `release-minor`, `release-major` to the `make help` target per FR-021 / `contracts/make-targets-contract.md` §"Help-line contract". Match the existing column-aligned format.
+- [X] T011 [US1] Add the help-line entries for `release-patch`, `release-minor`, `release-major` to the `make help` target per FR-021 / `contracts/make-targets-contract.md` §"Help-line contract". Match the existing column-aligned format.
 
-- [ ] T012 [US1] Manually verify the three Make targets locally:
+- [X] T012 [US1] Manually verify the three Make targets locally:
   - `make release-patch DRY_RUN=1` from clean tree on master → prints `Would create tag: vX.Y.(Z+1) at <SHA>`.
   - `make release-patch DRY_RUN=1` from dirty tree → exits 1 with "working tree is dirty".
   - `make release-patch DRY_RUN=1` from a non-master branch → exits 1 with "not on master".
@@ -128,7 +128,7 @@ description: "Task list for 013-ci-container-release"
   - `make release-major DRY_RUN=1` from a repo with no prior tag → prints `Would create tag: v1.0.0 at <SHA>`.
   - `make release-patch DRY_RUN=1` from a repo with no prior tag → exits 1 with "no prior".
 
-- [ ] T013 [US1] Create `.github/workflows/release.yml` per `contracts/ghcr-tag-contract.md` Trigger C and `research.md` §1, §2. Reference structure:
+- [X] T013 [US1] Create `.github/workflows/release.yml` per `contracts/ghcr-tag-contract.md` Trigger C and `research.md` §1, §2. Reference structure:
 
   ```yaml
   name: release
@@ -201,7 +201,7 @@ description: "Task list for 013-ci-container-release"
 
   The `prerelease: ${{ contains(github.ref_name, '-') }}` condition flags pre-release tags (those containing a hyphen after the version) per FR-011a / SC-003.
 
-- [ ] T014 [US1] Pin specific action versions in `release.yml` to known-good releases (`@v4`, `@v5`, `@v3`, `@v2` as shown). Do NOT use `@main` or floating refs. Dependabot's `github-actions` ecosystem (added in US3) will keep them current automatically.
+- [X] T014 [US1] Pin specific action versions in `release.yml` to known-good releases (`@v4`, `@v5`, `@v3`, `@v2` as shown). Do NOT use `@main` or floating refs. Dependabot's `github-actions` ecosystem (added in US3) will keep them current automatically.
 
 **Checkpoint**: US1 complete. After cutting `make release-patch` / `release-minor` / `release-major` against a real `master` HEAD, the release workflow runs end-to-end and lands the four-tag image on GHCR. The end-to-end smoke is deferred to Phase 7 (polish) so US2/US3/US4 can be implemented in parallel.
 
@@ -215,7 +215,7 @@ description: "Task list for 013-ci-container-release"
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Modify `.github/workflows/ci.yml` to add a `publish-master` job per `contracts/ghcr-tag-contract.md` Trigger A and `research.md` §1. Reference structure (added to the existing file alongside `test` and `build-image`):
+- [X] T015 [US2] Modify `.github/workflows/ci.yml` to add a `publish-master` job per `contracts/ghcr-tag-contract.md` Trigger A and `research.md` §1. Reference structure (added to the existing file alongside `test` and `build-image`):
 
   ```yaml
     publish-master:
@@ -262,9 +262,9 @@ description: "Task list for 013-ci-container-release"
   - `if: github.ref == 'refs/heads/master' && github.event_name == 'push'` ensures the job runs ONLY on direct `master` pushes (no PR runs, no other-branch runs).
   - `type=ref,event=branch` emits the `:master` tag; `type=sha,prefix=sha-,format=short` emits `:sha-<7short>`.
 
-- [ ] T016 [US2] Add explicit job-level `permissions:` block to the existing `test` job and `build-image` job in `ci.yml`: both should declare `contents: read` only (defense-in-depth — they don't need write access). Existing `permissions: contents: read` at the workflow top is preserved; per-job `permissions` blocks override it where needed (the new `publish-master` job is the only one with `packages: write`).
+- [X] T016 [US2] Add explicit job-level `permissions:` block to the existing `test` job and `build-image` job in `ci.yml`: both should declare `contents: read` only (defense-in-depth — they don't need write access). Existing `permissions: contents: read` at the workflow top is preserved; per-job `permissions` blocks override it where needed (the new `publish-master` job is the only one with `packages: write`).
 
-- [ ] T017 [US2] Confirm the existing `build-image` (smoke) job remains in `ci.yml`. It still runs on PRs to validate Dockerfile changes per FR-006 and `contracts/ghcr-tag-contract.md` Trigger B; it does NOT push (no `docker/login-action`, no `docker/build-push-action` with `push: true`). Verify by reading the existing `build-image` job's body.
+- [X] T017 [US2] Confirm the existing `build-image` (smoke) job remains in `ci.yml`. It still runs on PRs to validate Dockerfile changes per FR-006 and `contracts/ghcr-tag-contract.md` Trigger B; it does NOT push (no `docker/login-action`, no `docker/build-push-action` with `push: true`). Verify by reading the existing `build-image` job's body.
 
 **Checkpoint**: US2 complete. After the next `master` push, GHCR shows `:master` and `:sha-<short>`; PRs trigger only the smoke build with no GHCR push.
 
@@ -278,9 +278,9 @@ description: "Task list for 013-ci-container-release"
 
 ### Implementation for User Story 3
 
-- [ ] T018 [P] [US3] Create `.github/dependabot.yml` per `data-model.md` §6 and `research.md` §5. Three ecosystems (`gomod`, `github-actions`, `docker`), each with `directory: "/"`, `schedule.interval: weekly`, `open-pull-requests-limit: 5`, and `groups.all-non-major.update-types: ["minor", "patch"]`. File ends with a single `version: 2` at the top.
+- [X] T018 [P] [US3] Create `.github/dependabot.yml` per `data-model.md` §6 and `research.md` §5. Three ecosystems (`gomod`, `github-actions`, `docker`), each with `directory: "/"`, `schedule.interval: weekly`, `open-pull-requests-limit: 5`, and `groups.all-non-major.update-types: ["minor", "patch"]`. File ends with a single `version: 2` at the top.
 
-- [ ] T019 [P] [US3] Create `.github/workflows/dependabot-auto-merge.yml` per `research.md` §6 and FR-017. Reference structure:
+- [X] T019 [P] [US3] Create `.github/workflows/dependabot-auto-merge.yml` per `research.md` §6 and FR-017. Reference structure:
 
   ```yaml
   name: dependabot-auto-merge
@@ -312,7 +312,7 @@ description: "Task list for 013-ci-container-release"
   - The step-level `if:` filters out major bumps (they stay open for human review per FR-016 + FR-017).
   - `gh pr merge --auto --squash` queues the merge; it does NOT bypass branch protection. CI must still pass.
 
-- [ ] T020 [US3] Create `.github/workflows/auto-patch-release.yml` per `research.md` §7, `data-model.md` §5, FR-018. Reference structure:
+- [X] T020 [US3] Create `.github/workflows/auto-patch-release.yml` per `research.md` §7, `data-model.md` §5, FR-018. Reference structure:
 
   ```yaml
   name: auto-patch-release
