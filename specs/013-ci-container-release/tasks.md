@@ -431,7 +431,7 @@ description: "Task list for 013-ci-container-release"
 
 **Purpose**: Operator-facing documentation (`RELEASING.md`), final agent-context update, and the end-to-end smoke that closes the feature.
 
-- [ ] T026 [P] Create `/home/maverick/development/honkai-rule-server/RELEASING.md` per FR-020 and `quickstart.md`. Cover (in this order):
+- [X] T026 [P] Create `/home/maverick/development/honkai-rule-server/RELEASING.md` per FR-020 and `quickstart.md`. Cover (in this order):
   - **TL;DR table** of common operations (mirror `quickstart.md` §TL;DR).
   - **First-time setup** (nothing required; one-time GHCR visibility check).
   - **Cut a release** (patch / minor / major / RC / hotfix backport / dry-run).
@@ -443,7 +443,7 @@ description: "Task list for 013-ci-container-release"
 
   Aim for ~200–300 lines (vs. `quickstart.md`'s ~400) — `RELEASING.md` is the day-to-day operator reference; `quickstart.md` stays as the one-time onboarding doc.
 
-- [ ] T027 [P] Verify `CLAUDE.md` was updated by the plan to mark **013** as the active feature with a key-reading bullet pointing at `specs/013-ci-container-release/plan.md`. (Already done during `/speckit-plan`; this task is a verification, not a re-write.) Read `CLAUDE.md` and confirm the new lines are present in both the status block and the key-reading list.
+- [X] T027 [P] Verify `CLAUDE.md` was updated by the plan to mark **013** as the active feature with a key-reading bullet pointing at `specs/013-ci-container-release/plan.md`. (Already done during `/speckit-plan`; this task is a verification, not a re-write.) Read `CLAUDE.md` and confirm the new lines are present in both the status block and the key-reading list.
 
 - [ ] T028 End-to-end smoke for US1 + US2 covering both pre-release (SC-003) and stable-release (SC-001 / SC-002 / SC-005) paths. Steps:
   1. From clean `master` checkout, run `make release VERSION=v0.1.0-rc.1` — creates the first pre-release tag at `HEAD`. Watch the run URL printed.
@@ -495,11 +495,11 @@ description: "Task list for 013-ci-container-release"
   5. The release workflow (US1 path) picks up the new tag and publishes the patch release. Verify the four-tag GHCR images appear.
   6. End-to-end timing: from "Dependabot opens PR" to "new image at `ghcr.io/<owner>/honkai-rule-server:vX.Y.(Z+1)`" should be ≤ 24 hours plus the workflow run times. SC-009.
 
-- [ ] T032 Update `.specify/feature.json`-pointed feature path to remain at `specs/013-ci-container-release` (already set during `/speckit-specify`). No-op verification — this is a guardrail against accidental drift.
+- [X] T032 Update `.specify/feature.json`-pointed feature path to remain at `specs/013-ci-container-release` (already set during `/speckit-specify`). No-op verification — this is a guardrail against accidental drift.
 
-- [ ] T033 Verify the CLAUDE.md update from `/speckit-plan` (T027) explicitly notes that 009's `registry.example.com/library/honkai-rule-server` is now superseded by `ghcr.io/<owner>/honkai-rule-server`. If missing, add the note to the 009 line in CLAUDE.md so future `/speckit-*` runs and human readers see the registry change.
+- [X] T033 Verify the CLAUDE.md update from `/speckit-plan` (T027) explicitly notes that 009's `registry.example.com/library/honkai-rule-server` is now superseded by `ghcr.io/<owner>/honkai-rule-server`. If missing, add the note to the 009 line in CLAUDE.md so future `/speckit-*` runs and human readers see the registry change.
 
-- [ ] T034 Run `make check` to confirm no regression in the existing test gate (vet + staticcheck + tests + snapshot drift). This feature should not change any Go code; `make check` should pass identically to before. If it fails, debug (likely cause: a stray edit in Phase 2's Makefile changes that broke an existing target).
+- [X] T034 Run `make check` to confirm no regression in the existing test gate (vet + staticcheck + tests + snapshot drift). This feature should not change any Go code; `make check` should pass identically to before. If it fails, debug (likely cause: a stray edit in Phase 2's Makefile changes that broke an existing target).
 
 ---
 
