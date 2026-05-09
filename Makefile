@@ -29,6 +29,24 @@ IMAGE      := $(IMAGE_REPO):$(IMAGE_TAG)
 DEPLOYMENT_NAME ?= honkai-rule-server
 CONFIG_MAP_NAME ?= honkai-rule-server-config
 RULES_SYNC_POD  ?= honkai-rules-sync
+# PVC_NAME matches the chart's PVC for a release named honkai-rule-server
+# (`{{ .Release.Name }}-data`). Override on the command line for charts
+# that render a different PVC name (e.g., `<release>-honkai-data`):
+# `make rules-sync PVC_NAME=...`.
+PVC_NAME        ?= honkai-rule-server-data
+
+# _rules_sync_apply: substitutes the __RULES_SYNC_POD__ and __PVC_NAME__
+# placeholders in deploy/rules-sync-pod.yaml with the current Make variable
+# values, then pipes the rendered manifest to `kubectl apply -f -`. Used
+# by both `rules-sync` and `cache-clear`. The placeholders are not valid
+# Kubernetes identifiers, so direct `kubectl apply -f deploy/...yaml` is
+# intentionally non-functional — see the file's header for context.
+define _rules_sync_apply
+	@sed -e 's|__RULES_SYNC_POD__|$(RULES_SYNC_POD)|g' \
+	     -e 's|__PVC_NAME__|$(PVC_NAME)|g' \
+	     deploy/rules-sync-pod.yaml \
+	  | kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) apply -f -
+endef
 
 build:
 	go build -o $(BINARY) ./cmd/server
@@ -109,9 +127,9 @@ rules-sync:
 	@test -n "$(NAMESPACE)" || (echo "ERROR: set NAMESPACE=<namespace>"; exit 1)
 	@test -d config/custom-rules || (echo "ERROR: config/custom-rules/ directory missing"; exit 1)
 	@test -f deploy/rules-sync-pod.yaml || (echo "ERROR: deploy/rules-sync-pod.yaml missing"; exit 1)
-	@echo "rules-sync: context=$(KUBE_CONTEXT) namespace=$(NAMESPACE) helper=$(RULES_SYNC_POD)"
+	@echo "rules-sync: context=$(KUBE_CONTEXT) namespace=$(NAMESPACE) helper=$(RULES_SYNC_POD) pvc=$(PVC_NAME)"
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) delete pod $(RULES_SYNC_POD) --ignore-not-found --wait=true >/dev/null
-	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) apply -f deploy/rules-sync-pod.yaml
+	$(_rules_sync_apply)
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) wait --for=condition=Ready pod/$(RULES_SYNC_POD) --timeout=60s
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) exec $(RULES_SYNC_POD) -- sh -c 'rm -rf /data/custom-rules/* && mkdir -p /data/custom-rules'
 	@tar -cf - -C config/custom-rules . | kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) exec -i $(RULES_SYNC_POD) -- sh -c 'tar -xf - -C /data/custom-rules/'
@@ -141,9 +159,9 @@ cache-clear:
 	@test -n "$(KUBE_CONTEXT)" || (echo "ERROR: set KUBE_CONTEXT=<context>"; exit 1)
 	@test -n "$(NAMESPACE)" || (echo "ERROR: set NAMESPACE=<namespace>"; exit 1)
 	@test -f deploy/rules-sync-pod.yaml || (echo "ERROR: deploy/rules-sync-pod.yaml missing"; exit 1)
-	@echo "cache-clear: clearing /data/cache/ via helper pod, then rollout restart"
+	@echo "cache-clear: clearing /data/cache/ via helper pod (pvc=$(PVC_NAME)), then rollout restart"
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) delete pod $(RULES_SYNC_POD) --ignore-not-found --wait=true >/dev/null
-	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) apply -f deploy/rules-sync-pod.yaml
+	$(_rules_sync_apply)
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) wait --for=condition=Ready pod/$(RULES_SYNC_POD) --timeout=60s
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) exec $(RULES_SYNC_POD) -- sh -c 'rm -rf /data/cache/* && mkdir -p /data/cache'
 	@kubectl --context $(KUBE_CONTEXT) -n $(NAMESPACE) delete pod $(RULES_SYNC_POD) --wait=true
@@ -254,8 +272,10 @@ help:
 	@echo "Cluster sync (009; both require KUBE_CONTEXT and NAMESPACE):"
 	@echo "  make config-sync KUBE_CONTEXT=<your-context> NAMESPACE=cms"
 	@echo "    Atomically replaces the ConfigMap with config/{subscriptions.csv,own-proxies.yaml,tokens.json}."
-	@echo "  make rules-sync  KUBE_CONTEXT=<your-context> NAMESPACE=cms"
+	@echo "  make rules-sync  KUBE_CONTEXT=<your-context> NAMESPACE=cms [PVC_NAME=<pvc>]"
 	@echo "    Sync config/custom-rules/ to the PVC via a short-lived busybox helper pod."
+	@echo "    PVC_NAME defaults to honkai-rule-server-data; override when the chart's"
+	@echo "    release name produces a different PVC name (e.g., \`<release>-honkai-data\`)."
 	@echo "  make pod-restart KUBE_CONTEXT=<your-context> NAMESPACE=cms"
 	@echo "    Rollout restart the application pod (forces fresh rule load if"
 	@echo "    fsnotify missed a rules-sync event). Cache survives."

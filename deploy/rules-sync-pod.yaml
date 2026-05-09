@@ -3,18 +3,26 @@
 # files in /data/custom-rules/ on the PVC. The application's runtime image
 # is `FROM scratch` (no shell), so it cannot host the cp itself.
 #
+# This file is a TEMPLATE — the Makefile (`rules-sync` and `cache-clear`
+# targets) substitutes the `__RULES_SYNC_POD__` and `__PVC_NAME__` tokens
+# with the values of the matching Make variables before piping to
+# `kubectl apply -f -`. Do not `kubectl apply` this file directly; the
+# placeholders are not valid Kubernetes identifiers.
+#
 # Lifecycle (managed by `make rules-sync`):
-#   1. kubectl apply -f deploy/rules-sync-pod.yaml
-#   2. kubectl wait --for=condition=Ready pod/honkai-rule-server-rules-sync
+#   1. sed-substitute placeholders, kubectl apply -f -
+#   2. kubectl wait --for=condition=Ready pod/$(RULES_SYNC_POD)
 #   3. kubectl exec ... rm -rf /data/custom-rules/*
 #   4. tar -cf - config/custom-rules/. | kubectl exec -i ... tar -xf -
-#   5. kubectl delete pod honkai-rule-server-rules-sync
+#   5. kubectl delete pod $(RULES_SYNC_POD)
 #
 # The pod is intentionally short-lived. Do not leave it running.
 apiVersion: v1
 kind: Pod
 metadata:
-  name: honkai-rules-sync
+  # __RULES_SYNC_POD__ is replaced by Makefile variable RULES_SYNC_POD
+  # (default: honkai-rules-sync). Override per cluster as needed.
+  name: __RULES_SYNC_POD__
   labels:
     app.kubernetes.io/name: honkai-rule-server
     app.kubernetes.io/component: rules-sync
@@ -37,8 +45,10 @@ spec:
   volumes:
     - name: data
       persistentVolumeClaim:
-        # NOTE: matches the chart's PVC name. The chart renders the PVC as
-        # `{{ .Release.Name }}-data`. With release name `honkai-rule-server`
-        # the resulting PVC is `honkai-rule-server-data`.
-        # Override via PVC_NAME=... if your release name differs.
-        claimName: honkai-rule-server-data
+        # __PVC_NAME__ is replaced by Makefile variable PVC_NAME
+        # (default: honkai-rule-server-data, matching the chart's
+        # `{{ .Release.Name }}-data` PVC for a release named
+        # `honkai-rule-server`). For deployments under different release
+        # names — where the rendered PVC has a different name (e.g.,
+        # `<release>-honkai-data`) — set PVC_NAME=<...> when invoking make.
+        claimName: __PVC_NAME__

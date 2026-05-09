@@ -23,7 +23,7 @@
     },
     {
       "bootstrapState": "succeeded",
-      "cachedPayloadBytes": 53564,
+      "cachedPayloadBytes": 55239,
       "cachedSubscriptionUserinfo": {
         "download": 16106127360,
         "expire": 1777939200,

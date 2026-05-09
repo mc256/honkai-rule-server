@@ -5,6 +5,10 @@ tokens.json
 custom-rules
 custom-rules/**
 
+# Operator-private deploy notes — environment-specific (cluster contexts,
+# namespaces, Argo app names). Not appropriate to publish.
+*
+
 # But DO commit this gitignore and the README
 !.gitignore
 !README.md

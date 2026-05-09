@@ -94,7 +94,7 @@ func TestRealFixtures_FullPipelineSmoke(t *testing.T) {
 	}
 	hasBeta, hasAlphaShield := false, false
 	for _, g := range parsed.ProxyGroups {
-		if strings.Contains(g.Name, "蓝莓桥") {
+		if strings.Contains(g.Name, "synthetic-pool") {
 			hasBeta = true
 		}
 		if strings.Contains(g.Name, "🔰") {
@@ -102,7 +102,7 @@ func TestRealFixtures_FullPipelineSmoke(t *testing.T) {
 		}
 	}
 	if !hasBeta {
-		t.Errorf("parsed proxy-groups missing 蓝莓桥; got %d groups", len(parsed.ProxyGroups))
+		t.Errorf("parsed proxy-groups missing synthetic-pool; got %d groups", len(parsed.ProxyGroups))
 	}
 	if !hasAlphaShield {
 		t.Errorf("parsed proxy-groups missing 🔰-prefixed group; got %d groups", len(parsed.ProxyGroups))
