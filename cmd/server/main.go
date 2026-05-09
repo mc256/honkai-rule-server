@@ -108,6 +108,17 @@ func run() error {
 		"lazy", cfg.URLTestParams.Lazy,
 	)
 
+	// 014 FR-009: log resolved LoadBalanceParams (distinct from url-test
+	// log line so operators can grep for either independently).
+	log.Info("load_balance_params resolved",
+		"url", cfg.LoadBalanceParams.URL,
+		"interval_seconds", cfg.LoadBalanceParams.IntervalSeconds,
+		"timeout_ms", cfg.LoadBalanceParams.TimeoutMS,
+		"max_failed_times", cfg.LoadBalanceParams.MaxFailedTimes,
+		"lazy", cfg.LoadBalanceParams.Lazy,
+		"strategy", cfg.LoadBalanceParams.Strategy,
+	)
+
 	// Own-proxies YAML.
 	own, err := config.LoadOwnProxies(cfg.OwnProxiesYAMLPath)
 	if err != nil {
@@ -149,6 +160,14 @@ func run() error {
 			TimeoutMS:       cfg.URLTestParams.TimeoutMS,
 			MaxFailedTimes:  cfg.URLTestParams.MaxFailedTimes,
 			Lazy:            cfg.URLTestParams.Lazy,
+		}).
+		WithLoadBalanceParams(merge.LoadBalanceParams{
+			URL:             cfg.LoadBalanceParams.URL,
+			IntervalSeconds: cfg.LoadBalanceParams.IntervalSeconds,
+			TimeoutMS:       cfg.LoadBalanceParams.TimeoutMS,
+			MaxFailedTimes:  cfg.LoadBalanceParams.MaxFailedTimes,
+			Lazy:            cfg.LoadBalanceParams.Lazy,
+			Strategy:        cfg.LoadBalanceParams.Strategy,
 		}).
 		WithSnapshotter(dailyspend.NewFileSnapshotter(cfg.TodayZeroPath)).
 		WithBudgetLocation(cfg.BudgetLocation).

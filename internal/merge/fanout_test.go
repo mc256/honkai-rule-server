@@ -302,3 +302,113 @@ func equalStringSlice(a, b []string) bool {
 	}
 	return true
 }
+
+// 014 FR-014/FR-014a: AppendFanoutProxies's prefix predicate widens to also
+// accept `_lb_region_` and `_lb_continent_`. With one own-proxy + paired
+// {_region_JP, _lb_region_JP, _continent_AS, _lb_continent_AS} groups, the
+// fan-out emits 4 per-group copies + 1 AUTO copy = 5 total in deterministic
+// order matching the mergedGroups input.
+func TestAppendFanoutProxies_LBPrefixWidened(t *testing.T) {
+	own := mustParseYAMLNode(fanoutTestProxyYAML)
+	groups := []*yaml.Node{
+		regionGroupNode("_region_JP"),
+		regionGroupNode("_lb_region_JP"),
+		regionGroupNode("_continent_AS"),
+		regionGroupNode("_lb_continent_AS"),
+	}
+
+	fanout, skipped := AppendFanoutProxies([]*yaml.Node{own}, groups, "Proxies")
+
+	if skipped != 0 {
+		t.Errorf("skipped count = %d, want 0", skipped)
+	}
+	if len(fanout) != 5 {
+		t.Fatalf("len(fanout) = %d, want 5 (AUTO + 4 per-group); names=%v", len(fanout), fanoutNames(fanout))
+	}
+	wantOrder := []string{
+		"via_AUTO__markham",
+		"via_region_JP__markham",
+		"via_lb_region_JP__markham",
+		"via_continent_AS__markham",
+		"via_lb_continent_AS__markham",
+	}
+	if !equalStringSlice(fanoutNames(fanout), wantOrder) {
+		t.Errorf("fanout name order = %v, want %v", fanoutNames(fanout), wantOrder)
+	}
+}
+
+// 014 FR-014: lb fan-out copies carry dialer-proxy = full lb group name and
+// every other field is deep-cloned verbatim from the source own-proxy.
+func TestAppendFanoutProxies_LBDialerProxyAndFieldCopy(t *testing.T) {
+	own := mustParseYAMLNode(fanoutTestProxyYAML)
+	groups := []*yaml.Node{regionGroupNode("_lb_region_HK"), regionGroupNode("_lb_continent_AS")}
+
+	fanout, _ := AppendFanoutProxies([]*yaml.Node{own}, groups, "Proxies")
+
+	wants := []struct {
+		name        string
+		dialerProxy string
+	}{
+		{"via_lb_region_HK__markham", "_lb_region_HK"},
+		{"via_lb_continent_AS__markham", "_lb_continent_AS"},
+	}
+	for _, w := range wants {
+		f := findFanoutByName(t, fanout, w.name)
+		if f == nil {
+			t.Errorf("missing fan-out entry %q (got %v)", w.name, fanoutNames(fanout))
+			continue
+		}
+		if got := getMappingField(f, "dialer-proxy"); got != w.dialerProxy {
+			t.Errorf("%s dialer-proxy = %q, want %q", w.name, got, w.dialerProxy)
+		}
+		// Field-copy verification: all source fields except `name` (rewritten)
+		// match verbatim. The source had no dialer-proxy, so dialer-proxy is
+		// new on the clone.
+		for _, key := range []string{"type", "server", "port", "cipher", "password", "udp", "udp-over-tcp", "udp-over-tcp-version", "ip-version"} {
+			srcVal := getMappingField(own, key)
+			cloneVal := getMappingField(f, key)
+			if srcVal != cloneVal {
+				t.Errorf("%s %s = %q, want %q (copied verbatim from source)", w.name, key, cloneVal, srcVal)
+			}
+		}
+	}
+
+	// The source own-proxy MUST NOT have been mutated.
+	if getMappingField(own, "name") != "_markham" {
+		t.Errorf("source own-proxy name was mutated; now %q", getMappingField(own, "name"))
+	}
+}
+
+// 014 FR-016: 008's per-own-proxy skip rule applies uniformly. An own-proxy
+// with an explicit dialer-proxy: field generates ZERO via_* copies — including
+// the new via_lb_* variants.
+func TestAppendFanoutProxies_LBSkipRuleAppliesUniformly(t *testing.T) {
+	const ownWithDialer = `
+name: _explicit
+type: ss
+server: example.test
+port: 443
+cipher: aes-256-gcm
+password: pw
+dialer-proxy: SomeOtherGroup
+`
+	own := mustParseYAMLNode(ownWithDialer)
+	groups := []*yaml.Node{
+		regionGroupNode("_region_JP"),
+		regionGroupNode("_lb_region_JP"),
+		regionGroupNode("_continent_AS"),
+		regionGroupNode("_lb_continent_AS"),
+	}
+
+	fanout, skipped := AppendFanoutProxies([]*yaml.Node{own}, groups, "Proxies")
+
+	if skipped != 1 {
+		t.Errorf("skipped = %d, want 1 (008 FR-005 applied to own with explicit dialer)", skipped)
+	}
+	if len(fanout) != 0 {
+		// Sort names for stable error reporting.
+		names := fanoutNames(fanout)
+		sort.Strings(names)
+		t.Errorf("len(fanout) = %d, want 0 (no via_* copies for own with explicit dialer); got %v", len(fanout), names)
+	}
+}

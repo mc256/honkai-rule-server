@@ -87,6 +87,13 @@ type ServerConfig struct {
 	// auto-emitted _region_* / _continent_* proxy group per 012 FR-001..
 	// FR-004. Loaded from URL_TEST_* env vars; empty / unset → defaults.
 	URLTestParams URLTestParams
+
+	// LoadBalanceParams holds the six load-balance fields written into every
+	// auto-emitted _lb_region_* / _lb_continent_* proxy group per 014 FR-001..
+	// FR-005. Loaded from LOAD_BALANCE_* env vars; empty / unset → defaults.
+	// Independent namespace from URLTestParams (014 Decision 1) — the two
+	// probe sets describe semantically different behaviors.
+	LoadBalanceParams LoadBalanceParams
 }
 
 // URLTestParams holds the five Mihomo url-test health-check fields the
@@ -99,6 +106,29 @@ type URLTestParams struct {
 	TimeoutMS       int    // YAML field "timeout".          Default: 3000. Must be >= 1.
 	MaxFailedTimes  int    // YAML field "max-failed-times". Default: 3. Must be >= 1.
 	Lazy            bool   // YAML field "lazy".             Default: true.
+}
+
+// LoadBalanceParams holds the six Mihomo load-balance fields the server emits
+// on every auto-emitted _lb_region_* / _lb_continent_* proxy group per 014
+// FR-001..FR-005. Loaded by Load() from the six LOAD_BALANCE_* env vars and
+// validated per FR-005 (loud-fail per Constitution Principle III).
+type LoadBalanceParams struct {
+	URL             string // YAML field "url".              Default: https://www.gstatic.com/generate_204.
+	IntervalSeconds int    // YAML field "interval".         Default: 300. Must be >= 1.
+	TimeoutMS       int    // YAML field "timeout".          Default: 1500. Must be >= 1.
+	MaxFailedTimes  int    // YAML field "max-failed-times". Default: 3. Must be >= 1.
+	Lazy            bool   // YAML field "lazy".             Default: true.
+	Strategy        string // YAML field "strategy".         Default: "round-robin".
+	// Strategy must be one of: round-robin, consistent-hashing, sticky-sessions
+	// (Mihomo's three supported values; case-sensitive).
+}
+
+// validLoadBalanceStrategies lists the Mihomo-supported strategy values for
+// load-balance proxy groups (014 FR-005).
+var validLoadBalanceStrategies = map[string]struct{}{
+	"round-robin":        {},
+	"consistent-hashing": {},
+	"sticky-sessions":    {},
 }
 
 // Load reads ServerConfig from env. Required env vars must be set;
@@ -121,6 +151,14 @@ func Load(env Env) (*ServerConfig, error) {
 			TimeoutMS:       3000,
 			MaxFailedTimes:  3,
 			Lazy:            true,
+		},
+		LoadBalanceParams: LoadBalanceParams{
+			URL:             "https://www.gstatic.com/generate_204",
+			IntervalSeconds: 300,
+			TimeoutMS:       1500,
+			MaxFailedTimes:  3,
+			Lazy:            true,
+			Strategy:        "round-robin",
 		},
 		TodayZeroPath:       "/data/today-zero.json",
 		DailyBudgetTimezone: "America/Toronto",
@@ -244,6 +282,53 @@ func Load(env Env) (*ServerConfig, error) {
 	}
 	if len(urlTestErrs) > 0 {
 		return nil, fmt.Errorf("URLTestParams validation failed: %s", strings.Join(urlTestErrs, "; "))
+	}
+
+	// 014 FR-004 + FR-005: LOAD_BALANCE_* params for auto-emitted
+	// _lb_region_* / _lb_continent_* groups. Empty / unset → keep defaults.
+	// Invalid values accumulate into a single error so the operator sees all
+	// problems at once rather than fixing them one-by-one. Mirrors the
+	// URL_TEST_* pattern above; namespace is independent (014 Decision 1).
+	var loadBalanceErrs []string
+	if v := env.Getenv("LOAD_BALANCE_URL"); v != "" {
+		cfg.LoadBalanceParams.URL = v
+	}
+	parseLBPositiveInt := func(key string, dst *int) {
+		v := env.Getenv(key)
+		if v == "" {
+			return
+		}
+		n, err := strconv.Atoi(v)
+		if err != nil {
+			loadBalanceErrs = append(loadBalanceErrs, fmt.Sprintf("%s=%q (must be a positive integer)", key, v))
+			return
+		}
+		if n < 1 {
+			loadBalanceErrs = append(loadBalanceErrs, fmt.Sprintf("%s=%d (must be >= 1)", key, n))
+			return
+		}
+		*dst = n
+	}
+	parseLBPositiveInt("LOAD_BALANCE_INTERVAL_SECONDS", &cfg.LoadBalanceParams.IntervalSeconds)
+	parseLBPositiveInt("LOAD_BALANCE_TIMEOUT_MS", &cfg.LoadBalanceParams.TimeoutMS)
+	parseLBPositiveInt("LOAD_BALANCE_MAX_FAILED_TIMES", &cfg.LoadBalanceParams.MaxFailedTimes)
+	if v := env.Getenv("LOAD_BALANCE_LAZY"); v != "" {
+		b, err := strconv.ParseBool(v)
+		if err != nil {
+			loadBalanceErrs = append(loadBalanceErrs, fmt.Sprintf("LOAD_BALANCE_LAZY=%q (must be true or false)", v))
+		} else {
+			cfg.LoadBalanceParams.Lazy = b
+		}
+	}
+	if v := env.Getenv("LOAD_BALANCE_STRATEGY"); v != "" {
+		if _, ok := validLoadBalanceStrategies[v]; !ok {
+			loadBalanceErrs = append(loadBalanceErrs, fmt.Sprintf("LOAD_BALANCE_STRATEGY=%q (must be round-robin, consistent-hashing, or sticky-sessions)", v))
+		} else {
+			cfg.LoadBalanceParams.Strategy = v
+		}
+	}
+	if len(loadBalanceErrs) > 0 {
+		return nil, fmt.Errorf("LoadBalanceParams validation failed: %s", strings.Join(loadBalanceErrs, "; "))
 	}
 
 	// 011: today-zero snapshot file path + budget timezone.

@@ -238,10 +238,14 @@ func normalizeProxyGroupStyle(root *yaml.Node) {
 // Content alternates key, value nodes. We swap pairs to desired positions.
 //
 // Per 012 FR-007: url-test groups carry five additional fields after
-// proxies in the documented order (url, interval, timeout, max-failed-times,
-// lazy). moveFieldToPosition is a no-op when the key is absent, so calling
-// these on non-url-test groups (e.g., the always-present Proxies selector)
-// is safe.
+// proxies in the order url, interval, timeout, max-failed-times, lazy.
+// Per 014 FR-006: load-balance groups carry six fields after proxies in
+// the order url, interval, lazy, strategy, timeout, max-failed-times — note
+// `lazy` and `strategy` come earlier than the url-test order. The two layouts
+// share the leading triple (name, type, proxies) but diverge after, so we
+// branch on the value of the `type` field. moveFieldToPosition is a no-op
+// when the key is absent, so non-url-test / non-load-balance groups (e.g.,
+// the always-present Proxies selector) only get the leading triple ordered.
 func reorderProxyGroupFields(n *yaml.Node) {
 	if n.Kind != yaml.MappingNode || len(n.Content) < 2 {
 		return
@@ -249,11 +253,36 @@ func reorderProxyGroupFields(n *yaml.Node) {
 	moveFieldToPosition(n, "name", 0)
 	moveFieldToPosition(n, "type", 2)
 	moveFieldToPosition(n, "proxies", 4)
-	moveFieldToPosition(n, "url", 6)
-	moveFieldToPosition(n, "interval", 8)
-	moveFieldToPosition(n, "timeout", 10)
-	moveFieldToPosition(n, "max-failed-times", 12)
-	moveFieldToPosition(n, "lazy", 14)
+
+	// Branch on the type value to apply the right tail ordering. The type
+	// scalar lives at Content[3] after the moves above (key at index 2,
+	// value at index 3). For groups without these tail keys, both branches
+	// are no-ops on missing keys.
+	typeValue := ""
+	if len(n.Content) > 3 && n.Content[3].Kind == yaml.ScalarNode {
+		typeValue = n.Content[3].Value
+	}
+	switch typeValue {
+	case "load-balance":
+		// 014 FR-006: name, type, proxies, url, interval, lazy, strategy,
+		// timeout, max-failed-times.
+		moveFieldToPosition(n, "url", 6)
+		moveFieldToPosition(n, "interval", 8)
+		moveFieldToPosition(n, "lazy", 10)
+		moveFieldToPosition(n, "strategy", 12)
+		moveFieldToPosition(n, "timeout", 14)
+		moveFieldToPosition(n, "max-failed-times", 16)
+	default:
+		// 012 FR-007: name, type, proxies, url, interval, timeout,
+		// max-failed-times, lazy. Default branch covers url-test and any
+		// custom group with these keys; the no-op-on-missing semantic keeps
+		// it safe for the Proxies selector.
+		moveFieldToPosition(n, "url", 6)
+		moveFieldToPosition(n, "interval", 8)
+		moveFieldToPosition(n, "timeout", 10)
+		moveFieldToPosition(n, "max-failed-times", 12)
+		moveFieldToPosition(n, "lazy", 14)
+	}
 }
 
 // moveFieldToPosition finds a key and swaps its key-value pair to target position.

@@ -45,7 +45,7 @@ func TestRegion_Miss_02(t *testing.T) {
 		}
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, logger)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},logger)
 
 	// No region groups should be emitted
 	for _, g := range groups {
@@ -68,7 +68,7 @@ func TestRegionGroup_HK_ThreeMembers(t *testing.T) {
 		makeProxyNode("provider_Hong Kong 03"),
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find _region_HK group
 	var hkGroup *yaml.Node
@@ -112,7 +112,7 @@ func TestRegionGroup_HK_ZeroMembers(t *testing.T) {
 		makeProxyNode("provider_🇯🇵 JP 01"),
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	for _, g := range groups {
 		if getMappingField(g, "name") == "_region_HK" {
@@ -130,8 +130,8 @@ func TestRegion_Determinism(t *testing.T) {
 		makeProxyNode("b_中国"),
 	}
 
-	groups1 := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
-	groups2 := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups1 := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
+	groups2 := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Serialize both and compare
 	var buf1, buf2 bytes.Buffer
@@ -176,7 +176,7 @@ func TestRegion_ProxiesMembership(t *testing.T) {
 		makeProxyGroupNode("Proxies", []string{"provider_🇭🇰 HK", "provider_🇺🇸 US"}),
 	}
 
-	groups = AppendRegionGroups(groups, proxies, "Proxies", URLTestParams{}, nil)
+	groups = AppendRegionGroups(groups, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find Proxies group
 	var proxiesGroup *yaml.Node
@@ -211,7 +211,7 @@ func TestRegion_OwnProxyExcluded(t *testing.T) {
 		makeProxyNode("_🇨🇦 my-canada-1"),
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// No region groups should be emitted (own-proxies excluded)
 	for _, g := range groups {
@@ -248,7 +248,7 @@ func TestContinent_SingleRegion(t *testing.T) {
 		"_region_US": {"provider_🇺🇸 US 01", "provider_🇺🇸 US 02"},
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find _continent_NA group
 	var naGroup *yaml.Node
@@ -293,7 +293,7 @@ func TestContinent_MultiRegionUnion(t *testing.T) {
 		"_region_US": {"provider_🇺🇸 US 01", "provider_🇺🇸 US 02"},
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	var naGroup *yaml.Node
 	for _, g := range groups {
@@ -329,7 +329,7 @@ func TestContinent_MembershipOrdering(t *testing.T) {
 		"_region_GB": {"gb-1", "gb-2", "gb-3"},
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	var euGroup *yaml.Node
 	for _, g := range groups {
@@ -357,7 +357,7 @@ func TestContinent_MembershipOrdering(t *testing.T) {
 
 // TC-U-CONTINENT-04: no regions yields no continent groups
 func TestContinent_NoRegions(t *testing.T) {
-	groups := AppendContinentGroups(nil, []string{}, map[string][]string{}, "Proxies", URLTestParams{}, nil)
+	groups := AppendContinentGroups(nil, []string{}, map[string][]string{}, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 	if len(groups) != 0 {
 		t.Errorf("expected 0 groups for empty input, got %d", len(groups))
 	}
@@ -376,7 +376,7 @@ func TestContinent_UnmappedCountry(t *testing.T) {
 		"_region_XX": {"provider_unknown-1"},
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, logger)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},logger)
 
 	// No continent groups should be emitted
 	for _, g := range groups {
@@ -403,7 +403,7 @@ func TestContinent_ProxiesMembership(t *testing.T) {
 		makeProxyGroupNode("Proxies", []string{"us-1"}),
 	}
 
-	groups = AppendContinentGroups(groups, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups = AppendContinentGroups(groups, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find Proxies group
 	var proxiesGroup *yaml.Node
@@ -437,8 +437,8 @@ func TestContinent_Determinism(t *testing.T) {
 		"_region_US": {"us-1"},
 	}
 
-	groups1 := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
-	groups2 := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups1 := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
+	groups2 := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	var buf1, buf2 bytes.Buffer
 	for _, g := range groups1 {
@@ -466,7 +466,7 @@ func TestContinent_AlphabeticalOrder(t *testing.T) {
 		"_region_US": {"us-1"}, // NA
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, nil)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	names := make([]string, 0)
 	for _, g := range groups {
@@ -495,7 +495,7 @@ func TestUnknown_SingleUnclassified(t *testing.T) {
 		makeProxyNode("provider_UnknownXYZ"), // unclassified
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find _region_UNKNOWN group
 	var unknownGroup *yaml.Node
@@ -545,7 +545,7 @@ func TestUnknown_AllClassified(t *testing.T) {
 		makeProxyNode("provider_🇺🇸 US"),
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	for _, g := range groups {
 		if getMappingField(g, "name") == "_region_UNKNOWN" {
@@ -565,7 +565,7 @@ func TestUnknown_MultipleSources(t *testing.T) {
 		makeProxyNode("b_Unknown3"),
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	var unknownGroup *yaml.Node
 	for _, g := range groups {
@@ -598,7 +598,7 @@ func TestUnknown_OwnProxyExcluded(t *testing.T) {
 		makeProxyNode("provider_UnknownUpstream"), // upstream unclassified
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	var unknownGroup *yaml.Node
 	for _, g := range groups {
@@ -636,7 +636,7 @@ func TestUnknown_ProxiesMembership(t *testing.T) {
 		makeProxyGroupNode("Proxies", []string{"provider_🇭🇰 HK", "provider_Unknown"}),
 	}
 
-	groups = AppendRegionGroups(groups, proxies, "Proxies", URLTestParams{}, nil)
+	groups = AppendRegionGroups(groups, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{},nil)
 
 	// Find Proxies group
 	var proxiesGroup *yaml.Node
@@ -745,7 +745,7 @@ func TestAppendRegionGroups_EmitsURLTestFields(t *testing.T) {
 		Lazy:            true,
 	}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", params, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", params, LoadBalanceParams{}, nil)
 
 	var jpGroup *yaml.Node
 	for _, g := range groups {
@@ -775,7 +775,7 @@ func TestAppendRegionGroups_UnknownIsURLTest(t *testing.T) {
 	}
 	params := URLTestParams{URL: "u", IntervalSeconds: 1, TimeoutMS: 1, MaxFailedTimes: 1, Lazy: false}
 
-	groups := AppendRegionGroups(nil, proxies, "Proxies", params, nil)
+	groups := AppendRegionGroups(nil, proxies, "Proxies", params, LoadBalanceParams{}, nil)
 
 	var unknownGroup *yaml.Node
 	for _, g := range groups {
@@ -810,7 +810,7 @@ func TestAppendContinentGroups_EmitsURLTestFields(t *testing.T) {
 		Lazy:            true,
 	}
 
-	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", params, nil)
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", params, LoadBalanceParams{}, nil)
 
 	var asGroup *yaml.Node
 	for _, g := range groups {
@@ -835,3 +835,298 @@ func TestAppendContinentGroups_EmitsURLTestFields(t *testing.T) {
 
 var _ = bytes.NewBuffer // silence unused-import if the helper test above doesn't reference bytes
 var _ strings.Builder
+
+// 014 FR-003 + FR-006: newLoadBalanceGroup populates all 9 fields with the
+// passed-through LoadBalanceParams values, including the strategy field.
+func TestNewLoadBalanceGroup_AllFieldsPresent(t *testing.T) {
+	params := LoadBalanceParams{
+		URL:             "https://www.gstatic.com/generate_204",
+		IntervalSeconds: 300,
+		TimeoutMS:       1500,
+		MaxFailedTimes:  3,
+		Lazy:            true,
+		Strategy:        "round-robin",
+	}
+	members := []string{"alpha_node1", "beta_node1"}
+
+	g := newLoadBalanceGroup("_lb_region_JP", members, params)
+
+	if got := getMappingField(g, "name"); got != "_lb_region_JP" {
+		t.Errorf("name = %q, want _lb_region_JP", got)
+	}
+	if got := getMappingField(g, "type"); got != "load-balance" {
+		t.Errorf("type = %q, want load-balance", got)
+	}
+	if got := getMappingField(g, "url"); got != "https://www.gstatic.com/generate_204" {
+		t.Errorf("url = %q, want https://www.gstatic.com/generate_204", got)
+	}
+	if got := getMappingField(g, "interval"); got != "300" {
+		t.Errorf("interval = %q, want 300", got)
+	}
+	if got := getMappingField(g, "timeout"); got != "1500" {
+		t.Errorf("timeout = %q, want 1500", got)
+	}
+	if got := getMappingField(g, "max-failed-times"); got != "3" {
+		t.Errorf("max-failed-times = %q, want 3", got)
+	}
+	if got := getMappingField(g, "lazy"); got != "true" {
+		t.Errorf("lazy = %q, want true", got)
+	}
+	if got := getMappingField(g, "strategy"); got != "round-robin" {
+		t.Errorf("strategy = %q, want round-robin", got)
+	}
+	if got := mappingMembers(g, "proxies"); len(got) != 2 || got[0] != "alpha_node1" || got[1] != "beta_node1" {
+		t.Errorf("proxies = %v, want [alpha_node1 beta_node1]", got)
+	}
+}
+
+// 014 FR-005: overridden LoadBalanceParams (incl. strategy) flow through verbatim.
+func TestNewLoadBalanceGroup_OverriddenParams(t *testing.T) {
+	params := LoadBalanceParams{
+		URL:             "https://example.com/probe",
+		IntervalSeconds: 600,
+		TimeoutMS:       2000,
+		MaxFailedTimes:  5,
+		Lazy:            false,
+		Strategy:        "consistent-hashing",
+	}
+	g := newLoadBalanceGroup("_lb_continent_AS", []string{"x"}, params)
+
+	if got := getMappingField(g, "url"); got != "https://example.com/probe" {
+		t.Errorf("url = %q, want https://example.com/probe", got)
+	}
+	if got := getMappingField(g, "interval"); got != "600" {
+		t.Errorf("interval = %q, want 600", got)
+	}
+	if got := getMappingField(g, "timeout"); got != "2000" {
+		t.Errorf("timeout = %q, want 2000", got)
+	}
+	if got := getMappingField(g, "max-failed-times"); got != "5" {
+		t.Errorf("max-failed-times = %q, want 5", got)
+	}
+	if got := getMappingField(g, "lazy"); got != "false" {
+		t.Errorf("lazy = %q, want false", got)
+	}
+	if got := getMappingField(g, "strategy"); got != "consistent-hashing" {
+		t.Errorf("strategy = %q, want consistent-hashing", got)
+	}
+}
+
+// 014 FR-001 + FR-013: AppendRegionGroups emits a paired _lb_region_<CC> group
+// immediately after each _region_<CC> group. Same membership, different type +
+// fields.
+func TestAppendRegionGroups_PairedLBSibling(t *testing.T) {
+	proxies := []*yaml.Node{
+		makeProxyNode("provider_🇯🇵 JP 01"),
+		makeProxyNode("provider_🇯🇵 JP 02"),
+		makeProxyNode("provider_🇭🇰 香港 01"),
+	}
+	urlTestParams := URLTestParams{
+		URL:             "https://www.gstatic.com/generate_204",
+		IntervalSeconds: 10,
+		TimeoutMS:       3000,
+		MaxFailedTimes:  3,
+		Lazy:            true,
+	}
+	lbParams := LoadBalanceParams{
+		URL:             "https://www.gstatic.com/generate_204",
+		IntervalSeconds: 300,
+		TimeoutMS:       1500,
+		MaxFailedTimes:  3,
+		Lazy:            true,
+		Strategy:        "round-robin",
+	}
+
+	groups := AppendRegionGroups(nil, proxies, "Proxies", urlTestParams, lbParams, nil)
+
+	// Build name list to verify paired adjacency: _region_HK, _lb_region_HK,
+	// _region_JP, _lb_region_JP (alphabetical CC order with paired adjacency).
+	emitted := make([]string, 0, len(groups))
+	for _, g := range groups {
+		emitted = append(emitted, getMappingField(g, "name"))
+	}
+
+	wantOrder := []string{"_region_HK", "_lb_region_HK", "_region_JP", "_lb_region_JP"}
+	if len(emitted) != len(wantOrder) {
+		t.Fatalf("emitted groups = %v; want %v", emitted, wantOrder)
+	}
+	for i, want := range wantOrder {
+		if emitted[i] != want {
+			t.Errorf("emitted[%d] = %q, want %q (paired adjacency)", i, emitted[i], want)
+		}
+	}
+
+	// Verify the lb sibling has the same proxies as its url-test sibling.
+	urlTestJP := groups[2] // _region_JP
+	lbJP := groups[3]      // _lb_region_JP
+	urlTestMembers := mappingMembers(urlTestJP, "proxies")
+	lbMembers := mappingMembers(lbJP, "proxies")
+	if len(urlTestMembers) != len(lbMembers) {
+		t.Fatalf("member-count mismatch: url-test=%v, lb=%v", urlTestMembers, lbMembers)
+	}
+	for i := range urlTestMembers {
+		if urlTestMembers[i] != lbMembers[i] {
+			t.Errorf("member[%d]: url-test=%q, lb=%q", i, urlTestMembers[i], lbMembers[i])
+		}
+	}
+
+	// lb sibling carries type=load-balance and the lb-params strategy field.
+	if got := getMappingField(lbJP, "type"); got != "load-balance" {
+		t.Errorf("_lb_region_JP type = %q, want load-balance", got)
+	}
+	if got := getMappingField(lbJP, "strategy"); got != "round-robin" {
+		t.Errorf("_lb_region_JP strategy = %q, want round-robin", got)
+	}
+	if got := getMappingField(lbJP, "interval"); got != "300" {
+		t.Errorf("_lb_region_JP interval = %q, want 300 (lb-params, not url-test)", got)
+	}
+
+	// url-test sibling unchanged: type stays url-test, no strategy field.
+	if got := getMappingField(urlTestJP, "type"); got != "url-test" {
+		t.Errorf("_region_JP type = %q, want url-test", got)
+	}
+	if got := getMappingField(urlTestJP, "interval"); got != "10" {
+		t.Errorf("_region_JP interval = %q, want 10 (url-test params)", got)
+	}
+	if got := getMappingField(urlTestJP, "strategy"); got != "" {
+		t.Errorf("_region_JP unexpectedly carries strategy=%q (url-test groups have no strategy)", got)
+	}
+}
+
+// 014 FR-001 + FR-010: Paired _lb_region_UNKNOWN sibling and Proxies selector
+// gains both names interleaved.
+func TestAppendRegionGroups_PairedUnknownAndProxiesMembership(t *testing.T) {
+	// Seed a Proxies group so AppendRegionGroups appends region-group names to it.
+	proxiesGroup := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: "name"},
+			{Kind: yaml.ScalarNode, Value: "Proxies"},
+			{Kind: yaml.ScalarNode, Value: "type"},
+			{Kind: yaml.ScalarNode, Value: "select"},
+			{Kind: yaml.ScalarNode, Value: "proxies"},
+			{Kind: yaml.SequenceNode},
+		},
+	}
+	proxies := []*yaml.Node{
+		makeProxyNode("provider_🇯🇵 JP 01"),
+		makeProxyNode("provider_Unmappable Name"),
+	}
+
+	groups := AppendRegionGroups([]*yaml.Node{proxiesGroup}, proxies, "Proxies", URLTestParams{}, LoadBalanceParams{Strategy: "round-robin"}, nil)
+
+	// Find emitted region group names.
+	gotNames := make([]string, 0)
+	for _, g := range groups {
+		n := getMappingField(g, "name")
+		if strings.HasPrefix(n, "_") {
+			gotNames = append(gotNames, n)
+		}
+	}
+	wantNames := []string{"_region_JP", "_lb_region_JP", "_region_UNKNOWN", "_lb_region_UNKNOWN"}
+	if len(gotNames) != len(wantNames) {
+		t.Fatalf("region groups = %v; want %v", gotNames, wantNames)
+	}
+	for i, want := range wantNames {
+		if gotNames[i] != want {
+			t.Errorf("gotNames[%d] = %q, want %q", i, gotNames[i], want)
+		}
+	}
+
+	// Verify Proxies selector contains both url-test and lb names interleaved.
+	proxiesMembers := mappingMembers(proxiesGroup, "proxies")
+	wantMembers := []string{"_region_JP", "_lb_region_JP", "_region_UNKNOWN", "_lb_region_UNKNOWN"}
+	if len(proxiesMembers) != len(wantMembers) {
+		t.Fatalf("Proxies group members = %v; want %v", proxiesMembers, wantMembers)
+	}
+	for i, want := range wantMembers {
+		if proxiesMembers[i] != want {
+			t.Errorf("Proxies group member[%d] = %q, want %q (interleaved per FR-013)", i, proxiesMembers[i], want)
+		}
+	}
+}
+
+// 014 FR-002 + FR-013: AppendContinentGroups emits a paired _lb_continent_<CONT>
+// sibling immediately after each _continent_<CONT>, with the same flat-union
+// member list (per 003 FR-011).
+func TestAppendContinentGroups_PairedLBSibling(t *testing.T) {
+	regionGroups := []string{"_region_JP", "_region_HK"}
+	regionMembers := map[string][]string{
+		"_region_JP": {"jp1", "jp2"},
+		"_region_HK": {"hk1"},
+	}
+	urlTestParams := URLTestParams{IntervalSeconds: 10}
+	lbParams := LoadBalanceParams{IntervalSeconds: 300, Strategy: "round-robin"}
+
+	groups := AppendContinentGroups(nil, regionGroups, regionMembers, "Proxies", urlTestParams, lbParams, nil)
+
+	emitted := make([]string, 0, len(groups))
+	for _, g := range groups {
+		emitted = append(emitted, getMappingField(g, "name"))
+	}
+	wantOrder := []string{"_continent_AS", "_lb_continent_AS"}
+	if len(emitted) != len(wantOrder) {
+		t.Fatalf("emitted groups = %v; want %v", emitted, wantOrder)
+	}
+	for i, want := range wantOrder {
+		if emitted[i] != want {
+			t.Errorf("emitted[%d] = %q, want %q", i, emitted[i], want)
+		}
+	}
+
+	// Same flat-union member list: hk1, jp1, jp2 (region-CC alphabetical, then proxy order).
+	urlTestAS := groups[0]
+	lbAS := groups[1]
+	urlTestMembers := mappingMembers(urlTestAS, "proxies")
+	lbMembers := mappingMembers(lbAS, "proxies")
+	if len(urlTestMembers) != len(lbMembers) {
+		t.Fatalf("member-count mismatch: url-test=%v, lb=%v", urlTestMembers, lbMembers)
+	}
+	for i := range urlTestMembers {
+		if urlTestMembers[i] != lbMembers[i] {
+			t.Errorf("member[%d]: url-test=%q, lb=%q", i, urlTestMembers[i], lbMembers[i])
+		}
+	}
+
+	// lb continent group carries load-balance type + strategy.
+	if got := getMappingField(lbAS, "type"); got != "load-balance" {
+		t.Errorf("_lb_continent_AS type = %q, want load-balance", got)
+	}
+	if got := getMappingField(lbAS, "strategy"); got != "round-robin" {
+		t.Errorf("_lb_continent_AS strategy = %q, want round-robin", got)
+	}
+	if got := getMappingField(lbAS, "interval"); got != "300" {
+		t.Errorf("_lb_continent_AS interval = %q, want 300 (lb params)", got)
+	}
+}
+
+// 014 FR-010: Continent-level paired groups also land in the Proxies selector.
+func TestAppendContinentGroups_ProxiesMembershipBothEntries(t *testing.T) {
+	proxiesGroup := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: "name"},
+			{Kind: yaml.ScalarNode, Value: "Proxies"},
+			{Kind: yaml.ScalarNode, Value: "type"},
+			{Kind: yaml.ScalarNode, Value: "select"},
+			{Kind: yaml.ScalarNode, Value: "proxies"},
+			{Kind: yaml.SequenceNode},
+		},
+	}
+	regionGroups := []string{"_region_JP"}
+	regionMembers := map[string][]string{"_region_JP": {"jp1"}}
+
+	groups := AppendContinentGroups([]*yaml.Node{proxiesGroup}, regionGroups, regionMembers, "Proxies", URLTestParams{}, LoadBalanceParams{Strategy: "round-robin"}, nil)
+	_ = groups
+
+	proxiesMembers := mappingMembers(proxiesGroup, "proxies")
+	wantMembers := []string{"_continent_AS", "_lb_continent_AS"}
+	if len(proxiesMembers) != len(wantMembers) {
+		t.Fatalf("Proxies members = %v; want %v", proxiesMembers, wantMembers)
+	}
+	for i, want := range wantMembers {
+		if proxiesMembers[i] != want {
+			t.Errorf("Proxies member[%d] = %q, want %q", i, proxiesMembers[i], want)
+		}
+	}
+}

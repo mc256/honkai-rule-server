@@ -98,10 +98,11 @@ func TestSubscriptionMode_RenderProducesValidYAML(t *testing.T) {
 	if !ok || len(proxies) != 1 {
 		t.Errorf("proxies = %v, want one entry", got["proxies"])
 	}
-	// 1 from upstream (Auto) + 1 always-present Proxies group (FR-009a) = 2.
+	// 1 from upstream (Auto) + 1 always-present Proxies group (FR-009a) +
+	// 1 _region_UNKNOWN (003) + 1 _lb_region_UNKNOWN paired sibling (014 FR-001) = 4.
 	groups, ok := got["proxy-groups"].([]any)
-	if !ok || len(groups) != 3 {
-		t.Errorf("proxy-groups = %v, want 3 entries (Auto + Proxies + _region_UNKNOWN)", got["proxy-groups"])
+	if !ok || len(groups) != 4 {
+		t.Errorf("proxy-groups = %v, want 4 entries (Auto + Proxies + _region_UNKNOWN + _lb_region_UNKNOWN)", got["proxy-groups"])
 	}
 	rules, ok := got["rules"].([]any)
 	if !ok || len(rules) != 2 {
@@ -967,6 +968,102 @@ func TestReorderProxyGroupFields_URLTestOrdering(t *testing.T) {
 		if gotKeys[i] != want {
 			t.Errorf("key[%d] = %q, want %q (full order: got=%v want=%v)",
 				i, gotKeys[i], want, gotKeys, wantKeyOrder)
+		}
+	}
+}
+
+// 014 FR-006: load-balance groups have their nine fields in the documented
+// order: name, type, proxies, url, interval, lazy, strategy, timeout,
+// max-failed-times. This order DIFFERS from url-test (where lazy is last)
+// and adds the new `strategy` field.
+func TestReorderProxyGroupFields_LoadBalanceOrdering(t *testing.T) {
+	scalar := func(v string) *yaml.Node { return &yaml.Node{Kind: yaml.ScalarNode, Value: v} }
+	seq := func(items ...string) *yaml.Node {
+		s := &yaml.Node{Kind: yaml.SequenceNode}
+		for _, it := range items {
+			s.Content = append(s.Content, scalar(it))
+		}
+		return s
+	}
+
+	// Construct in scrambled order.
+	n := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			scalar("strategy"), scalar("round-robin"),
+			scalar("max-failed-times"), scalar("3"),
+			scalar("type"), scalar("load-balance"),
+			scalar("name"), scalar("_lb_region_JP"),
+			scalar("proxies"), seq("a", "b"),
+			scalar("interval"), scalar("300"),
+			scalar("lazy"), scalar("true"),
+			scalar("url"), scalar("https://gstatic/204"),
+			scalar("timeout"), scalar("1500"),
+		},
+	}
+
+	reorderProxyGroupFields(n)
+
+	wantKeyOrder := []string{
+		"name", "type", "proxies",
+		"url", "interval", "lazy", "strategy", "timeout", "max-failed-times",
+	}
+	gotKeys := make([]string, 0, len(n.Content)/2)
+	for i := 0; i+1 < len(n.Content); i += 2 {
+		gotKeys = append(gotKeys, n.Content[i].Value)
+	}
+	if len(gotKeys) != len(wantKeyOrder) {
+		t.Fatalf("got %d keys, want %d", len(gotKeys), len(wantKeyOrder))
+	}
+	for i, want := range wantKeyOrder {
+		if gotKeys[i] != want {
+			t.Errorf("key[%d] = %q, want %q (full order: got=%v want=%v)",
+				i, gotKeys[i], want, gotKeys, wantKeyOrder)
+		}
+	}
+}
+
+// 014 FR-007: url-test groups (012 layout) MUST remain byte-identical after
+// the load-balance ordering branch lands. Same input as the 012 url-test
+// ordering test, asserted again to catch regressions if the branch logic
+// accidentally affects url-test groups.
+func TestReorderProxyGroupFields_URLTestOrderingPreserved(t *testing.T) {
+	scalar := func(v string) *yaml.Node { return &yaml.Node{Kind: yaml.ScalarNode, Value: v} }
+	seq := func(items ...string) *yaml.Node {
+		s := &yaml.Node{Kind: yaml.SequenceNode}
+		for _, it := range items {
+			s.Content = append(s.Content, scalar(it))
+		}
+		return s
+	}
+
+	n := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			scalar("lazy"), scalar("true"),
+			scalar("url"), scalar("https://gstatic/204"),
+			scalar("name"), scalar("_region_JP"),
+			scalar("max-failed-times"), scalar("3"),
+			scalar("type"), scalar("url-test"),
+			scalar("interval"), scalar("10"),
+			scalar("proxies"), seq("a", "b"),
+			scalar("timeout"), scalar("3000"),
+		},
+	}
+
+	reorderProxyGroupFields(n)
+
+	wantKeyOrder := []string{
+		"name", "type", "proxies",
+		"url", "interval", "timeout", "max-failed-times", "lazy",
+	}
+	gotKeys := make([]string, 0, len(n.Content)/2)
+	for i := 0; i+1 < len(n.Content); i += 2 {
+		gotKeys = append(gotKeys, n.Content[i].Value)
+	}
+	for i, want := range wantKeyOrder {
+		if i >= len(gotKeys) || gotKeys[i] != want {
+			t.Errorf("key[%d] = %q, want %q (url-test order MUST stay 012)", i, gotKeys[i], want)
 		}
 	}
 }

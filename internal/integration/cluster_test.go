@@ -256,6 +256,14 @@ func newTestClusterWithOpts(t *testing.T, opts clusterOpts) *testCluster {
 			MaxFailedTimes:  3,
 			Lazy:            true,
 		}).
+		WithLoadBalanceParams(merge.LoadBalanceParams{
+			URL:             "https://www.gstatic.com/generate_204",
+			IntervalSeconds: 300,
+			TimeoutMS:       1500,
+			MaxFailedTimes:  3,
+			Lazy:            true,
+			Strategy:        "round-robin",
+		}).
 		WithSnapshotter(dailyspend.NewMapSnapshotter(nil)).
 		WithBudgetLocation(tzToronto)
 
