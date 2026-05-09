@@ -41,11 +41,19 @@ func AppendFanoutProxies(
 		proxiesGroupName = "Proxies"
 	}
 
-	// Pre-collect target groups (region/continent) in mergedGroups order.
+	// Pre-collect target groups (region/continent + lb variants) in
+	// mergedGroups order. Per 014 FR-014a, the predicate widens from 008's
+	// original `_region_` / `_continent_` to also include the lb-prefixed
+	// siblings emitted by 014 (`_lb_region_` / `_lb_continent_`), so the
+	// existing fan-out machinery produces `via_lb_region_<CC>__<own>` and
+	// `via_lb_continent_<CONT>__<own>` copies.
 	targetGroupNames := make([]string, 0, len(mergedGroups))
 	for _, g := range mergedGroups {
 		name := getMappingField(g, "name")
-		if strings.HasPrefix(name, "_region_") || strings.HasPrefix(name, "_continent_") {
+		if strings.HasPrefix(name, "_region_") ||
+			strings.HasPrefix(name, "_continent_") ||
+			strings.HasPrefix(name, "_lb_region_") ||
+			strings.HasPrefix(name, "_lb_continent_") {
 			targetGroupNames = append(targetGroupNames, name)
 		}
 	}

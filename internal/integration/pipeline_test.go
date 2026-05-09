@@ -1224,17 +1224,23 @@ func TestI_008_03_ProxiesGroupExcludesOwnAndViaProxies(t *testing.T) {
 		t.Fatal("Proxies group has empty member list")
 	}
 
-	upstreamCount, regionGroupCount, continentGroupCount := 0, 0, 0
+	upstreamCount, regionGroupCount, continentGroupCount, lbRegionCount, lbContinentCount := 0, 0, 0, 0, 0
 	for _, m := range members {
 		if strings.HasPrefix(m, "via_") {
 			t.Errorf("Proxies group member %q must not be a fan-out copy", m)
 		}
 		if strings.HasPrefix(m, "_") &&
 			!strings.HasPrefix(m, "_region_") &&
-			!strings.HasPrefix(m, "_continent_") {
+			!strings.HasPrefix(m, "_continent_") &&
+			!strings.HasPrefix(m, "_lb_region_") &&
+			!strings.HasPrefix(m, "_lb_continent_") {
 			t.Errorf("Proxies group member %q must not be an own-proxy or own-group", m)
 		}
 		switch {
+		case strings.HasPrefix(m, "_lb_region_"):
+			lbRegionCount++
+		case strings.HasPrefix(m, "_lb_continent_"):
+			lbContinentCount++
 		case strings.HasPrefix(m, "_region_"):
 			regionGroupCount++
 		case strings.HasPrefix(m, "_continent_"):
@@ -1251,6 +1257,13 @@ func TestI_008_03_ProxiesGroupExcludesOwnAndViaProxies(t *testing.T) {
 	}
 	if continentGroupCount == 0 {
 		t.Error("Proxies group has zero _continent_* members; expected at least one")
+	}
+	// 014 FR-010: paired lb groups also land in the Proxies selector.
+	if lbRegionCount == 0 {
+		t.Error("Proxies group has zero _lb_region_* members; expected at least one (014 FR-010)")
+	}
+	if lbContinentCount == 0 {
+		t.Error("Proxies group has zero _lb_continent_* members; expected at least one (014 FR-010)")
 	}
 }
 

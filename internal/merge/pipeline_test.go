@@ -101,7 +101,7 @@ func TestPipeline_BuildHappyPath(t *testing.T) {
 	// src_a: Auto → src_a_Auto
 	// plus the always-present Proxies group (FR-009a, never prefixed).
 	groupNames := proxyNames(mc.ProxyGroups)
-	wantGroupSet := map[string]bool{"src_b_Auto": true, "src_b_B-only": true, "src_a_Auto": true, "Proxies": true, "_region_UNKNOWN": true}
+	wantGroupSet := map[string]bool{"src_b_Auto": true, "src_b_B-only": true, "src_a_Auto": true, "Proxies": true, "_region_UNKNOWN": true, "_lb_region_UNKNOWN": true}
 	for _, n := range groupNames {
 		if !wantGroupSet[n] {
 			t.Errorf("unexpected group name %q (got %v)", n, groupNames)

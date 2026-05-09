@@ -153,38 +153,70 @@ proxies:
   - {name: alpha_基础-香港HKT1-SS, type: ss, server: v5.cdn.fkjw4wq0g5.ewddns.net, port: 4101, cipher: aes-256-gcm, password: synthetic-ss-password, udp: true}
   - {name: via_AUTO__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: Proxies}
   - {name: via_region_CA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_CA}
+  - {name: via_lb_region_CA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_CA}
   - {name: via_region_DE__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_DE}
+  - {name: via_lb_region_DE__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_DE}
   - {name: via_region_FR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_FR}
+  - {name: via_lb_region_FR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_FR}
   - {name: via_region_GB__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_GB}
+  - {name: via_lb_region_GB__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_GB}
   - {name: via_region_HK__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_HK}
+  - {name: via_lb_region_HK__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_HK}
   - {name: via_region_JP__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_JP}
+  - {name: via_lb_region_JP__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_JP}
   - {name: via_region_KR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_KR}
+  - {name: via_lb_region_KR__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_KR}
   - {name: via_region_MY__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_MY}
+  - {name: via_lb_region_MY__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_MY}
   - {name: via_region_SG__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_SG}
+  - {name: via_lb_region_SG__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_SG}
   - {name: via_region_TW__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_TW}
+  - {name: via_lb_region_TW__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_TW}
   - {name: via_region_US__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_US}
+  - {name: via_lb_region_US__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_US}
   - {name: via_region_VN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_VN}
+  - {name: via_lb_region_VN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_VN}
   - {name: via_region_UNKNOWN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _region_UNKNOWN}
+  - {name: via_lb_region_UNKNOWN__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_region_UNKNOWN}
   - {name: via_continent_AS__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_AS}
+  - {name: via_lb_continent_AS__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_continent_AS}
   - {name: via_continent_EU__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_EU}
+  - {name: via_lb_continent_EU__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_continent_EU}
   - {name: via_continent_NA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _continent_NA}
+  - {name: via_lb_continent_NA__my-home-trojan, type: trojan, server: home-test.example.com, port: 443, password: synthetic-test-password, sni: home-test.example.com, skip-cert-verify: false, dialer-proxy: _lb_continent_NA}
   - {name: via_AUTO__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: Proxies}
   - {name: via_region_CA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_CA}
+  - {name: via_lb_region_CA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_CA}
   - {name: via_region_DE__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_DE}
+  - {name: via_lb_region_DE__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_DE}
   - {name: via_region_FR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_FR}
+  - {name: via_lb_region_FR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_FR}
   - {name: via_region_GB__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_GB}
+  - {name: via_lb_region_GB__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_GB}
   - {name: via_region_HK__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_HK}
+  - {name: via_lb_region_HK__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_HK}
   - {name: via_region_JP__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_JP}
+  - {name: via_lb_region_JP__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_JP}
   - {name: via_region_KR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_KR}
+  - {name: via_lb_region_KR__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_KR}
   - {name: via_region_MY__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_MY}
+  - {name: via_lb_region_MY__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_MY}
   - {name: via_region_SG__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_SG}
+  - {name: via_lb_region_SG__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_SG}
   - {name: via_region_TW__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_TW}
+  - {name: via_lb_region_TW__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_TW}
   - {name: via_region_US__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_US}
+  - {name: via_lb_region_US__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_US}
   - {name: via_region_VN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_VN}
+  - {name: via_lb_region_VN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_VN}
   - {name: via_region_UNKNOWN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _region_UNKNOWN}
+  - {name: via_lb_region_UNKNOWN__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_region_UNKNOWN}
   - {name: via_continent_AS__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_AS}
+  - {name: via_lb_continent_AS__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_continent_AS}
   - {name: via_continent_EU__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_EU}
+  - {name: via_lb_continent_EU__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_continent_EU}
   - {name: via_continent_NA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _continent_NA}
+  - {name: via_lb_continent_NA__my-vps-vless, type: vless, server: vps-test.example.com, port: 8443, uuid: 00000000-0000-0000-0000-000000000001, tls: true, network: tcp, dialer-proxy: _lb_continent_NA}
 proxy-groups:
   - name: _My-Own
     type: select
@@ -1089,21 +1121,37 @@ proxy-groups:
       - alpha_基础-香港HKT2-V2
       - alpha_基础-香港HKT1-SS
       - _region_CA
+      - _lb_region_CA
       - _region_DE
+      - _lb_region_DE
       - _region_FR
+      - _lb_region_FR
       - _region_GB
+      - _lb_region_GB
       - _region_HK
+      - _lb_region_HK
       - _region_JP
+      - _lb_region_JP
       - _region_KR
+      - _lb_region_KR
       - _region_MY
+      - _lb_region_MY
       - _region_SG
+      - _lb_region_SG
       - _region_TW
+      - _lb_region_TW
       - _region_US
+      - _lb_region_US
       - _region_VN
+      - _lb_region_VN
       - _region_UNKNOWN
+      - _lb_region_UNKNOWN
       - _continent_AS
+      - _lb_continent_AS
       - _continent_EU
+      - _lb_continent_EU
       - _continent_NA
+      - _lb_continent_NA
   - name: _region_CA
     type: url-test
     proxies:
@@ -1115,6 +1163,18 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_CA
+    type: load-balance
+    proxies:
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_DE
     type: url-test
     proxies:
@@ -1128,6 +1188,20 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_DE
+    type: load-balance
+    proxies:
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_FR
     type: url-test
     proxies:
@@ -1139,6 +1213,18 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_FR
+    type: load-balance
+    proxies:
+      - alpha_法国4直
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_GB
     type: url-test
     proxies:
@@ -1149,6 +1235,17 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_GB
+    type: load-balance
+    proxies:
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_HK
     type: url-test
     proxies:
@@ -1187,6 +1284,45 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_HK
+    type: load-balance
+    proxies:
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_JP
     type: url-test
     proxies:
@@ -1213,6 +1349,33 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_JP
+    type: load-balance
+    proxies:
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_KR
     type: url-test
     proxies:
@@ -1224,6 +1387,18 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_KR
+    type: load-balance
+    proxies:
+      - alpha_韩国4直
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_MY
     type: url-test
     proxies:
@@ -1238,6 +1413,21 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_MY
+    type: load-balance
+    proxies:
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_SG
     type: url-test
     proxies:
@@ -1270,6 +1460,39 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_SG
+    type: load-balance
+    proxies:
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_TW
     type: url-test
     proxies:
@@ -1286,6 +1509,23 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_TW
+    type: load-balance
+    proxies:
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_US
     type: url-test
     proxies:
@@ -1309,6 +1549,30 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_US
+    type: load-balance
+    proxies:
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - alpha_美国02
+      - alpha_美国01
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_VN
     type: url-test
     proxies:
@@ -1319,6 +1583,17 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_VN
+    type: load-balance
+    proxies:
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _region_UNKNOWN
     type: url-test
     proxies:
@@ -1337,6 +1612,25 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_region_UNKNOWN
+    type: load-balance
+    proxies:
+      - beta_剩余流量：43.18 GB
+      - beta_距离下次重置剩余：19 天
+      - beta_套餐到期：2027-04-14
+      - beta_官网 provider.example.com
+      - beta_每日使用前请刷新订阅
+      - beta_优先使用 TCP 系列节点
+      - beta_特殊地区专用线路
+      - beta_摩尔多瓦-线路1 | TCP
+      - beta_摩尔多瓦-线路3 | TCP
+      - alpha_网站回家页：https://home.example.com
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _continent_AS
     type: url-test
     proxies:
@@ -1436,6 +1730,106 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_continent_AS
+    type: load-balance
+    proxies:
+      - beta_香港A-线路1 | TCP
+      - beta_香港A-线路2 | TCP
+      - beta_香港A-线路3 | TCP
+      - beta_香港B-线路1 | TCP
+      - beta_香港B-线路2 | TCP
+      - beta_香港B-线路3 | TCP
+      - beta_香港C-CMI专线
+      - alpha_香港直连6
+      - alpha_香港直连5
+      - alpha_香港直连4
+      - alpha_香港直连3
+      - alpha_香港直连2
+      - alpha_香港直连1
+      - alpha_LA香港2直
+      - alpha_LA香港1直
+      - alpha_香港大带宽8直
+      - alpha_香港HKT4直
+      - alpha_香港HKT2直
+      - alpha_LA香港中转02|VLESS
+      - alpha_LA香港中转02
+      - alpha_LA香港中转01|VLESS
+      - alpha_LA香港中转01
+      - alpha_LA香港中转03|VLESS
+      - alpha_LA香港中转03
+      - alpha_基础-香港大带宽8-V2
+      - alpha_基础-香港大带宽7-SS
+      - alpha_基础-香港HKT4-V2
+      - alpha_基础-香港HKT3-SS
+      - alpha_基础-香港HKT2-V2
+      - alpha_基础-香港HKT1-SS
+      - beta_日本A-线路1 | TCP
+      - beta_日本A-线路2 | TCP
+      - beta_日本A-线路3 | TCP
+      - beta_日本A-CMI专线
+      - beta_日本B-线路1 | TCP
+      - beta_日本B-线路2 | TCP
+      - beta_日本B-线路3 | TCP
+      - beta_日本B-CMI专线
+      - beta_日本C-线路1 | TCP
+      - beta_日本C-线路2 | TCP
+      - beta_日本C-线路3 | TCP
+      - beta_日本C-CMI专线
+      - alpha_日本4直
+      - alpha_日本2直
+      - alpha_基础-日本4-V2
+      - alpha_基础-日本3-SS
+      - alpha_基础-日本2-V2
+      - alpha_基础-日本1-SS
+      - alpha_韩国4直
+      - alpha_基础-韩国4-V2
+      - alpha_基础-韩国1-SS
+      - alpha_马来西亚4直
+      - alpha_马来西亚2直
+      - alpha_基础-马来西亚4-V2
+      - alpha_基础-马来西亚3-SS
+      - alpha_基础-马来西亚2-V2
+      - alpha_基础-马来西亚1-SS
+      - beta_新加坡A-线路1 | TCP
+      - beta_新加坡A-线路2 | TCP
+      - beta_新加坡A-线路3 | TCP
+      - beta_新加坡A-CMI专线
+      - beta_新加坡B-线路1 | TCP
+      - beta_新加坡B-线路2 | TCP
+      - beta_新加坡B-线路3 | TCP
+      - beta_新加坡B-CMI专线
+      - beta_新加坡C-线路1 | TCP
+      - beta_新加坡C-线路2 | TCP
+      - beta_新加坡C-线路3 | TCP
+      - beta_新加坡C-CMI专线
+      - alpha_新加坡8直
+      - alpha_新加坡6直
+      - alpha_新加坡4直
+      - alpha_新加坡2直
+      - alpha_基础-新加坡8-V2
+      - alpha_基础-新加坡7-SS
+      - alpha_基础-新加坡6-V2
+      - alpha_基础-新加坡5-SS
+      - alpha_基础-新加坡4-V2
+      - alpha_基础-新加坡3-SS
+      - alpha_基础-新加坡2-V2
+      - alpha_基础-新加坡1-SS
+      - beta_台湾-线路1 | TCP
+      - beta_台湾-线路3 | TCP
+      - alpha_台湾4直
+      - alpha_台湾2直
+      - alpha_基础-台湾4-V2
+      - alpha_基础-台湾3-SS
+      - alpha_基础-台湾2-V2
+      - alpha_基础-台湾1-SS
+      - beta_越南-线路1 | TCP
+      - beta_越南-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _continent_EU
     type: url-test
     proxies:
@@ -1454,6 +1848,25 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_continent_EU
+    type: load-balance
+    proxies:
+      - beta_德国-线路1 | TCP
+      - beta_德国-线路2 | TCP
+      - beta_德国-线路3 | TCP
+      - beta_德国-线路4 | HY2
+      - beta_德国-CMI专线
+      - alpha_法国4直
+      - alpha_基础-法国4-V2
+      - alpha_基础-法国1-SS
+      - beta_英国-线路1 | TCP
+      - beta_英国-线路3 | TCP
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
   - name: _continent_NA
     type: url-test
     proxies:
@@ -1480,6 +1893,33 @@ proxy-groups:
     timeout: 3000
     max-failed-times: 3
     lazy: true
+  - name: _lb_continent_NA
+    type: load-balance
+    proxies:
+      - beta_加拿大-线路1 | TCP
+      - beta_加拿大-线路3 | TCP
+      - beta_加拿大-线路4 | HY2
+      - beta_美国A-线路1 | TCP
+      - beta_美国A-线路2 | TCP
+      - beta_美国A-线路3 | TCP
+      - beta_美国A-CMI专线
+      - beta_美国B-线路1 | TCP
+      - beta_美国B-线路2 | TCP
+      - beta_美国B-线路3 | TCP
+      - beta_美国B-CMI专线
+      - beta_美国C-线路1 | TCP
+      - beta_美国C-线路2 | TCP
+      - beta_美国C-线路3 | TCP
+      - beta_美国C-CMI专线
+      - beta_美国D-线路4 | HY2
+      - alpha_美国02
+      - alpha_美国01
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
 rules:
   # --- priority 1000 (alpha) ---
   - DOMAIN-SUFFIX,smtp,DIRECT

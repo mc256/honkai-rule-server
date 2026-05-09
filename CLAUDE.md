@@ -42,6 +42,17 @@ of non-major bumps and a daily auto-patch-release workflow that cuts
 `vX.Y.(Z+1)` whenever Dependabot commits accumulate on master since
 the last release tag; canonical image registry replaces 009's
 `registry.example.com/library/honkai-rule-server` placeholder).
+**014 (load-balance-region-groups)** is the active routing feature being
+designed/implemented in `specs/014-load-balance-region-groups/` (additive
+`_lb_region_<CC>` / `_lb_continent_<CONT>` proxy groups of `type:
+load-balance` emitted in parallel to 012's url-test groups, sharing the
+same membership; new `LOAD_BALANCE_*` env-var namespace — six knobs incl.
+`LOAD_BALANCE_STRATEGY` accepting `round-robin`/`consistent-hashing`/
+`sticky-sessions`; existing 008 fan-out predicate widens to also accept
+`_lb_region_` / `_lb_continent_` prefixes, producing
+`via_lb_region_<CC>__<own>` / `via_lb_continent_<CONT>__<own>` copies; lb
+groups join the always-present `Proxies` selector alongside url-test
+groups; no AUTO_lb variant; existing 012 url-test groups byte-unchanged).
 
 Key reading for any change:
 - `specs/001-subscription-aggregator/spec.md` + `plan.md` — what the service does today (27 FRs, 15 SCs) and how it's structured
@@ -57,6 +68,7 @@ Key reading for any change:
 - `specs/012-url-test-region-groups/spec.md` + `plan.md` — convert auto-emitted `_region_*` and `_continent_*` proxy groups from `select` to `url-test` with operator-configurable health-check params (5 env vars: `URL_TEST_URL`, `URL_TEST_INTERVAL_SECONDS`, `URL_TEST_TIMEOUT_MS`, `URL_TEST_MAX_FAILED_TIMES`, `URL_TEST_LAZY`); always-present `Proxies` selector and operator-defined custom groups untouched
 - `specs/011-daily-spend-tracking/spec.md` + `plan.md` — track today's spend in the served `Subscription-Userinfo` header so the client UI's bar fills as the user consumes (010 left it flat at 0%); persistent `/data/today-zero.json` snapshot of per-source midnight baselines + pinned allowance, lazy request-driven rollover, America/Toronto local-day boundary; new `internal/dailyspend/` package owns file I/O outside the pure-merge boundary
 - `specs/013-ci-container-release/spec.md` + `plan.md` — active feature: GitHub Actions workflows publishing the container image to `ghcr.io/<owner>/honkai-rule-server` on `master` push (tags `master` + `sha-<short>`) and on `v*` SemVer tag push (tags `vX.Y.Z` + `vX.Y` + `vX` + `latest`, with hotfix-vs-`latest` precedence rule); Makefile gains `release-{patch,minor,major}` + `release VERSION=` + `DRY_RUN=1` helpers; `.github/dependabot.yml` covers gomod / github-actions / docker ecosystems; `dependabot-auto-merge.yml` skips major bumps via `dependabot/fetch-metadata`; `auto-patch-release.yml` runs daily and cuts `vX.Y.(Z+1)` when Dependabot commits accumulate on master since the last release tag; replaces 009's `registry.example.com/library/honkai-rule-server` placeholder with GHCR as canonical registry
+- `specs/014-load-balance-region-groups/spec.md` + `plan.md` — active feature: additive `_lb_region_<CC>` / `_lb_continent_<CONT>` proxy groups of `type: load-balance` emitted alongside 012's url-test groups (same membership, paired adjacency in `proxy-groups:`); operator-configurable via six new `LOAD_BALANCE_*` env vars (`LOAD_BALANCE_URL`, `LOAD_BALANCE_INTERVAL_SECONDS=300`, `LOAD_BALANCE_TIMEOUT_MS=1500`, `LOAD_BALANCE_MAX_FAILED_TIMES=3`, `LOAD_BALANCE_LAZY=true`, `LOAD_BALANCE_STRATEGY=round-robin` accepting also `consistent-hashing`/`sticky-sessions`); 008 fan-out predicate widens to include `_lb_region_`/`_lb_continent_` prefixes producing `via_lb_region_<CC>__<own>` / `via_lb_continent_<CONT>__<own>` copies; lb groups join the always-present `Proxies` selector; no AUTO_lb variant (008's `via_AUTO__<own>` unchanged); url-test groups (012) byte-unchanged; field order on lb groups is `name, type, proxies, url, interval, lazy, strategy, timeout, max-failed-times` — distinct from url-test order
 - `specs/003-custom-rules-access-control/quickstart.md` — operator guide (custom rules YAML schema, continent groups, UA filtering setup)
 - `internal/merge/` — pure-functional transformation core (Constitution Principle I; do not reach into it from outside the module)
 - `internal/customrules/` — custom rule file loading and `CustomRuleSet` type

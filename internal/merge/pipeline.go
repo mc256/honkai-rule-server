@@ -99,6 +99,14 @@ type Pipeline struct {
 	// responsibility to set this from cfg.URLTestParams).
 	urlTestParams URLTestParams
 
+	// loadBalanceParams is the load-balance parameter set written into every
+	// auto-emitted _lb_region_* / _lb_continent_* proxy group per 014
+	// FR-001..FR-006. Set via WithLoadBalanceParams; same caller contract as
+	// urlTestParams (a Pipeline constructed without the builder renders lb
+	// groups with empty/zero fields, so callers MUST set this from
+	// cfg.LoadBalanceParams).
+	loadBalanceParams LoadBalanceParams
+
 	// snapshotter persists today-zero state across pod restarts (011
 	// FR-005). nil → fall back to 010 behavior (no spend tracking;
 	// ComposeServedTrafficHeader without a snapshot).
@@ -162,6 +170,14 @@ func (p *Pipeline) WithFallbackRuleTarget(target string) *Pipeline {
 // receiver for chaining.
 func (p *Pipeline) WithURLTestParams(params URLTestParams) *Pipeline {
 	p.urlTestParams = params
+	return p
+}
+
+// WithLoadBalanceParams sets the load-balance parameter set for emitted
+// _lb_region_* / _lb_continent_* groups (014 FR-001..FR-006). Returns the
+// receiver for chaining.
+func (p *Pipeline) WithLoadBalanceParams(params LoadBalanceParams) *Pipeline {
+	p.loadBalanceParams = params
 	return p
 }
 
@@ -281,7 +297,7 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 			}
 		}
 		unmappedSeen := make(map[string]bool)
-		mergedGroups = AppendRegionGroups(mergedGroups, upstreamProxies, p.proxiesGroupName, p.urlTestParams, func(fragment string) {
+		mergedGroups = AppendRegionGroups(mergedGroups, upstreamProxies, p.proxiesGroupName, p.urlTestParams, p.loadBalanceParams, func(fragment string) {
 			if !unmappedSeen[fragment] {
 				unmappedSeen[fragment] = true
 				slog.Info("region-unmapped-indicator",
@@ -303,7 +319,7 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 			}
 		}
 		unmappedContinentSeen := make(map[string]bool)
-		mergedGroups = AppendContinentGroups(mergedGroups, regionGroupNames, regionGroupMembers, p.proxiesGroupName, p.urlTestParams, func(cc string) {
+		mergedGroups = AppendContinentGroups(mergedGroups, regionGroupNames, regionGroupMembers, p.proxiesGroupName, p.urlTestParams, p.loadBalanceParams, func(cc string) {
 			if !unmappedContinentSeen[cc] {
 				unmappedContinentSeen[cc] = true
 				slog.Info("continent-unmapped-country",
@@ -321,7 +337,10 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 	fanoutTargetGroups := 0
 	for _, g := range mergedGroups {
 		name := getMappingField(g, "name")
-		if strings.HasPrefix(name, "_region_") || strings.HasPrefix(name, "_continent_") {
+		if strings.HasPrefix(name, "_region_") ||
+			strings.HasPrefix(name, "_continent_") ||
+			strings.HasPrefix(name, "_lb_region_") ||
+			strings.HasPrefix(name, "_lb_continent_") {
 			fanoutTargetGroups++
 		}
 	}

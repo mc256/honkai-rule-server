@@ -435,6 +435,221 @@ func TestServerConfig_URLTestParamsMultipleViolations(t *testing.T) {
 	}
 }
 
+// 014 FR-003 + FR-004: LoadBalanceParams defaults match the operator-confirmed
+// example values when no env vars are set.
+func TestServerConfig_LoadBalanceParamsDefaults(t *testing.T) {
+	cfg, err := Load(validRequiredEnv())
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	want := LoadBalanceParams{
+		URL:             "https://www.gstatic.com/generate_204",
+		IntervalSeconds: 300,
+		TimeoutMS:       1500,
+		MaxFailedTimes:  3,
+		Lazy:            true,
+		Strategy:        "round-robin",
+	}
+	if cfg.LoadBalanceParams != want {
+		t.Errorf("LoadBalanceParams = %+v, want %+v", cfg.LoadBalanceParams, want)
+	}
+}
+
+// 014 FR-004: All six env vars override the defaults verbatim.
+func TestServerConfig_LoadBalanceParamsAllOverridden(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_URL"] = "https://example.com/204"
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = "600"
+	env["LOAD_BALANCE_TIMEOUT_MS"] = "2000"
+	env["LOAD_BALANCE_MAX_FAILED_TIMES"] = "5"
+	env["LOAD_BALANCE_LAZY"] = "false"
+	env["LOAD_BALANCE_STRATEGY"] = "consistent-hashing"
+
+	cfg, err := Load(env)
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	want := LoadBalanceParams{
+		URL:             "https://example.com/204",
+		IntervalSeconds: 600,
+		TimeoutMS:       2000,
+		MaxFailedTimes:  5,
+		Lazy:            false,
+		Strategy:        "consistent-hashing",
+	}
+	if cfg.LoadBalanceParams != want {
+		t.Errorf("LoadBalanceParams = %+v, want %+v", cfg.LoadBalanceParams, want)
+	}
+}
+
+// 014 FR-004: Empty string is treated as unset (matches FALLBACK_RULE_TARGET pattern).
+func TestServerConfig_LoadBalanceParamsEmptyTreatedAsUnset(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_URL"] = ""
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = ""
+	env["LOAD_BALANCE_TIMEOUT_MS"] = ""
+	env["LOAD_BALANCE_MAX_FAILED_TIMES"] = ""
+	env["LOAD_BALANCE_LAZY"] = ""
+	env["LOAD_BALANCE_STRATEGY"] = ""
+
+	cfg, err := Load(env)
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.LoadBalanceParams.URL != "https://www.gstatic.com/generate_204" {
+		t.Errorf("URL = %q, want default", cfg.LoadBalanceParams.URL)
+	}
+	if cfg.LoadBalanceParams.IntervalSeconds != 300 {
+		t.Errorf("IntervalSeconds = %d, want 300", cfg.LoadBalanceParams.IntervalSeconds)
+	}
+	if cfg.LoadBalanceParams.Strategy != "round-robin" {
+		t.Errorf("Strategy = %q, want round-robin", cfg.LoadBalanceParams.Strategy)
+	}
+}
+
+// 014 FR-005: Non-integer interval fails loud (Constitution Principle III).
+func TestServerConfig_LoadBalanceParamsNonIntegerIntervalFails(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = "abc"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for non-integer LOAD_BALANCE_INTERVAL_SECONDS, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_INTERVAL_SECONDS") {
+		t.Errorf("error should name the offending env var; got: %v", err)
+	}
+}
+
+// 014 FR-005: Zero / negative values fail loud.
+func TestServerConfig_LoadBalanceParamsZeroIntervalFails(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = "0"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for zero LOAD_BALANCE_INTERVAL_SECONDS, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_INTERVAL_SECONDS") {
+		t.Errorf("error should name LOAD_BALANCE_INTERVAL_SECONDS; got: %v", err)
+	}
+}
+
+func TestServerConfig_LoadBalanceParamsNegativeTimeoutFails(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_TIMEOUT_MS"] = "-100"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for negative LOAD_BALANCE_TIMEOUT_MS, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_TIMEOUT_MS") {
+		t.Errorf("error should name LOAD_BALANCE_TIMEOUT_MS; got: %v", err)
+	}
+}
+
+// 014 FR-005: Bool gibberish fails loud.
+func TestServerConfig_LoadBalanceParamsInvalidBoolFails(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_LAZY"] = "maybe"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for invalid LOAD_BALANCE_LAZY, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_LAZY") {
+		t.Errorf("error should name LOAD_BALANCE_LAZY; got: %v", err)
+	}
+}
+
+// 014 FR-005: Strategy enum — only round-robin / consistent-hashing /
+// sticky-sessions are accepted. Other values fail loud (Constitution III).
+func TestServerConfig_LoadBalanceParamsStrategyAcceptedValues(t *testing.T) {
+	for _, strat := range []string{"round-robin", "consistent-hashing", "sticky-sessions"} {
+		t.Run(strat, func(t *testing.T) {
+			env := validRequiredEnv()
+			env["LOAD_BALANCE_STRATEGY"] = strat
+			cfg, err := Load(env)
+			if err != nil {
+				t.Fatalf("Load: %v", err)
+			}
+			if cfg.LoadBalanceParams.Strategy != strat {
+				t.Errorf("Strategy = %q, want %q", cfg.LoadBalanceParams.Strategy, strat)
+			}
+		})
+	}
+}
+
+func TestServerConfig_LoadBalanceParamsUnknownStrategyFails(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_STRATEGY"] = "random"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for unknown LOAD_BALANCE_STRATEGY, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_STRATEGY") {
+		t.Errorf("error should name LOAD_BALANCE_STRATEGY; got: %v", err)
+	}
+}
+
+// 014 FR-005: Strategy is case-sensitive — Mihomo accepts only the lowercase
+// hyphenated literals.
+func TestServerConfig_LoadBalanceParamsStrategyCaseSensitive(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_STRATEGY"] = "Round-Robin"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for case-mismatched strategy, got nil")
+	}
+	if !strings.Contains(err.Error(), "LOAD_BALANCE_STRATEGY") {
+		t.Errorf("error should name LOAD_BALANCE_STRATEGY; got: %v", err)
+	}
+}
+
+// 014 FR-005: Multiple violations bundled in one error message.
+func TestServerConfig_LoadBalanceParamsMultipleViolations(t *testing.T) {
+	env := validRequiredEnv()
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = "0"
+	env["LOAD_BALANCE_LAZY"] = "maybe"
+	env["LOAD_BALANCE_STRATEGY"] = "random"
+
+	_, err := Load(env)
+	if err == nil {
+		t.Fatal("expected error for three violations, got nil")
+	}
+	msg := err.Error()
+	if !strings.Contains(msg, "LOAD_BALANCE_INTERVAL_SECONDS") {
+		t.Errorf("error missing LOAD_BALANCE_INTERVAL_SECONDS: %v", err)
+	}
+	if !strings.Contains(msg, "LOAD_BALANCE_LAZY") {
+		t.Errorf("error missing LOAD_BALANCE_LAZY: %v", err)
+	}
+	if !strings.Contains(msg, "LOAD_BALANCE_STRATEGY") {
+		t.Errorf("error missing LOAD_BALANCE_STRATEGY: %v", err)
+	}
+}
+
+// 014: URL_TEST_* and LOAD_BALANCE_* namespaces are independent — overriding
+// one MUST NOT affect the other (FR-007 byte-stability for url-test path).
+func TestServerConfig_URLTestAndLoadBalanceIndependent(t *testing.T) {
+	env := validRequiredEnv()
+	env["URL_TEST_INTERVAL_SECONDS"] = "30"
+	env["LOAD_BALANCE_INTERVAL_SECONDS"] = "999"
+
+	cfg, err := Load(env)
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.URLTestParams.IntervalSeconds != 30 {
+		t.Errorf("URLTestParams.IntervalSeconds = %d, want 30", cfg.URLTestParams.IntervalSeconds)
+	}
+	if cfg.LoadBalanceParams.IntervalSeconds != 999 {
+		t.Errorf("LoadBalanceParams.IntervalSeconds = %d, want 999", cfg.LoadBalanceParams.IntervalSeconds)
+	}
+}
+
 // 011 FR-005: TODAY_ZERO_PATH defaults + override.
 func TestServerConfig_TodayZeroPathDefault(t *testing.T) {
 	cfg, err := Load(validRequiredEnv())
