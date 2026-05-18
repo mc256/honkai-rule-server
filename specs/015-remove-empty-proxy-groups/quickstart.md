@@ -53,20 +53,27 @@ Add members to the group upstream if you expected it to appear.
 ### Running the tests
 
 ```sh
-make check                                   # vet + staticcheck + tests + snapshot drift
-go test ./internal/merge/ -run TestPrune     # unit tests for the prune function
-go test ./internal/integration/ -run TestPrune   # integration scenario
+make check                                              # vet + lint + tests + snapshot drift
+go test ./internal/merge/ -run 'TestPrune|TestRuleTarget'   # prune-function unit tests
+go test ./internal/integration/ -run TestSnapshot_PruneServedConfig   # end-to-end scenario
 ```
+
+The integration scenario builds the pipeline directly against a crafted upstream
+payload (`pruneUpstreamYAML` in `internal/integration/prune_test.go`) — an upstream
+that contributes a proxy-group with no members, a group that references it, and a
+rule that targets it. The merge harness hardcodes its two upstream stubs, so the
+prune scenario uses the `stubMergeCache` direct-build path rather than a fixture file
+registered in `subscriptions.csv`.
 
 ### Updating snapshots (deliberate, reviewed action)
 
 The existing `served-config.snap.yaml` MUST NOT drift — its fixtures contain no empty
 group. If it does, the prune step changed something it should not have.
 
-The new `served-config-prune.snap.yaml` is regenerated with:
+The `served-config-prune.snap.yaml` baseline is regenerated with:
 
 ```sh
-UPDATE_SNAPSHOTS=true go test ./internal/integration/ -run TestSnapshot
+UPDATE_SNAPSHOTS=true go test ./internal/integration/ -run TestSnapshot_PruneServedConfig
 ```
 
 Per the Constitution snapshot-stability gate, any snapshot change must be called out

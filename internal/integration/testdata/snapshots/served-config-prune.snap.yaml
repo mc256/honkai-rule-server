@@ -1,0 +1,39 @@
+mixed-port: 7890
+mode: rule
+proxies:
+  - {name: alpha_HK-1, type: ss, server: hk1.test, port: 443, cipher: aes-256-gcm, password: synthetic-pw, udp: true}
+proxy-groups:
+  - name: alpha_NodeSelect
+    type: select
+    proxies:
+      - alpha_HK-1
+  - name: Proxies
+    type: select
+    proxies:
+      - alpha_HK-1
+      - _region_UNKNOWN
+      - _lb_region_UNKNOWN
+  - name: _region_UNKNOWN
+    type: url-test
+    proxies:
+      - alpha_HK-1
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _lb_region_UNKNOWN
+    type: load-balance
+    proxies:
+      - alpha_HK-1
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
+rules:
+  # --- priority 1000 (alpha) ---
+  - DOMAIN-SUFFIX,empty.test,Proxies
+  - DOMAIN-SUFFIX,node.test,alpha_NodeSelect
+  - MATCH,Proxies
