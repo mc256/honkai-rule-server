@@ -376,6 +376,34 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 		servedTrafficHeader = ComposeServedTrafficHeader(userinfoPerSource, p.clock)
 	}
 
+	// 015 FR-001..FR-011: drop every proxy-group whose `proxies` member list
+	// is empty so the served config loads in the Mihomo client, and clean up
+	// the member/rule references the removals leave behind. Runs last —
+	// `mergedGroups` and the rule slice are final here (after fan-out). The
+	// always-present `Proxies` selector and the fallback-rule-target group are
+	// exempt from removal (FR-007).
+	prunedGroups, prunedRules, pruneResult := PruneEmptyProxyGroups(
+		mergedGroups, mergedRulesResult.Rules, p.proxiesGroupName, p.fallbackRuleTarget,
+	)
+	mergedGroups = prunedGroups
+	mergedRulesResult.Rules = prunedRules
+	if len(pruneResult.RemovedGroups) > 0 || len(pruneResult.Retargets) > 0 {
+		slog.Info("proxy-groups-pruned",
+			"event", "proxy-groups-pruned",
+			"removed_count", len(pruneResult.RemovedGroups),
+			"removed", pruneResult.RemovedGroups,
+			"retargeted_rules", len(pruneResult.Retargets),
+		)
+		for _, rt := range pruneResult.Retargets {
+			slog.Info("rule-retargeted",
+				"event", "rule-retargeted",
+				"rule_index", rt.RuleIndex,
+				"old_target", rt.OldTarget,
+				"new_target", rt.NewTarget,
+			)
+		}
+	}
+
 	return &MergedConfig{
 		Proxies:                              mergedProxies,
 		ProxyGroups:                          mergedGroups,
