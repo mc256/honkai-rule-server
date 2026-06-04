@@ -40,6 +40,12 @@ type MergedConfig struct {
 	Proxies     []*yaml.Node
 	ProxyGroups []*yaml.Node
 
+	// RuleProviders is the merged, namespaced `rule-providers:` mapping node
+	// (016), containing only providers referenced by a surviving RULE-SET rule.
+	// nil → no surviving RULE-SET rule referenced any provider; the output
+	// adapter then emits no `rule-providers:` key (016 FR-006).
+	RuleProviders *yaml.Node
+
 	// Rules, RulePriorities, RuleContributors are three parallel slices of
 	// equal length. RulePriorities[i] is the priority of the contributor that
 	// supplied Rules[i]; RuleContributors[i] is the contributor's name. The
@@ -205,6 +211,8 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 	proxiesPerSource := make(map[string][]*yaml.Node, len(rows))
 	groupsPerSource := make(map[string][]*yaml.Node, len(rows))
 	rulesPerSource := make(map[string][]string, len(rows))
+	// 016: raw (pre-namespacing) `rule-providers:` mapping node per source.
+	ruleProvidersPerSource := make(map[string]*yaml.Node, len(rows))
 	contributing := make([]string, 0, len(rows))
 
 	for _, row := range rows {
@@ -233,6 +241,9 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 			}
 			rulesPerSource[row.Name] = rules
 		}
+		if m := findChildMapping(root, "rule-providers"); m != nil {
+			ruleProvidersPerSource[row.Name] = m
+		}
 		contributing = append(contributing, row.Name)
 	}
 
@@ -252,7 +263,14 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 	}
 
 	// FR-004/FR-005/FR-006: Apply provider-prefix namespacing to each source's
-	// proxies, groups, and rules before merge.
+	// proxies, groups, and rules before merge. 016: also namespace the
+	// `rule-providers:` block (keys + path + fetch-through proxy) and the
+	// RULE-SET rules' provider-name field (handled inside RewriteSource).
+	nsRuleProviders := make(map[string]*yaml.Node, len(contributing))
+	type droppedRuleSetEvt struct{ source, provider, rule string }
+	type skippedProviderEvt struct{ source, provider string }
+	var droppedRuleSets []droppedRuleSetEvt
+	var skippedProviders []skippedProviderEvt
 	for _, name := range contributing {
 		proxiesPerSource[name], groupsPerSource[name], rulesPerSource[name] = RewriteSource(
 			name,
@@ -260,6 +278,25 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 			groupsPerSource[name],
 			rulesPerSource[name],
 		)
+		if raw := ruleProvidersPerSource[name]; raw != nil {
+			ns, skipped := RewriteSourceRuleProviders(name, raw)
+			nsRuleProviders[name] = ns
+			for _, s := range skipped {
+				skippedProviders = append(skippedProviders, skippedProviderEvt{source: name, provider: s.Provider})
+			}
+		}
+	}
+
+	// 016 FR-009: drop RULE-SET rules whose provider is undefined in their
+	// source, BEFORE the unified merge so the priority/contributor parallel
+	// slices stay aligned by construction.
+	for _, name := range contributing {
+		keys := ruleProviderKeys(nsRuleProviders[name])
+		kept, dropped := DropUnbackedRuleSetRules(rulesPerSource[name], keys)
+		rulesPerSource[name] = kept
+		for _, d := range dropped {
+			droppedRuleSets = append(droppedRuleSets, droppedRuleSetEvt{source: name, provider: d.Provider, rule: d.Rule})
+		}
 	}
 
 	// FR-007a/FR-007b: Apply underscore prefix to own-proxies and own-groups.
@@ -404,9 +441,53 @@ func (p *Pipeline) Build() (*MergedConfig, error) {
 		}
 	}
 
+	// 016 FR-005/FR-006/FR-010: build the merged `rule-providers:` block from
+	// the FINAL rule slice (post trailing-drop, unbacked-drop, and 015 prune),
+	// keeping only providers a surviving RULE-SET rule references, in
+	// contributing-source order. nil when nothing is referenced.
+	referenced := ReferencedRuleProviders(mergedRulesResult.Rules)
+	orderedNSRuleProviders := make([]*yaml.Node, 0, len(contributing))
+	for _, name := range contributing {
+		if ns := nsRuleProviders[name]; ns != nil {
+			orderedNSRuleProviders = append(orderedNSRuleProviders, ns)
+		}
+	}
+	ruleProviders := MergeRuleProviders(orderedNSRuleProviders, referenced)
+
+	// 016 FR-011: structured observability for the rule-set merge decisions.
+	for _, d := range droppedRuleSets {
+		slog.Info("ruleset-rule-dropped",
+			"event", "ruleset-rule-dropped",
+			"source", d.source,
+			"provider", d.provider,
+			"rule", d.rule,
+		)
+	}
+	for _, s := range skippedProviders {
+		slog.Info("ruleset-provider-skipped",
+			"event", "ruleset-provider-skipped",
+			"source", s.source,
+			"provider", s.provider,
+			"reason", "malformed",
+		)
+	}
+	if ruleProviders != nil || len(droppedRuleSets) > 0 || len(skippedProviders) > 0 {
+		mergedCount := 0
+		if ruleProviders != nil {
+			mergedCount = len(ruleProviders.Content) / 2
+		}
+		slog.Info("ruleset-merged",
+			"event", "ruleset-merged",
+			"providers_merged", mergedCount,
+			"rules_dropped", len(droppedRuleSets),
+			"providers_skipped", len(skippedProviders),
+		)
+	}
+
 	return &MergedConfig{
 		Proxies:                              mergedProxies,
 		ProxyGroups:                          mergedGroups,
+		RuleProviders:                        ruleProviders,
 		Rules:                                mergedRulesResult.Rules,
 		RulePriorities:                       mergedRulesResult.Priorities,
 		RuleContributors:                     mergedRulesResult.Contributors,

@@ -88,6 +88,13 @@ func (s *SubscriptionMode) Render(merged *merge.MergedConfig) (*Rendered, error)
 	setMappingValue(root, "proxy-groups", sequenceOfNodes(merged.ProxyGroups))
 	setMappingValue(root, "rules", sequenceOfStrings(merged.Rules))
 
+	// 016 FR-005/FR-006: emit the merged `rule-providers:` mapping when any
+	// surviving RULE-SET rule referenced a provider; omit the key entirely
+	// otherwise (nil node). Appended at end of the document mapping.
+	if merged.RuleProviders != nil {
+		setMappingValue(root, "rule-providers", merged.RuleProviders)
+	}
+
 	// Strip ALL comments from the document. The template carries docstrings
 	// for operators (explaining the __MERGED_*__ placeholders); those are
 	// useful in the file but should not appear in every served response.

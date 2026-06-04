@@ -311,6 +311,51 @@ func TestSubscriptionMode_RenderEmptyMergedConfig(t *testing.T) {
 	}
 }
 
+// TC-O-RULESET-01 (016 FR-005/FR-006): Render emits a `rule-providers:`
+// mapping when MergedConfig.RuleProviders is non-nil, and omits the key when
+// it is nil.
+func TestSubscriptionMode_RuleProvidersEmittedAndOmitted(t *testing.T) {
+	adapter, err := NewSubscriptionModeFromBytes([]byte(minimalTemplate))
+	if err != nil {
+		t.Fatalf("NewSubscriptionModeFromBytes: %v", err)
+	}
+
+	// Build a rule-providers mapping node.
+	var doc yaml.Node
+	if err := yaml.Unmarshal([]byte("alpha_Local-IP:\n  type: http\n  behavior: ipcidr\n  path: ./ruleset/alpha_Local-IP.mrs\n"), &doc); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	rpNode := doc.Content[0] // unwrap DocumentNode → MappingNode
+
+	withRP, err := adapter.Render(&merge.MergedConfig{
+		Rules:         []string{"RULE-SET,alpha_Local-IP,DIRECT", "MATCH,DIRECT"},
+		RuleProviders: rpNode,
+	})
+	if err != nil {
+		t.Fatalf("Render(withRP): %v", err)
+	}
+	var parsed struct {
+		RuleProviders map[string]any `yaml:"rule-providers"`
+	}
+	if err := yaml.Unmarshal(withRP.Body, &parsed); err != nil {
+		t.Fatalf("parse withRP body: %v", err)
+	}
+	if _, ok := parsed.RuleProviders["alpha_Local-IP"]; !ok {
+		t.Errorf("rule-providers block missing alpha_Local-IP; body:\n%s", withRP.Body)
+	}
+
+	// Nil → key omitted entirely.
+	withoutRP, err := adapter.Render(&merge.MergedConfig{
+		Rules: []string{"MATCH,DIRECT"},
+	})
+	if err != nil {
+		t.Fatalf("Render(withoutRP): %v", err)
+	}
+	if strings.Contains(string(withoutRP.Body), "rule-providers") {
+		t.Errorf("rule-providers key emitted when RuleProviders is nil; body:\n%s", withoutRP.Body)
+	}
+}
+
 func TestSubscriptionMode_NilTemplateError(t *testing.T) {
 	_, err := NewSubscriptionModeFromBytes([]byte("not: [valid {yaml"))
 	if err == nil {

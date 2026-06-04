@@ -36,6 +36,22 @@ func findChildSequence(root *yaml.Node, key string) *yaml.Node {
 	return nil
 }
 
+// findChildMapping returns the mapping Node value of a top-level mapping key,
+// or nil if absent / the wrong kind. Sibling of findChildSequence, used to read
+// the upstream `rule-providers:` block (a mapping, not a sequence).
+func findChildMapping(root *yaml.Node, key string) *yaml.Node {
+	if root == nil || root.Kind != yaml.MappingNode {
+		return nil
+	}
+	for i := 0; i+1 < len(root.Content); i += 2 {
+		k, v := root.Content[i], root.Content[i+1]
+		if k.Value == key && v.Kind == yaml.MappingNode {
+			return v
+		}
+	}
+	return nil
+}
+
 // getMappingField returns the scalar value of a key in a mapping node,
 // or "" if absent / the wrong kind.
 func getMappingField(n *yaml.Node, key string) string {

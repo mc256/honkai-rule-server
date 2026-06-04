@@ -160,6 +160,43 @@ func TestNS_RULE_05_CommaInMatcherValue(t *testing.T) {
 	}
 }
 
+// TC-U-NS-RULESET-01: RULE-SET with a built-in target — provider field[1]
+// prefixed, built-in target left unchanged (016 FR-003/FR-004).
+func TestNS_RULESET_01_BuiltinTarget(t *testing.T) {
+	_, _, newRules := RewriteSource("alpha", nil, nil, []string{"RULE-SET,Local-IP,DIRECT"})
+	if newRules[0] != "RULE-SET,alpha_Local-IP,DIRECT" {
+		t.Errorf("rule = %q, want RULE-SET,alpha_Local-IP,DIRECT", newRules[0])
+	}
+}
+
+// TC-U-NS-RULESET-02: RULE-SET with a non-built-in proxy-group target AND a
+// modifier (the real-upstream shape) — both field[1] and the group target are
+// prefixed; the modifier is preserved in place (016 FR-003/FR-004).
+func TestNS_RULESET_02_GroupTargetWithModifier(t *testing.T) {
+	_, _, newRules := RewriteSource("alpha", nil, nil, []string{"RULE-SET,Local-IP,SomeGroup,no-resolve"})
+	if newRules[0] != "RULE-SET,alpha_Local-IP,alpha_SomeGroup,no-resolve" {
+		t.Errorf("rule = %q, want RULE-SET,alpha_Local-IP,alpha_SomeGroup,no-resolve", newRules[0])
+	}
+}
+
+// TC-U-NS-RULESET-03: RULE-SET with a non-built-in target, no modifier — both
+// the provider and the group target are prefixed.
+func TestNS_RULESET_03_GroupTargetNoModifier(t *testing.T) {
+	_, _, newRules := RewriteSource("alpha", nil, nil, []string{"RULE-SET,China-Site,SomeGroup"})
+	if newRules[0] != "RULE-SET,alpha_China-Site,alpha_SomeGroup" {
+		t.Errorf("rule = %q, want RULE-SET,alpha_China-Site,alpha_SomeGroup", newRules[0])
+	}
+}
+
+// TC-U-NS-RULESET-04 (I1 guard): a malformed 2-field RULE-SET (no target) has
+// its provider field prefixed exactly once and is never double-prefixed.
+func TestNS_RULESET_04_TwoFieldGuard(t *testing.T) {
+	_, _, newRules := RewriteSource("alpha", nil, nil, []string{"RULE-SET,Local-IP"})
+	if newRules[0] != "RULE-SET,alpha_Local-IP" {
+		t.Errorf("rule = %q, want RULE-SET,alpha_Local-IP (single prefix)", newRules[0])
+	}
+}
+
 // TC-U-NS-IDEMPOTENT-01: applying rewriter twice is NOT idempotent.
 func TestNS_IDEMPOTENT_01_NotIdempotent(t *testing.T) {
 	proxies := []*yaml.Node{mustParseYAMLNode("name: Node1\ntype: trojan\nserver: a.test\nport: 443\npassword: pw\n")}

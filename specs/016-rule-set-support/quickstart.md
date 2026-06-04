@@ -96,9 +96,9 @@ If a second source `srcB` also defines `Local-IP`, both appear as distinct keys
 ## Diagnostics (structured logs)
 
 ```
-event=ruleset-rule-dropped   source=<src> provider=<src_name> rule="RULE-SET,..."
-event=ruleset-provider-skipped source=<src> provider=<name> reason=malformed
-event=ruleset-merged  providers_merged=<n> providers_pruned=<n> rules_dropped=<n>
+event=ruleset-rule-dropped     source=<src> provider=<src_name> rule="RULE-SET,..."
+event=ruleset-provider-skipped  source=<src> provider=<name> reason=malformed
+event=ruleset-merged  providers_merged=<n> rules_dropped=<n> providers_skipped=<n>
 ```
 
 ## Verifying locally
