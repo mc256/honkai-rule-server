@@ -62,6 +62,19 @@ member references to removed groups are dropped; a routing rule whose target
 group was removed is redirected to the configured fallback rule target; new
 pure fn `PruneEmptyProxyGroups` in `internal/merge/prune.go`; byte-unchanged
 output when no group is empty).
+**016 (rule-set-support)** is the active feature being designed/implemented in
+`specs/016-rule-set-support/` (read each upstream source's `rule-providers:`
+mapping, namespace provider keys with the `<source>_` prefix — `srcA_Local-IP`,
+`srcB_Local-IP` — and namespace the `RULE-SET` rule's provider-name field
+(field[1]) to match; provider defs get a source-distinct `path:` and a prefixed
+non-builtin `proxy:`; per-source drop of `RULE-SET` rules with no backing
+provider before the unified merge; emit a merged `rule-providers:` block holding
+only providers referenced by a surviving `RULE-SET` rule, omitting the key
+entirely when none; new pure fns in `internal/merge/ruleset.go` +
+`findChildMapping` in `yamlutil.go` + `MergedConfig.RuleProviders *yaml.Node`;
+`RULE-SET` rules still priority-ordered (014-style) and subject to 002 trailing
+drop + 015 prune/retarget; byte-unchanged output when no source has
+`rule-providers`/`RULE-SET`).
 
 Key reading for any change:
 - `specs/001-subscription-aggregator/spec.md` + `plan.md` — what the service does today (27 FRs, 15 SCs) and how it's structured
@@ -79,6 +92,7 @@ Key reading for any change:
 - `specs/013-ci-container-release/spec.md` + `plan.md` — active feature: GitHub Actions workflows publishing the container image to `ghcr.io/<owner>/honkai-rule-server` on `master` push (tags `master` + `sha-<short>`) and on `v*` SemVer tag push (tags `vX.Y.Z` + `vX.Y` + `vX` + `latest`, with hotfix-vs-`latest` precedence rule); Makefile gains `release-{patch,minor,major}` + `release VERSION=` + `DRY_RUN=1` helpers; `.github/dependabot.yml` covers gomod / github-actions / docker ecosystems; `dependabot-auto-merge.yml` skips major bumps via `dependabot/fetch-metadata`; `auto-patch-release.yml` runs daily and cuts `vX.Y.(Z+1)` when Dependabot commits accumulate on master since the last release tag; replaces 009's `registry.example.com/library/honkai-rule-server` placeholder with GHCR as canonical registry
 - `specs/014-load-balance-region-groups/spec.md` + `plan.md` — active feature: additive `_lb_region_<CC>` / `_lb_continent_<CONT>` proxy groups of `type: load-balance` emitted alongside 012's url-test groups (same membership, paired adjacency in `proxy-groups:`); operator-configurable via six new `LOAD_BALANCE_*` env vars (`LOAD_BALANCE_URL`, `LOAD_BALANCE_INTERVAL_SECONDS=300`, `LOAD_BALANCE_TIMEOUT_MS=1500`, `LOAD_BALANCE_MAX_FAILED_TIMES=3`, `LOAD_BALANCE_LAZY=true`, `LOAD_BALANCE_STRATEGY=round-robin` accepting also `consistent-hashing`/`sticky-sessions`); 008 fan-out predicate widens to include `_lb_region_`/`_lb_continent_` prefixes producing `via_lb_region_<CC>__<own>` / `via_lb_continent_<CONT>__<own>` copies; lb groups join the always-present `Proxies` selector; no AUTO_lb variant (008's `via_AUTO__<own>` unchanged); url-test groups (012) byte-unchanged; field order on lb groups is `name, type, proxies, url, interval, lazy, strategy, timeout, max-failed-times` — distinct from url-test order
 - `specs/015-remove-empty-proxy-groups/spec.md` + `plan.md` — active feature: a final prune pass at the end of `Pipeline.Build()` removes every proxy-group with an empty `proxies:` member list so the served config passes Mihomo validation; single removal pass (no cascading — FR-005); the always-present `Proxies` selector is exempt and retained even when empty (FR-007); dangling member references to removed groups are dropped (FR-006); a routing rule whose target group was pruned is redirected to the configured fallback rule target (FR-008); new pure fn `PruneEmptyProxyGroups` in `internal/merge/prune.go`; output byte-unchanged when no group is empty (FR-010); auto-emitted `_region_*`/`_continent_*`/`_lb_*` groups are non-empty by construction so only operator/upstream groups are real prune candidates
+- `specs/016-rule-set-support/spec.md` + `plan.md` — active feature: read upstream `rule-providers:` mappings and serve a merged, namespaced block. Provider keys + the `RULE-SET` rule's provider-name field (field[1]) get the `<source>_` prefix; provider defs get a source-distinct `path:` and a prefixed non-builtin `proxy:` (FR-007/008); unbacked `RULE-SET` rules dropped per-source before the unified merge (FR-009, logged); only referenced providers emitted, key omitted when none (FR-006/010); new `internal/merge/ruleset.go` + `findChildMapping` in `yamlutil.go` + `MergedConfig.RuleProviders *yaml.Node` + one guarded emit in `internal/output/subscription_mode.go`; byte-unchanged output when no source has `rule-providers`/`RULE-SET` (FR-013)
 - `specs/003-custom-rules-access-control/quickstart.md` — operator guide (custom rules YAML schema, continent groups, UA filtering setup)
 - `internal/merge/` — pure-functional transformation core (Constitution Principle I; do not reach into it from outside the module)
 - `internal/customrules/` — custom rule file loading and `CustomRuleSet` type
