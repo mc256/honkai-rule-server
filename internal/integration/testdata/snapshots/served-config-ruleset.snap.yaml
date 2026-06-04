@@ -1,0 +1,77 @@
+mixed-port: 7890
+mode: rule
+proxies:
+  - {name: beta_B-Node, type: ss, server: b.test, port: 443, cipher: aes-256-gcm, password: synthetic-pw, udp: true}
+  - {name: alpha_A-Node, type: ss, server: a.test, port: 443, cipher: aes-256-gcm, password: synthetic-pw, udp: true}
+proxy-groups:
+  - name: beta_CN-Direct
+    type: select
+    proxies:
+      - beta_B-Node
+  - name: alpha_CN-Direct
+    type: select
+    proxies:
+      - alpha_A-Node
+  - name: Proxies
+    type: select
+    proxies:
+      - beta_B-Node
+      - alpha_A-Node
+      - _region_UNKNOWN
+      - _lb_region_UNKNOWN
+  - name: _region_UNKNOWN
+    type: url-test
+    proxies:
+      - beta_B-Node
+      - alpha_A-Node
+    url: https://www.gstatic.com/generate_204
+    interval: 10
+    timeout: 3000
+    max-failed-times: 3
+    lazy: true
+  - name: _lb_region_UNKNOWN
+    type: load-balance
+    proxies:
+      - beta_B-Node
+      - alpha_A-Node
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    lazy: true
+    strategy: round-robin
+    timeout: 1500
+    max-failed-times: 3
+rules:
+  # --- priority 1000 (alpha) ---
+  - RULE-SET,alpha_Local-IP,alpha_CN-Direct,no-resolve
+  - RULE-SET,alpha_China-Site,DIRECT
+  - RULE-SET,alpha_Local-IP,Proxies
+  - DOMAIN-SUFFIX,direct.test,alpha_CN-Direct
+  # --- priority 2000 (beta) ---
+  - RULE-SET,beta_Local-IP,beta_CN-Direct
+  - DOMAIN-SUFFIX,beta.test,beta_CN-Direct
+  - MATCH,Proxies
+rule-providers:
+  beta_Local-IP:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://cdn.example.test/Local-IP.mrs
+    path: ./ruleset/beta_Local-IP.mrs
+    proxy: DIRECT
+    interval: 86400
+  alpha_Local-IP:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://cdn.example.test/Local-IP.mrs
+    path: ./ruleset/alpha_Local-IP.mrs
+    proxy: DIRECT
+    interval: 86400
+  alpha_China-Site:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://cdn.example.test/China-Site.mrs
+    path: ./ruleset/alpha_China-Site.mrs
+    proxy: DIRECT
+    interval: 86400

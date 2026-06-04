@@ -152,12 +152,21 @@ func rewriteOwnGroupMembers(group *yaml.Node, ownProxyNames, ownGroupNames map[s
 	setMappingMembers(group, "proxies", newMembers)
 }
 
-// rewriteRuleTarget rewrites the target field of a Mihomo rule.
+// rewriteRuleTarget rewrites the target field of a Mihomo rule, plus — for
+// RULE-SET rules (016 FR-003) — the rule-provider name field (parts[1]).
 // The target is the rightmost comma-separated field that is NOT a known modifier.
 func rewriteRuleTarget(rule, sourceName string) string {
 	parts := strings.Split(rule, ",")
 	if len(parts) < 2 {
 		return rule // malformed; pass through unchanged
+	}
+
+	// 016 FR-003: RULE-SET's field[1] is the rule-provider name, never the
+	// target. Prefix it unconditionally (provider names are never built-ins).
+	// The target (a later field) is still handled by the scan below.
+	isRuleSet := parts[0] == "RULE-SET"
+	if isRuleSet {
+		parts[1] = sourceName + "_" + parts[1]
 	}
 
 	// Find the target: last field that is NOT a modifier.
@@ -170,9 +179,18 @@ func rewriteRuleTarget(rule, sourceName string) string {
 		}
 	}
 
+	// 016 I1 guard: for RULE-SET, never treat field[1] (the provider) as the
+	// target. A malformed 2-field `RULE-SET,Name` has no target to rewrite, so
+	// return with only the provider prefix applied (no double prefix).
+	if isRuleSet && targetIdx <= 1 {
+		return strings.Join(parts, ",")
+	}
+
 	target := parts[targetIdx]
 	if builtinTargets[target] {
-		return rule // built-in, don't prefix
+		// Built-in target: don't prefix it. Re-join rather than returning the
+		// original `rule` so a RULE-SET provider-field prefix is preserved.
+		return strings.Join(parts, ",")
 	}
 
 	// Rewrite the target field.
