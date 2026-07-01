@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"math"
 	"sort"
 	"sync"
 	"time"
@@ -11,6 +12,17 @@ import (
 	"github.com/mc256/honkai-rule-server/internal/clock"
 	"github.com/mc256/honkai-rule-server/internal/config"
 )
+
+// neverRefreshTTL is an effectively-infinite TTL used for sources configured to
+// never refresh (RefreshSeconds < 0): the cached snapshot is never treated as
+// stale and no steady-state ticker is scheduled.
+const neverRefreshTTL = time.Duration(math.MaxInt64)
+
+// refreshDisabled reports whether a source is configured to never refresh after
+// its initial bootstrap fetch (RefreshSeconds < 0).
+func refreshDisabled(row config.SubscriptionRow) bool {
+	return row.RefreshSeconds < 0
+}
 
 // BootstrapState is the per-source state machine described in data-model.md.
 type BootstrapState string
@@ -205,10 +217,28 @@ func (c *Coordinator) signalReady() {
 }
 
 func (c *Coordinator) ttlFor(row config.SubscriptionRow) time.Duration {
-	if row.TTLSeconds > 0 {
-		return time.Duration(row.TTLSeconds) * time.Second
+	if refreshDisabled(row) {
+		// Never refresh: report an effectively-infinite TTL so the cached
+		// snapshot is never considered stale (steady-state + /health view).
+		return neverRefreshTTL
+	}
+	if row.RefreshSeconds > 0 {
+		return time.Duration(row.RefreshSeconds) * time.Second
 	}
 	return c.cfg.DefaultTTL
+}
+
+// fetchTTLFor is the TTL used to decide whether a fetch is needed. It mirrors
+// ttlFor except that a never-refresh source uses the default interval here, so
+// its one-shot bootstrap fetch still refreshes a stale disk-cached snapshot on
+// process start (e.g. after the operator edited the source's link). Steady-state
+// staleness/ticking still uses ttlFor's neverRefreshTTL, so the source is never
+// re-fetched on a schedule within a running process.
+func (c *Coordinator) fetchTTLFor(row config.SubscriptionRow) time.Duration {
+	if refreshDisabled(row) {
+		return c.cfg.DefaultTTL
+	}
+	return c.ttlFor(row)
 }
 
 func (c *Coordinator) staleWindowFor(row config.SubscriptionRow) time.Duration {
@@ -275,6 +305,22 @@ func (c *Coordinator) bootstrapAndRun(ctx context.Context, row config.Subscripti
 
 // runSteady is the background ticker loop for one source.
 func (c *Coordinator) runSteady(ctx context.Context, row config.SubscriptionRow) {
+	if refreshDisabled(row) {
+		// RefreshSeconds < 0: the source is fetched once during bootstrap and
+		// never refreshed again. Hold the goroutine until shutdown so cleanup
+		// (Wait) still works.
+		if _, ok := c.cache.Get(row.Name); ok {
+			c.log.Info("source configured to never refresh", "source", row.Name)
+		} else {
+			// Bootstrap produced no usable payload; a never-refresh source has
+			// no ticker to self-heal, so this stays failed until a restart.
+			c.log.Warn("never-refresh source has no cached payload after bootstrap; will not retry until restart",
+				"source", row.Name)
+		}
+		<-ctx.Done()
+		return
+	}
+
 	ttl := c.ttlFor(row)
 	ticker := time.NewTicker(ttl)
 	defer ticker.Stop()
@@ -306,7 +352,7 @@ func (c *Coordinator) runSteady(ctx context.Context, row config.SubscriptionRow)
 }
 
 func (c *Coordinator) refresh(ctx context.Context, row config.SubscriptionRow) (*UpstreamCachedPayload, bool, error) {
-	ttl := c.ttlFor(row)
+	ttl := c.fetchTTLFor(row)
 	payload, refreshed, err := c.cache.RefreshIfStale(ctx, row.Name, ttl, func(ctx context.Context) (*UpstreamCachedPayload, *FetchResult, error) {
 		p, res, ferr := c.fetcher.Fetch(ctx, row)
 		c.recordResult(row.Name, res)

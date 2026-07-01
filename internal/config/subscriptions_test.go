@@ -165,15 +165,17 @@ func TestCSV_09_InvalidLinkURL(t *testing.T) {
 	}
 }
 
-// TC-U-CSV-10: optional ttl_seconds and stale_on_error_seconds parse; absent → 0.
+// TC-U-CSV-10: optional refresh and stale_on_error_seconds parse; absent → 0.
+// refresh is tri-state: 0/absent → default interval, >0 → interval seconds,
+// <0 → never refresh.
 func TestCSV_10_OptionalColumns(t *testing.T) {
-	p := writeCSV(t, "name,link,priority,enable,ttl_seconds,stale_on_error_seconds\nfoo,http://a.test,1,Enable,300,7200\n")
+	p := writeCSV(t, "name,link,priority,enable,refresh,stale_on_error_seconds\nfoo,http://a.test,1,Enable,300,7200\n")
 	rows, err := LoadSubscriptions(p)
 	if err != nil {
 		t.Fatalf("LoadSubscriptions: %v", err)
 	}
-	if rows[0].TTLSeconds != 300 || rows[0].StaleOnErrorSeconds != 7200 {
-		t.Errorf("got TTL=%d, stale=%d, want 300/7200", rows[0].TTLSeconds, rows[0].StaleOnErrorSeconds)
+	if rows[0].RefreshSeconds != 300 || rows[0].StaleOnErrorSeconds != 7200 {
+		t.Errorf("got refresh=%d, stale=%d, want 300/7200", rows[0].RefreshSeconds, rows[0].StaleOnErrorSeconds)
 	}
 
 	p2 := writeCSV(t, "name,link,priority,enable\nfoo,http://a.test,1,Enable\n")
@@ -181,16 +183,36 @@ func TestCSV_10_OptionalColumns(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadSubscriptions: %v", err)
 	}
-	if rows2[0].TTLSeconds != 0 || rows2[0].StaleOnErrorSeconds != 0 {
-		t.Errorf("got TTL=%d, stale=%d, want 0/0", rows2[0].TTLSeconds, rows2[0].StaleOnErrorSeconds)
+	if rows2[0].RefreshSeconds != 0 || rows2[0].StaleOnErrorSeconds != 0 {
+		t.Errorf("got refresh=%d, stale=%d, want 0/0", rows2[0].RefreshSeconds, rows2[0].StaleOnErrorSeconds)
 	}
 
-	// Negative / zero in optional column → error.
-	p3 := writeCSV(t, "name,link,priority,enable,ttl_seconds\nfoo,http://a.test,1,Enable,0\n")
-	_, err = LoadSubscriptions(p3)
+	// refresh=0 → use default interval (accepted, stored as 0).
+	p3 := writeCSV(t, "name,link,priority,enable,refresh\nfoo,http://a.test,1,Enable,0\n")
+	rows3, err := LoadSubscriptions(p3)
+	if err != nil {
+		t.Fatalf("refresh=0 should be accepted (means default): %v", err)
+	}
+	if rows3[0].RefreshSeconds != 0 {
+		t.Errorf("refresh=0 → RefreshSeconds=%d, want 0", rows3[0].RefreshSeconds)
+	}
+
+	// refresh<0 → never refresh (accepted, stored as the negative value).
+	p4 := writeCSV(t, "name,link,priority,enable,refresh\nfoo,http://a.test,1,Enable,-1\n")
+	rows4, err := LoadSubscriptions(p4)
+	if err != nil {
+		t.Fatalf("refresh=-1 should be accepted (means never refresh): %v", err)
+	}
+	if rows4[0].RefreshSeconds != -1 {
+		t.Errorf("refresh=-1 → RefreshSeconds=%d, want -1", rows4[0].RefreshSeconds)
+	}
+
+	// Non-integer refresh → loud validation error.
+	p5 := writeCSV(t, "name,link,priority,enable,refresh\nfoo,http://a.test,1,Enable,abc\n")
+	_, err = LoadSubscriptions(p5)
 	var vErr *ConfigValidationError
-	if !errors.As(err, &vErr) || vErr.Field != "ttl_seconds" {
-		t.Errorf("ttl_seconds=0 error = %v (Field=%q), want validation on ttl_seconds", err, vErr.Field)
+	if !errors.As(err, &vErr) || vErr.Field != "refresh" {
+		t.Errorf("refresh=abc error = %v (Field=%q), want validation on refresh", err, vErr.Field)
 	}
 }
 

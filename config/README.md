@@ -6,7 +6,7 @@ Operator-managed configuration files. **All three files in this directory are gi
 
 | File | Env var pointing at it | Format |
 |---|---|---|
-| `subscriptions.csv` | `SUBSCRIPTIONS_CSV_PATH` | CSV — `name,link,priority,enable` (+ optional `ttl_seconds`, `stale_on_error_seconds`) |
+| `subscriptions.csv` | `SUBSCRIPTIONS_CSV_PATH` | CSV — `name,link,priority,enable` (+ optional `refresh`, `stale_on_error_seconds`) |
 | `own-proxies.yaml` | `OWN_PROXIES_YAML_PATH` | YAML — `proxies` + `proxy-groups` keys (Clash native shape) |
 | `tokens.json` | `TOKENS_PATH` | JSON — array of per-client tokens |
 
@@ -32,6 +32,39 @@ Set `"revoked": true` on the offending entry in `tokens.json`. The next `Lookup`
 ## Disabling an upstream temporarily
 
 Edit `subscriptions.csv`, change the row's `enable` column from `Enable` to `Disable`. Currently the subscriptions CSV is loaded once at startup, so this requires a server restart in v1 (CSV hot-reload is a follow-up). The disabled source is loaded, validated, and surfaced in `/health` with `enabled: false` — but never fetched.
+
+## Controlling a source's refresh interval
+
+The optional `refresh` column on each `subscriptions.csv` row sets how often the
+server re-fetches that upstream (integer **seconds**):
+
+| `refresh` value | Behavior |
+|---|---|
+| omitted / empty / `0` | Use the server default interval (`DEFAULT_TTL_SECONDS`, default 3600s) |
+| positive (e.g. `900`) | Re-fetch every that many seconds |
+| negative (e.g. `-1`) | **Never refresh** — fetch once at startup, then never again |
+
+```csv
+name,link,priority,enable,refresh
+alpha,"https://…",1000,Enable,0        # default interval
+bravo,"https://…",1500,Enable,900     # refresh every 15 minutes
+static,"https://…",2000,Enable,-1     # fetch once, never refresh
+```
+
+A never-refresh source still bootstraps at startup (so it contributes to the
+merged config) and, while the process runs, its snapshot is never treated as
+stale and is never re-fetched on a schedule. Two things to know:
+
+- **On restart** it behaves like any other source at bootstrap: if the persisted
+  disk cache for that source is older than the default interval
+  (`DEFAULT_TTL_SECONDS`) it re-fetches fresh (so an edited `link` is picked up);
+  a still-fresh cache is reused to avoid re-hammering upstream.
+- **If the bootstrap fetch fails** (upstream down at startup), a never-refresh
+  source has no ticker to self-heal, so it stays failed on `/health` until the
+  next restart.
+
+Like all CSV changes, editing `refresh` takes effect on the next server restart
+(v1 limitation).
 
 ## Production secret rotation
 
