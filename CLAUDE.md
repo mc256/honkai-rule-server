@@ -75,6 +75,16 @@ entirely when none; new pure fns in `internal/merge/ruleset.go` +
 `RULE-SET` rules still priority-ordered (014-style) and subject to 002 trailing
 drop + 015 prune/retarget; byte-unchanged output when no source has
 `rule-providers`/`RULE-SET`).
+**017 (per-source-refresh-interval)** is fully implemented (renames 001's
+optional `ttl_seconds` subscriptions-CSV column to `refresh` with tri-state
+semantics: `0`/absent → server default interval `DEFAULT_TTL_SECONDS`,
+positive → that many seconds, negative → never refresh; `SubscriptionRow.TTLSeconds`
+renamed to `RefreshSeconds`; scheduler gains `refreshDisabled`/`neverRefreshTTL`
+so a negative-refresh source bootstraps once then skips the `runSteady` ticker
+and its cache never reports stale; non-integer `refresh` is a loud validation
+error, but `0`/negative are now valid; `ttl_seconds` is no longer a recognized
+column; supersedes 001 FR-001a/FR-001b for that column; scheduling-only, so
+served bytes and integration snapshots are unchanged).
 
 Key reading for any change:
 - `specs/001-subscription-aggregator/spec.md` + `plan.md` — what the service does today (27 FRs, 15 SCs) and how it's structured
@@ -93,6 +103,7 @@ Key reading for any change:
 - `specs/014-load-balance-region-groups/spec.md` + `plan.md` — active feature: additive `_lb_region_<CC>` / `_lb_continent_<CONT>` proxy groups of `type: load-balance` emitted alongside 012's url-test groups (same membership, paired adjacency in `proxy-groups:`); operator-configurable via six new `LOAD_BALANCE_*` env vars (`LOAD_BALANCE_URL`, `LOAD_BALANCE_INTERVAL_SECONDS=300`, `LOAD_BALANCE_TIMEOUT_MS=1500`, `LOAD_BALANCE_MAX_FAILED_TIMES=3`, `LOAD_BALANCE_LAZY=true`, `LOAD_BALANCE_STRATEGY=round-robin` accepting also `consistent-hashing`/`sticky-sessions`); 008 fan-out predicate widens to include `_lb_region_`/`_lb_continent_` prefixes producing `via_lb_region_<CC>__<own>` / `via_lb_continent_<CONT>__<own>` copies; lb groups join the always-present `Proxies` selector; no AUTO_lb variant (008's `via_AUTO__<own>` unchanged); url-test groups (012) byte-unchanged; field order on lb groups is `name, type, proxies, url, interval, lazy, strategy, timeout, max-failed-times` — distinct from url-test order
 - `specs/015-remove-empty-proxy-groups/spec.md` + `plan.md` — active feature: a final prune pass at the end of `Pipeline.Build()` removes every proxy-group with an empty `proxies:` member list so the served config passes Mihomo validation; single removal pass (no cascading — FR-005); the always-present `Proxies` selector is exempt and retained even when empty (FR-007); dangling member references to removed groups are dropped (FR-006); a routing rule whose target group was pruned is redirected to the configured fallback rule target (FR-008); new pure fn `PruneEmptyProxyGroups` in `internal/merge/prune.go`; output byte-unchanged when no group is empty (FR-010); auto-emitted `_region_*`/`_continent_*`/`_lb_*` groups are non-empty by construction so only operator/upstream groups are real prune candidates
 - `specs/016-rule-set-support/spec.md` + `plan.md` — active feature: read upstream `rule-providers:` mappings and serve a merged, namespaced block. Provider keys + the `RULE-SET` rule's provider-name field (field[1]) get the `<source>_` prefix; provider defs get a source-distinct `path:` and a prefixed non-builtin `proxy:` (FR-007/008); unbacked `RULE-SET` rules dropped per-source before the unified merge (FR-009, logged); only referenced providers emitted, key omitted when none (FR-006/010); new `internal/merge/ruleset.go` + `findChildMapping` in `yamlutil.go` + `MergedConfig.RuleProviders *yaml.Node` + one guarded emit in `internal/output/subscription_mode.go`; byte-unchanged output when no source has `rule-providers`/`RULE-SET` (FR-013)
+- `specs/017-per-source-refresh-interval/spec.md` + `plan.md` — renames 001's optional `ttl_seconds` CSV column to `refresh` with tri-state semantics (`0`/absent → server default interval, positive → interval seconds, negative → never refresh); `SubscriptionRow.RefreshSeconds` + scheduler `refreshDisabled`/`neverRefreshTTL`; never-refresh sources bootstrap once then skip the `runSteady` ticker and never report stale; scheduling-only, so served bytes / snapshots unchanged
 - `specs/003-custom-rules-access-control/quickstart.md` — operator guide (custom rules YAML schema, continent groups, UA filtering setup)
 - `internal/merge/` — pure-functional transformation core (Constitution Principle I; do not reach into it from outside the module)
 - `internal/customrules/` — custom rule file loading and `CustomRuleSet` type

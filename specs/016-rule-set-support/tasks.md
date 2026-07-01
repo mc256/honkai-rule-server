@@ -143,7 +143,7 @@ log entries record the drop/skip.
 
 - [X] T029 [P] Run `make check` (vet + staticcheck + unit + integration + snapshot drift) and confirm every pre-existing snapshot is byte-unchanged (FR-013) and the new snapshot is committed
 - [X] T030 [P] Verify the `quickstart.md` before/after YAML and log-event examples match the actual served output and emitted `slog` events; correct any drift in `specs/016-rule-set-support/quickstart.md`
-- [X] T031 Run the repo sensitive-name guard over new fixtures/snapshots/tests (`git ls-files -z | xargs -0 grep -lE 'starlitedge|starlit|蓝莓桥|erwan|berrypass'`) and confirm zero matches; use generic `srcA`/`srcB`-style source names in all new fixtures
+- [X] T031 Run the repo sensitive-name guard over new fixtures/snapshots/tests (grep for the operator infra/source names kept out of the repo — see the gitignored `config/` and operator notes) and confirm zero matches; use generic `srcA`/`srcB`-style source names in all new fixtures
 
 ---
 

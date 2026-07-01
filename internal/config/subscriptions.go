@@ -23,7 +23,11 @@ type SubscriptionRow struct {
 	Link                string
 	Priority            int
 	Enable              bool
-	TTLSeconds          int // 0 means "use ServerConfig.DefaultTTLSeconds"
+	// RefreshSeconds controls the per-source background refresh interval:
+	//   0 (or absent) → use the default interval (ServerConfig.DefaultTTLSeconds)
+	//   > 0           → refresh every RefreshSeconds seconds
+	//   < 0           → never refresh (fetch once at startup, then never again)
+	RefreshSeconds      int
 	StaleOnErrorSeconds int // 0 means "use ServerConfig.DefaultStaleOnErrorSeconds"
 }
 
@@ -32,7 +36,7 @@ type SubscriptionRow struct {
 // missing override (Constitution Principle III: loud failure).
 var (
 	requiredCols = []string{"name", "link", "priority", "enable"}
-	optionalCols = []string{"ttl_seconds", "stale_on_error_seconds"}
+	optionalCols = []string{"refresh", "stale_on_error_seconds"}
 )
 
 // ConfigLoadError wraps an OS-level error opening the file.
@@ -223,15 +227,18 @@ func parseRow(rec []string, colIdx map[string]int, rowNum int) (SubscriptionRow,
 		}
 	}
 
-	if v, ok := get("ttl_seconds"); ok && v != "" {
+	// refresh is tri-state: 0/absent means "use the default interval", a
+	// positive value is the interval in seconds, and any negative value means
+	// "never refresh". Only a non-integer value is rejected.
+	if v, ok := get("refresh"); ok && v != "" {
 		n, err := strconv.Atoi(v)
-		if err != nil || n <= 0 {
+		if err != nil {
 			return row, &ConfigValidationError{
-				Row: rowNum, Field: "ttl_seconds",
-				Reason: fmt.Sprintf("not a positive integer: %q", v),
+				Row: rowNum, Field: "refresh",
+				Reason: fmt.Sprintf("not an integer: %q", v),
 			}
 		}
-		row.TTLSeconds = n
+		row.RefreshSeconds = n
 	}
 
 	if v, ok := get("stale_on_error_seconds"); ok && v != "" {

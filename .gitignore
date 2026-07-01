@@ -25,3 +25,6 @@ vendor/
 # Operator-private overrides for Makefile/deploy targets — see .env.example
 .env
 .env.local
+
+# OMC state (never committed)
+.omc/
