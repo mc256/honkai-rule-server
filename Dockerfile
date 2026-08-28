@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Multi-stage build per plan.md §Target Platform: static binary in a scratch image.
 
-FROM golang:1.26-alpine AS build
+FROM golang:1.27-alpine AS build
 WORKDIR /src
 
 # Allow the Go toolchain to fetch a newer minor version on demand if go.mod
